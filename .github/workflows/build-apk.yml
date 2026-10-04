@@ -53,10 +53,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.2.1
-          name: "SAMP Mobile v0.8.2.1 ([TH] 4KING ROLEPLAY)"
+          tag_name: v0.8.2.2
+          name: "SAMP Mobile v0.8.2.2 ([TH] 4KING ROLEPLAY)"
           body: |
-            ### SAMP Mobile v0.8.2.1
+            ### SAMP Mobile v0.8.2.2 (Crash Fix)
+            - Fixed crash on launch (removed `std::terminate` in settings.ini loader)
+            - Auto-extracts settings.ini if missing
             - Configured Server: `192.168.1.112:7777` ([TH] 4KING ROLEPLAY)
             - Default Nickname: `Tham_Player`
             - Supports both ARM64-v8a and ARMeabi-v7a

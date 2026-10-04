@@ -11,17 +11,26 @@ import java.io.OutputStream;
 
 public class ConfigValidator {
     public static void validateConfigFiles(Context context) {
-        File externalFilesDir = context.getExternalFilesDir(null);
-        File file = new File(externalFilesDir, "SAMP/settings.ini");
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            copyAsset(context.getAssets(), "settings.ini", file.toString());
+        try {
+            File externalFilesDir = context.getExternalFilesDir(null);
+            if (externalFilesDir != null) {
+                File file = new File(externalFilesDir, "SAMP/settings.ini");
+                if (!file.exists()) {
+                    file.getParentFile().mkdirs();
+                    copyAsset(context.getAssets(), "settings.ini", file.toString());
+                }
+            }
+            File internalFilesDir = context.getFilesDir();
+            if (internalFilesDir != null) {
+                File file2 = new File(internalFilesDir, "SAMP/settings.ini");
+                if (!file2.exists()) {
+                    file2.getParentFile().mkdirs();
+                    copyAsset(context.getAssets(), "settings.ini", file2.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        /*File file2 = new File(externalFilesDir, "gta_sa.set");
-        if (!file2.exists()) {
-            file2.getParentFile().mkdirs();
-            copyAsset(context.getAssets(), "gta_sa.set", file2.toString());
-        }*/
     }
 
     static boolean copyAsset(AssetManager assetManager, String str, String str2) {

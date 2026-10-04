@@ -10,7 +10,7 @@ elseif(${ANDROID_ABI} STREQUAL "arm64-v8a")
 endif()
 
 # Compilation flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -s -fvisibility=hidden -pthread -O3 -fexceptions")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -fvisibility=hidden -pthread -O3 -fexceptions")
 
 # Add source files
 file(GLOB_RECURSE SOURCES

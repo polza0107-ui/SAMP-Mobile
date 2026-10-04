@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.bytedance.shadowhook.ShadowHook;
 import com.joom.paranoid.Obfuscate;
+import com.samp.mobile.launcher.util.ConfigValidator;
 import com.samp.mobile.launcher.util.SharedPreferenceCore;
 import com.samp.mobile.launcher.util.SignatureChecker;
 import com.wardrumstudios.utils.WarMedia;
@@ -95,6 +96,7 @@ public class GTASA extends WarMedia {
         //}
 
         System.out.println("GTASA onCreate");
+        ConfigValidator.validateConfigFiles(this);
         //  gtasaSelf = this;
         //  wantsAccelerometer = true;
 

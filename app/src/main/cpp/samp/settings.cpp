@@ -5,28 +5,62 @@
 #include "vendor/SimpleIni/SimpleIni.h"
 #include "game/game.h"
 
+#include <unistd.h>
+
 extern CGame *pGame;
 
 CSettings::CSettings()
 {
 	FLog("Loading settings..");	
 
-	char buff[0x7F];
-	sprintf(buff, "%sSAMP/settings.ini", g_pszStorage);
+	char buff[256] = {0};
+	bool found = false;
+
+	if (g_pszStorage && strlen(g_pszStorage) > 0) {
+		if (g_pszStorage[strlen(g_pszStorage) - 1] == '/')
+			snprintf(buff, sizeof(buff), "%sSAMP/settings.ini", g_pszStorage);
+		else
+			snprintf(buff, sizeof(buff), "%s/SAMP/settings.ini", g_pszStorage);
+
+		if (access(buff, F_OK) == 0) {
+			found = true;
+		}
+	}
+
+	if (!found) {
+		const char* candidatePaths[] = {
+			"/storage/emulated/0/Android/data/com.samp.mobile/files/SAMP/settings.ini",
+			"/sdcard/Android/data/com.samp.mobile/files/SAMP/settings.ini",
+			"/data/data/com.samp.mobile/files/SAMP/settings.ini",
+			"/data/user/0/com.samp.mobile/files/SAMP/settings.ini"
+		};
+		for (const char* path : candidatePaths) {
+			if (access(path, F_OK) == 0) {
+				snprintf(buff, sizeof(buff), "%s", path);
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (!found && (!buff[0])) {
+		snprintf(buff, sizeof(buff), "/storage/emulated/0/Android/data/com.samp.mobile/files/SAMP/settings.ini");
+	}
 
 	INIReader reader(buff);
 
 	if(reader.ParseError() < 0)
 	{
-		FLog("Error: can't load %s", buff);
-		std::terminate();
-		return;
+		FLog("Warning: can't load %s, using defaults", buff);
+	}
+	else
+	{
+		FLog("Successfully loaded %s", buff);
 	}
 
 	// client
 	size_t length = 0;
-	sprintf(buff, "__android_%d%d", rand() % 1000, rand() % 1000);
-	length = reader.Get("client", "name", buff).copy(m_Settings.szNickName, 24);
+	length = reader.Get("client", "name", "Tham_Player").copy(m_Settings.szNickName, 24);
 	m_Settings.szNickName[length] = '\0';
 	length = reader.Get("client", "host", "192.168.1.112").copy(m_Settings.szHost, MAX_SETTINGS_STRING);
 	m_Settings.szHost[length] = '\0';
