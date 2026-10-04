@@ -1318,6 +1318,16 @@ void NvUtilInit_hook()
 
     g_pszStorage = (char*)(g_libGTASA + (VER_x32 ? 0x6D687C : 0x8B46A8)); // StorageRootBuffer
 
+    if (access("/storage/emulated/0/GTA/", F_OK) == 0) {
+        strcpy((char*)(g_libGTASA + (VER_x32 ? 0x6D687C : 0x8B46A8)), "/storage/emulated/0/GTA/");
+        g_pszStorage = (char*)(g_libGTASA + (VER_x32 ? 0x6D687C : 0x8B46A8));
+        FLog("Using storage path: %s", g_pszStorage);
+    } else if (access("/sdcard/GTA/", F_OK) == 0) {
+        strcpy((char*)(g_libGTASA + (VER_x32 ? 0x6D687C : 0x8B46A8)), "/sdcard/GTA/");
+        g_pszStorage = (char*)(g_libGTASA + (VER_x32 ? 0x6D687C : 0x8B46A8));
+        FLog("Using storage path: %s", g_pszStorage);
+    }
+
     ReadSettingFile();
 
     ApplyFPSPatch(120);
@@ -1333,78 +1343,94 @@ char lastFile[123];
 
 stFile* NvFOpen(const char* r0, const char* r1, int r2, int r3)
 {
-    strcpy(lastFile, r1);
+    if (!r1) return nullptr;
+    strncpy(lastFile, r1, sizeof(lastFile) - 1);
 
-    static char path[255]{};
+    static char path[512]{};
     memset(path, 0, sizeof(path));
 
     sprintf(path, "%s%s", g_pszStorage, r1);
 
+    size_t r1Len = strlen(r1);
+
     // ----------------------------
-    if(!strncmp(r1+12, "mainV1.scm", 10))
+    if(r1Len >= 22 && !strncmp(r1+12, "mainV1.scm", 10))
     {
         sprintf(path, "%sSAMP/main.scm", g_pszStorage);
         FLog("Loading %s", path);
     }
     // ----------------------------
-    if(!strncmp(r1+12, "SCRIPTV1.IMG", 12))
+    else if(r1Len >= 24 && !strncmp(r1+12, "SCRIPTV1.IMG", 12))
     {
         sprintf(path, "%sSAMP/script.img", g_pszStorage);
         FLog("Loading script.img..");
     }
     // ----------------------------
-    if(!strncmp(r1, "DATA/PEDS.IDE", 13))
+    else if(!strncmp(r1, "DATA/PEDS.IDE", 13))
     {
         sprintf(path, "%sSAMP/peds.ide", g_pszStorage);
         FLog("Loading peds.ide..");
     }
     // ----------------------------
-    if(!strncmp(r1, "DATA/VEHICLES.IDE", 17))
+    else if(!strncmp(r1, "DATA/VEHICLES.IDE", 17))
     {
         sprintf(path, "%sSAMP/vehicles.ide", g_pszStorage);
         FLog("Loading vehicles.ide..");
     }
-
-    if (!strncmp(r1, "DATA/GTA.DAT", 12))
+    else if (!strncmp(r1, "DATA/GTA.DAT", 12))
     {
         sprintf(path, "%sSAMP/gta.dat", g_pszStorage);
         FLog("Loading gta.dat..");
     }
-
-    if (!strncmp(r1, "DATA/HANDLING.CFG", 17))
+    else if (!strncmp(r1, "DATA/HANDLING.CFG", 17))
     {
         sprintf(path, "%sSAMP/handling.cfg", g_pszStorage);
         FLog("Loading handling.cfg..");
     }
-
-    if (!strncmp(r1, "DATA/WEAPON.DAT", 15))
+    else if (!strncmp(r1, "DATA/WEAPON.DAT", 15))
     {
         sprintf(path, "%sSAMP/weapon.dat", g_pszStorage);
         FLog("Loading weapon.dat..");
     }
-
-    if (!strncmp(r1, "DATA/FONTS.DAT", 15))
+    else if (!strncmp(r1, "DATA/FONTS.DAT", 15))
     {
         sprintf(path, "%sdata/fonts.dat", g_pszStorage);
         FLog("Loading fonts.dat..");
     }
-
-    if (!strncmp(r1, "DATA/PEDSTATS.DAT", 15))
+    else if (!strncmp(r1, "DATA/PEDSTATS.DAT", 15))
     {
         sprintf(path, "%sdata/pedstats.dat", g_pszStorage);
         FLog("Loading pedstats.dat..");
     }
-
-    if (!strncmp(r1, "DATA/TIMECYC.DAT", 15))
+    else if (!strncmp(r1, "DATA/TIMECYC.DAT", 15))
     {
         sprintf(path, "%sdata/timecyc.dat", g_pszStorage);
         FLog("Loading timecyc.dat..");
     }
-
-    if (!strncmp(r1, "DATA/POPCYCLE.DAT", 15))
+    else if (!strncmp(r1, "DATA/POPCYCLE.DAT", 15))
     {
         sprintf(path, "%sdata/popcycle.dat", g_pszStorage);
         FLog("Loading popcycle.dat..");
+    }
+
+    FILE *f  = fopen(path, "rb");
+
+    if (!f) {
+        const char* altRoots[] = {
+            "/storage/emulated/0/GTA/",
+            "/sdcard/GTA/",
+            "/storage/emulated/0/Android/data/com.samp.mobile/files/",
+            "/sdcard/Android/data/com.samp.mobile/files/"
+        };
+        for (const char* altRoot : altRoots) {
+            char altPath[512];
+            snprintf(altPath, sizeof(altPath), "%s%s", altRoot, r1);
+            f = fopen(altPath, "rb");
+            if (f) {
+                strncpy(path, altPath, sizeof(path) - 1);
+                break;
+            }
+        }
     }
 
 #if VER_x32
@@ -1413,8 +1439,6 @@ stFile* NvFOpen(const char* r0, const char* r1, int r2, int r3)
     auto *st = (stFile*)malloc(0x10);
 #endif
     st->isFileExist = false;
-
-    FILE *f  = fopen(path, "rb");
 
     if(f)
     {
@@ -1605,6 +1629,7 @@ static uint32_t dwRLEDecompressSourceSize = 0;
 size_t (*OS_FileRead)(OSFile a1, void *buffer, size_t numBytes);
 size_t OS_FileRead_hook(OSFile a1, void *buffer, size_t numBytes)
 {
+    if (!a1) return 0;
     dwRLEDecompressSourceSize = numBytes;
 
     return OS_FileRead(a1, buffer, numBytes);

@@ -96,6 +96,13 @@ public class GTASA extends WarMedia {
         //}
 
         System.out.println("GTASA onCreate");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R && !android.os.Environment.isExternalStorageManager()) {
+            try {
+                android.content.Intent intent = new android.content.Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(android.net.Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            } catch (Exception ignored) {}
+        }
         ConfigValidator.validateConfigFiles(this);
         //  gtasaSelf = this;
         //  wantsAccelerometer = true;
