@@ -16,8 +16,8 @@
 extern "C" bool MSHookFunction(void* symbol, void* replace, void** result);
 #elif defined __aarch64__
 #define __64BIT
-    #define DETHUMB(_a)
-    #define RETHUMB(_a)
+    #define DETHUMB(_a) ((uintptr_t)(_a))
+    #define RETHUMB(_a) ((uintptr_t)(_a))
     #define THUMBMODE(_a) (false)
     #define cacheflush(c, n, zeroarg) __builtin___clear_cache((char*)(c), (char*)(n))
 #else
