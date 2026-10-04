@@ -40,6 +40,16 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
 
+      - name: Dump CMake Logs on Failure
+        if: failure()
+        run: |
+          echo "================ CMake Error Logs ================"
+          find app/.cxx -type f \( -name "*.txt" -o -name "*.log" \) | while read -r file; do
+            echo "::group::$file"
+            cat "$file"
+            echo "::endgroup::"
+          done || true
+
       - name: Upload Build Failure Logs
         if: failure()
         uses: actions/upload-artifact@v4
@@ -48,3 +58,4 @@ jobs:
           path: |
             app/.cxx/
             app/build/reports/
+          include-hidden-files: true
