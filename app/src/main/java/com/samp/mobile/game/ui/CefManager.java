@@ -181,22 +181,40 @@ public class CefManager {
         public void emitEvent(String event, String jsonArgs) {
             Log.d(TAG, "CEF Event from JS: " + event + " Args: " + jsonArgs);
 
-            // Handle standard 4KING CEF events
             if ("cef:onLoginSubmit".equals(event)) {
                 // Parse password argument from jsonArgs array [ "password" ]
                 String pass = extractFirstArg(jsonArgs);
                 if (SAMP.getInstance() != null) {
-                    SAMP.getInstance().sendChatCommand("/login " + pass);
+                    try {
+                        byte[] strBytes = pass.getBytes("TIS-620");
+                        SAMP.getInstance().sendDialogResponse(1, 1100, 0, strBytes);
+                    } catch (Exception e) {
+                        SAMP.getInstance().sendDialogResponse(1, 1100, 0, pass.getBytes());
+                    }
                 }
+                hideBrowser();
             } else if ("cef:onRegisterSubmit".equals(event)) {
                 String pass = extractFirstArg(jsonArgs);
                 if (SAMP.getInstance() != null) {
-                    SAMP.getInstance().sendChatCommand("/register " + pass);
+                    try {
+                        byte[] strBytes = pass.getBytes("TIS-620");
+                        SAMP.getInstance().sendDialogResponse(1, 1101, 0, strBytes);
+                    } catch (Exception e) {
+                        SAMP.getInstance().sendDialogResponse(1, 1101, 0, pass.getBytes());
+                    }
                 }
+                hideBrowser();
             } else if ("cef:selectSchool".equals(event)) {
                 String school = extractFirstArg(jsonArgs);
+                int listitem = 0;
+                if ("itr".equalsIgnoreCase(school) || "inthar".equalsIgnoreCase(school)) listitem = 1;
+                else if ("pcc".equalsIgnoreCase(school) || "prachachuen".equalsIgnoreCase(school)) listitem = 2;
+                else if ("brp".equalsIgnoreCase(school) || "buranapon".equalsIgnoreCase(school)) listitem = 3;
+
                 if (SAMP.getInstance() != null) {
-                    SAMP.getInstance().sendChatCommand("/selectschool " + school);
+                    try {
+                        SAMP.getInstance().sendDialogResponse(1, 1099, listitem, school.getBytes());
+                    } catch (Exception ignored) {}
                 }
                 hideBrowser();
             } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event) || "cef:closeCard".equals(event)) {

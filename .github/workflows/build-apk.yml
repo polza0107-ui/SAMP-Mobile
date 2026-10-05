@@ -54,10 +54,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.2
-          name: "SAMP Mobile v0.8.3.2 (4KING SOBAD - Full CEF WebUI Bridge for Mobile)"
+          tag_name: v0.8.3.3
+          name: "SAMP Mobile v0.8.3.3 (4KING SOBAD - CEF WebUI Auto Intercept)"
           body: |
-            ### 4KING SOBAD v0.8.3.2 Update
+            ### 4KING SOBAD v0.8.3.3 Update
+            - Auto Intercept Dialog 1100 (Login), 1101 (Register), and 1099 (School Select) into CEF WebUI!
+            - Full Mobile CEF WebView Bridge with two-way RPC support.
             - **ระบบ CEF WebUI Overlay บนมือถือ (CEF Bridge for Android)**:
               - เพิ่มโมดูล CefManager (WebView Bridge) ดักจับอีเวนต์ JavaScript `window.cef.emit` และ `window.cef.on`
               - รองรับการเปิดหน้าต่าง CEF จากโฟลเดอร์ Web GUI (index.html, 4.html, inventory.html ฯลฯ) บนมือถือได้เหมือน PC

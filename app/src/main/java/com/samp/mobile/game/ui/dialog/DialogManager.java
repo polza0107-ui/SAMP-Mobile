@@ -136,6 +136,24 @@ public class DialogManager {
     }
 
     public void show(int i, int i2, String str, String str2, String str3, String str4) {
+        // Intercept 4KING Dialogs (1100=LOGIN, 1101=REGISTER, 1099=SELECT_SCHOOL) and open WebUI CEF instead!
+        if (i == 1100 || i == 1101) {
+            String mode = (i == 1100) ? "login" : "register";
+            String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
+            String url = "http://192.168.1.112/gui/index.html?mode=" + mode + "&name=" + nick + "&v=" + System.currentTimeMillis();
+            if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
+                com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(1, url);
+                return;
+            }
+        } else if (i == 1099) {
+            String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
+            String url = "http://192.168.1.112/gui/4.html?name=" + nick + "&v=" + System.currentTimeMillis();
+            if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
+                com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
+                return;
+            }
+        }
+
         isShow = true;
         this.mCurrentDialogId = i;
         this.mDialogStyle = i2;
