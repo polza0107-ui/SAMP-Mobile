@@ -19,13 +19,48 @@ public class ConfigValidator {
                     file.getParentFile().mkdirs();
                     copyAsset(context.getAssets(), "settings.ini", file.toString());
                 }
+
+                File fontDir = new File(externalFilesDir, "SAMP/fonts");
+                fontDir.mkdirs();
+                File font1 = new File(fontDir, "arial_bold.ttf");
+                if (!font1.exists() || font1.length() < 100000) {
+                    copyAsset(context.getAssets(), "Fonts/arial_bold.ttf", font1.toString());
+                }
+                File font2 = new File(fontDir, "arial.ttf");
+                if (!font2.exists() || font2.length() < 100000) {
+                    copyAsset(context.getAssets(), "Fonts/arial.ttf", font2.toString());
+                }
             }
+
+            File gtaStorageDir = new File("/storage/emulated/0/GTA/SAMP/fonts");
+            if (gtaStorageDir.exists() || gtaStorageDir.mkdirs()) {
+                File gtaFont1 = new File(gtaStorageDir, "arial_bold.ttf");
+                if (!gtaFont1.exists() || gtaFont1.length() < 100000) {
+                    copyAsset(context.getAssets(), "Fonts/arial_bold.ttf", gtaFont1.toString());
+                }
+                File gtaFont2 = new File(gtaStorageDir, "arial.ttf");
+                if (!gtaFont2.exists() || gtaFont2.length() < 100000) {
+                    copyAsset(context.getAssets(), "Fonts/arial.ttf", gtaFont2.toString());
+                }
+            }
+
             File internalFilesDir = context.getFilesDir();
             if (internalFilesDir != null) {
                 File file2 = new File(internalFilesDir, "SAMP/settings.ini");
                 if (!file2.exists()) {
                     file2.getParentFile().mkdirs();
                     copyAsset(context.getAssets(), "settings.ini", file2.toString());
+                }
+
+                File internalFontDir = new File(internalFilesDir, "SAMP/fonts");
+                internalFontDir.mkdirs();
+                File font1 = new File(internalFontDir, "arial_bold.ttf");
+                if (!font1.exists() || font1.length() < 100000) {
+                    copyAsset(context.getAssets(), "Fonts/arial_bold.ttf", font1.toString());
+                }
+                File font2 = new File(internalFontDir, "arial.ttf");
+                if (!font2.exists() || font2.length() < 100000) {
+                    copyAsset(context.getAssets(), "Fonts/arial.ttf", font2.toString());
                 }
             }
         } catch (Exception e) {

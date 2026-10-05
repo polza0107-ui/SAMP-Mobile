@@ -1,21 +1,89 @@
 #include "encoding.h"
+#include <string.h>
 
 constexpr Encoding::Letter Encoding::m_letters[];
 
+// Convert CP874 / CP1251 single-byte character (or existing UTF-8) to UTF-8
 std::string Encoding::cp2utf(const std::string& s)
 {
-	int c, i;
-	int len = s.size();
 	std::string ns;
-	for (i = 0; i < len; i++) 
+	ns.reserve(s.size() * 2);
+
+	const unsigned char* p = reinterpret_cast<const unsigned char*>(s.c_str());
+	size_t len = s.size();
+	size_t i = 0;
+
+	while (i < len)
 	{
-		c = s[i];
-		char buf[4];
-		char in[2] = { 0, 0 };
-		*in = c;
-		convert_windows1251_to_utf8(buf, in, strlen(in));
-		ns += std::string(buf);
+		unsigned char c = p[i];
+
+		// Check if it's already a valid UTF-8 multibyte sequence
+		if ((c & 0xE0) == 0xC0 && (i + 1 < len) && ((p[i + 1] & 0xC0) == 0x80))
+		{
+			// 2-byte UTF-8
+			ns.push_back((char)c);
+			ns.push_back((char)p[i + 1]);
+			i += 2;
+			continue;
+		}
+		else if ((c & 0xF0) == 0xE0 && (i + 2 < len) && ((p[i + 1] & 0xC0) == 0x80) && ((p[i + 2] & 0xC0) == 0x80))
+		{
+			// 3-byte UTF-8 (e.g. Thai characters U+0E00..U+0E7F: E0 B8/B9 xx)
+			ns.push_back((char)c);
+			ns.push_back((char)p[i + 1]);
+			ns.push_back((char)p[i + 2]);
+			i += 3;
+			continue;
+		}
+		else if ((c & 0xF8) == 0xF0 && (i + 3 < len) && ((p[i + 1] & 0xC0) == 0x80) && ((p[i + 2] & 0xC0) == 0x80) && ((p[i + 3] & 0xC0) == 0x80))
+		{
+			// 4-byte UTF-8
+			ns.push_back((char)c);
+			ns.push_back((char)p[i + 1]);
+			ns.push_back((char)p[i + 2]);
+			ns.push_back((char)p[i + 3]);
+			i += 4;
+			continue;
+		}
+
+		// Single-byte ASCII
+		if (c < 0x80)
+		{
+			ns.push_back((char)c);
+			i++;
+			continue;
+		}
+
+		// Thai (CP874 / TIS-620) character range 0xA1..0xFB
+		// Unicode code point = c + 0x0D60 (0x0E01..0x0E5B)
+		// Encoded in UTF-8:
+		// 0x0E01..0x0E3F (c: 0xA1..0xDF) -> 3 bytes: 0xE0, 0xB8, (c - 0x20)
+		// 0x0E40..0x0E5B (c: 0xE0..0xFB) -> 3 bytes: 0xE0, 0xB9, (c - 0x60)
+		if (c >= 0xA1 && c <= 0xDF)
+		{
+			ns.push_back((char)0xE0);
+			ns.push_back((char)0xB8);
+			ns.push_back((char)(c - 0x20));
+			i++;
+			continue;
+		}
+		else if (c >= 0xE0 && c <= 0xFB)
+		{
+			ns.push_back((char)0xE0);
+			ns.push_back((char)0xB9);
+			ns.push_back((char)(c - 0x60));
+			i++;
+			continue;
+		}
+
+		// Windows-1251 fallback for other high-ASCII bytes (e.g. 0x80..0xA0, 0xFC..0xFF)
+		char buf[8] = { 0 };
+		char in[2] = { (char)c, 0 };
+		convert_windows1251_to_utf8(buf, in, 1);
+		ns.append(buf);
+		i++;
 	}
+
 	return ns;
 }
 
@@ -23,9 +91,10 @@ std::string Encoding::utf2cp(const std::string& s)
 {
 	size_t len = s.size();
 	const char* buff = s.c_str();
-	char* output = new char[len];
+	char* output = new char[len + 1];
 	convert_utf8_to_windows1251(buff, output, len);
 	std::string ns(output);
+	delete[] output;
 	return ns;
 }
 
@@ -33,46 +102,66 @@ bool Encoding::convert_utf8_to_windows1251(const char* utf8, char* windows1251, 
 {
 	int i = 0;
 	int j = 0;
-	for (; i < (int)n && utf8[i] != 0; ++i) {
-		char prefix = utf8[i];
-		char suffix = utf8[i + 1];
+	const unsigned char* u = reinterpret_cast<const unsigned char*>(utf8);
+
+	for (; i < (int)n && u[i] != 0; ++i) {
+		unsigned char prefix = u[i];
+
 		if ((prefix & 0x80) == 0) {
-			windows1251[j] = (char)prefix;
-			++j;
+			windows1251[j++] = (char)prefix;
 		}
+		// 3-byte UTF-8: Check for Thai range U+0E00..U+0E7F (0xE0, 0xB8/B9, 0x80..0xBF)
+		else if (prefix == 0xE0 && i + 2 < (int)n && (u[i + 1] == 0xB8 || u[i + 1] == 0xB9)) {
+			unsigned char b2 = u[i + 1];
+			unsigned char b3 = u[i + 2];
+			if (b2 == 0xB8 && b3 >= 0x81 && b3 <= 0xBF) {
+				windows1251[j++] = (char)(b3 + 0x20); // 0xA1..0xDF in CP874
+				i += 2;
+			}
+			else if (b2 == 0xB9 && b3 >= 0x80 && b3 <= 0xBB) {
+				windows1251[j++] = (char)(b3 + 0x60); // 0xE0..0xFB in CP874
+				i += 2;
+			}
+			else {
+				// Non-convertible Thai char, keep or skip
+				i += 2;
+			}
+		}
+		// 2-byte UTF-8: Cyrillic / Latin
 		else if ((~prefix) & 0x20) {
+			unsigned char suffix = u[i + 1];
 			int first5bit = prefix & 0x1F;
 			first5bit <<= 6;
 			int sec6bit = suffix & 0x3F;
 			int unicode_char = first5bit + sec6bit;
 
 			if (unicode_char >= 0x410 && unicode_char <= 0x44F) {
-				windows1251[j] = (char)(unicode_char - 0x350);
+				windows1251[j++] = (char)(unicode_char - 0x350);
 			}
 			else if (unicode_char >= 0x80 && unicode_char <= 0xFF) {
-				windows1251[j] = (char)(unicode_char);
+				windows1251[j++] = (char)(unicode_char);
 			}
 			else if (unicode_char >= 0x402 && unicode_char <= 0x403) {
-				windows1251[j] = (char)(unicode_char - 0x382);
+				windows1251[j++] = (char)(unicode_char - 0x382);
 			}
 			else {
 				int count = sizeof(m_letters) / sizeof(Letter);
+				bool matched = false;
 				for (int k = 0; k < count; ++k) {
 					if (unicode_char == m_letters[k].unicode) {
-						windows1251[j] = m_letters[k].win1251;
-						goto NEXT_LETTER;
+						windows1251[j++] = m_letters[k].win1251;
+						matched = true;
+						break;
 					}
 				}
-				// can't convert this char
-				return false;
+				if (!matched) {
+					windows1251[j++] = '?';
+				}
 			}
-		NEXT_LETTER:
 			++i;
-			++j;
 		}
 		else {
-			// can't convert this chars
-			return false;
+			windows1251[j++] = '?';
 		}
 	}
 	windows1251[j] = 0;

@@ -53,12 +53,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.2.5
-          name: "SAMP Mobile v0.8.2.5 ([TH] 4KING ROLEPLAY)"
+          tag_name: v0.8.2.6
+          name: "SAMP Mobile v0.8.2.6 (4KING SOBAD - Thai Language & Logo)"
           body: |
-            ### SAMP Mobile v0.8.2.5 (Fix Texture Crash on Render)
-            - Fixed null pointer crash in VoiceButton, Image widgets, and PlayerTags when voice textures are missing
-            - Direct connection to 192.168.1.112:7777
+            ### 4KING SOBAD v0.8.2.6
+            - **Thai Language & Encoding Support**: Added CP874 (TIS-620) & UTF-8 passthrough decoder for chat, dialogs, labels, and input
+            - **Thai Fonts**: Integrated Thai TTF font (Tahoma/Arial) auto-extracted to `/storage/emulated/0/GTA/SAMP/fonts/`
+            - **Android Keyboard**: Enabled `androidkeyboard = 1` for native Thai keyboard input
+            - **App Branding**: Updated App Name to `4KING SOBAD`
+            - **New Logo**: Applied custom 4KING SOBAD logo across launcher icons, splash screen, and loading screen
+            - Direct connection to `192.168.1.112:7777`
             - Support cache in `/storage/emulated/0/GTA/` and `/sdcard/GTA/`
             - Added All Files Access permission handling for Android 11-16
             - Fixed `OS_FileRead` null pointer crash when game files are missing

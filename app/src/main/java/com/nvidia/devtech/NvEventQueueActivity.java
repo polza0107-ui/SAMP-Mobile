@@ -1189,7 +1189,11 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
         byte[] toReturn = null;
         try
         {
-            toReturn = retn.getBytes("windows-1251");
+            try {
+                toReturn = retn.getBytes("windows-874");
+            } catch (Exception ex) {
+                toReturn = retn.getBytes("windows-1251");
+            }
         }
         catch(UnsupportedEncodingException e)
         {

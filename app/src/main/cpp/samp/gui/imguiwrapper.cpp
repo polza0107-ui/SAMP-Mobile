@@ -62,8 +62,28 @@ bool ImGuiWrapper::initialize()
 
 	if (font == nullptr)
 	{
-		Log::addParameter("font", font);
-		return false;
+		const char* fallbackFonts[] = {
+			"/storage/emulated/0/GTA/SAMP/fonts/arial_bold.ttf",
+			"/storage/emulated/0/GTA/SAMP/fonts/arial.ttf",
+			"/sdcard/GTA/SAMP/fonts/arial_bold.ttf",
+			"/sdcard/GTA/SAMP/fonts/arial.ttf",
+			"/storage/emulated/0/Android/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
+			"/data/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
+			nullptr
+		};
+
+		for (int i = 0; fallbackFonts[i] != nullptr; i++) {
+			font = io.Fonts->AddFontFromFileTTF(fallbackFonts[i], UISettings::fontSize(), &fontCfg, ranges);
+			if (font != nullptr) {
+				m_fontPath = fallbackFonts[i];
+				break;
+			}
+		}
+	}
+
+	if (font == nullptr)
+	{
+		font = io.Fonts->AddFontDefault();
 	}
 
 	createFontTexture();
