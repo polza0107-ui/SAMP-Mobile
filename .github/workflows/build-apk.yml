@@ -54,22 +54,20 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.2.9
-          name: "SAMP Mobile v0.8.2.9 (4KING SOBAD - Full Home Launcher with Custom Nickname & FPS)"
+          tag_name: v0.8.3.0
+          name: "SAMP Mobile v0.8.3.0 (4KING SOBAD - Landscape Launcher UI & FPS Settings)"
           body: |
-            ### 4KING SOBAD v0.8.2.9 Update
-            - **เปิดแอปเข้าหน้า Launcher ทันที (Default Launcher Screen)**:
-              - ปรับแต่ง `AndroidManifest.xml` ให้เข้าสู่หน้า `MainActivity` โดยตรงทันทีที่กดเข้าแอป
-              - ไม่เด้งเข้าเกมเองโดยไม่ตั้งชื่ออีกต่อไป
-            - **หน้าแรกโฉมใหม่ (Beautiful Home Screen)**:
-              - โลโก้ 4KING SOBAD พร้อมชื่อเซิร์ฟเวอร์ `[TH] 4KING ROLEPLAY`
-              - ช่องกรอกชื่อตัวละคร (Nickname) ตรงกลางหน้าแรก ตั้งชื่อได้ทันที
-              - ปุ่มเลือกจำกัดเฟรมเรต (FPS: 30 / 60 / 90 / 120 FPS) พร้อม Dialog เลือกง่ายๆ
-              - ปุ่มใหญ่ `▶ เริ่มเกม (CONNECT)` กดยืนยันแล้วเปิดหน้าต่างเชื่อมต่อเซิร์ฟเวอร์พร้อมเล่น
-            - **แก้ไขระบบเกมทั้งหมด**:
+            ### 4KING SOBAD v0.8.3.0 Update
+            - **Launcher แนวนอน (Landscape Fullscreen)**:
+              - หน้าจอเปิดแอปแบบแนวนอนเต็มจอ สวยงามด้วยภาพพื้นหลัง 4KING SOBAD
+              - ซ้ายล่าง: ช่องกรอกชื่อตัวละคร (Nickname)
+              - ขวาล่าง: ปุ่มอัปเดต (Update) และ ปุ่มเริ่มเกม (Start Game)
+              - ขวาบน: ปุ่มฟันเฟืองสำหรับตั้งค่า FPS (30 / 60 / 90 / 120 FPS) เท่านั้น
+              - ซ่อนแท็บเลือกเซิร์ฟเวอร์ และไม่แสดง IP เซิร์ฟเวอร์ตามที่ต้องการ
+            - **แก้ไขระบบตัวเกม**:
               - ดาเมจ PC ตี/ยิง มือถือเข้าปกติ
-              - แก้นาฬิกาทราย/AFK เวลายืนนิ่ง
-              - ซิงค์ `settings.ini` ทุกตำแหน่ง
+              - แก้นาฬิกาทราย/AFK บนหัวเมื่อยืนนิ่ง
+              - ซิงค์ไฟล์ config settings.ini อัตโนมัติ
           files: app/build/outputs/apk/**/*.apk
 
       - name: Push Build Failure Log to Branch

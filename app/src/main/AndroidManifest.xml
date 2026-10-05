@@ -77,7 +77,7 @@
 
         <activity
             android:name=".launcher.MainActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true">

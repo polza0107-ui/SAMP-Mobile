@@ -2,168 +2,118 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- App / Server Logo -->
+    <!-- Fullscreen Landscape Background (User provided 4KING SOBAD wallpaper) -->
     <ImageView
-        android:id="@+id/home_logo"
-        android:layout_width="@dimen/_105sdp"
-        android:layout_height="@dimen/_105sdp"
-        android:layout_marginTop="@dimen/_18sdp"
+        android:id="@+id/home_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_launcher"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Server / Community Title -->
-    <TextView
-        android:id="@+id/home_server_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:fontFamily="@font/montserrat_bold"
-        android:text="[TH] 4KING ROLEPLAY"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_16sdp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_logo" />
-
-    <View
-        android:id="@+id/home_divider"
-        android:layout_width="@dimen/_210sdp"
-        android:layout_height="@dimen/_2sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:background="#FF0037"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_server_title" />
-
-    <!-- Nickname Label -->
-    <TextView
-        android:id="@+id/home_nickname_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!-- Top Right Settings Button (Gear Icon) -->
+    <ImageView
+        android:id="@+id/btn_settings_top_right"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_36sdp"
         android:layout_marginTop="@dimen/_14sdp"
-        android:fontFamily="@font/montserrat_bold"
-        android:text="ชื่อตัวละคร (Nickname)"
-        android:textColor="#AEAEAE"
-        android:textSize="@dimen/_11sdp"
-        app:layout_constraintStart_toStartOf="@+id/home_nickname_edit"
-        app:layout_constraintTop_toBottomOf="@+id/home_divider" />
-
-    <!-- Nickname Input Box -->
-    <EditText
-        android:id="@+id/home_nickname_edit"
-        android:layout_width="@dimen/_240sdp"
-        android:layout_height="@dimen/_38sdp"
-        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
         android:background="@drawable/ic_nickname_bg"
-        android:ems="24"
-        android:focusable="auto"
-        android:fontFamily="@font/montserrat_bold"
-        android:gravity="center"
-        android:hint="ใส่ชื่อตัวละครที่นี่..."
-        android:imeOptions="actionDone"
-        android:inputType="textPersonName"
-        android:maxLength="24"
-        android:paddingStart="@dimen/_14sdp"
-        android:paddingEnd="@dimen/_14sdp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/gray"
-        android:textSize="@dimen/_12sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/_7sdp"
+        android:src="@drawable/ic_settingsmenu"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_nickname_label" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Action Buttons Row: Settings (FPS) & Big Start Game Button -->
+    <!-- Bottom Left: Nickname Input Container -->
     <LinearLayout
-        android:id="@+id/home_action_row"
-        android:layout_width="@dimen/_240sdp"
+        android:id="@+id/bottom_left_container"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_18sdp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/home_nickname_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:fontFamily="@font/montserrat_bold"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"
+            android:text="ชื่อตัวละคร (Nickname)"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp" />
+
+        <EditText
+            android:id="@+id/home_nickname_edit"
+            android:layout_width="@dimen/_190sdp"
+            android:layout_height="@dimen/_34sdp"
+            android:background="@drawable/ic_nickname_bg"
+            android:ems="24"
+            android:focusable="auto"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center_vertical"
+            android:hint="ใส่ชื่อตัวละคร..."
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName"
+            android:maxLength="24"
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/_11sdp" />
+    </LinearLayout>
+
+    <!-- Bottom Right: Update Button & Big Start Game Button -->
+    <LinearLayout
+        android:id="@+id/bottom_right_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_18sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_nickname_edit">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- FPS Config Button -->
+        <!-- Update Button (ปุ่ม อัพเดท ฝั่งขวาล่าง) -->
         <Button
-            android:id="@+id/home_btn_fps"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_36sdp"
+            android:id="@+id/btn_update"
+            android:layout_width="@dimen/_75sdp"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             android:background="@drawable/ic_buttoncolor3"
             android:fontFamily="@font/montserrat_bold"
-            android:text="FPS: 60"
+            android:text="อัปเดต"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/_10sdp" />
 
-        <Space
-            android:layout_width="@dimen/_8sdp"
-            android:layout_height="wrap_content" />
-
-        <!-- Big Start Game Button -->
+        <!-- Start Game Button (ปุ่ม เริ่มเกม ฝั่งขวาล่าง) -->
         <Button
-            android:id="@+id/home_btn_start"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_weight="1"
+            android:id="@+id/btn_start_game"
+            android:layout_width="@dimen/_110sdp"
+            android:layout_height="@dimen/_34sdp"
             android:background="@drawable/ic_buttoncolor"
             android:fontFamily="@font/montserrat_bold"
-            android:text="▶ เริ่มเกม (CONNECT)"
+            android:text="▶ เริ่มเกม"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/_11sdp" />
-    </LinearLayout>
-
-    <!-- Social / Community Icons Row -->
-    <TextView
-        android:id="@+id/home_community_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="ช่องทางติดตามคอมมูนิตี้"
-        android:textColor="#808080"
-        android:textSize="@dimen/_10sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_action_row" />
-
-    <LinearLayout
-        android:id="@+id/home_social_row"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_community_label">
-
-        <ImageView
-            android:id="@+id/discord_logo"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            app:srcCompat="@drawable/discord_logo" />
-
-        <ImageView
-            android:id="@+id/youtube_logo"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            app:srcCompat="@drawable/youtube_logo" />
-
-        <ImageView
-            android:id="@+id/internet_button"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            app:srcCompat="@drawable/internet" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

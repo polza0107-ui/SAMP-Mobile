@@ -1,7 +1,9 @@
 package com.samp.mobile.launcher.fragments;
 
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,9 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.joom.paranoid.Obfuscate;
@@ -30,11 +33,9 @@ import com.samp.mobile.launcher.util.SharedPreferenceCore;
 public class HomeFragment extends Fragment {
 
     private EditText mNicknameEdit;
-    private Button mBtnFps;
-    private Button mBtnStart;
-
-    private final String[] fpsOptions = {"30 FPS", "60 FPS", "90 FPS", "120 FPS"};
-    private final int[] fpsValues = {30, 60, 90, 120};
+    private Button mBtnUpdate;
+    private Button mBtnStartGame;
+    private ImageView mBtnSettings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,10 +46,11 @@ public class HomeFragment extends Fragment {
         }
 
         mNicknameEdit = view.findViewById(R.id.home_nickname_edit);
-        mBtnFps = view.findViewById(R.id.home_btn_fps);
-        mBtnStart = view.findViewById(R.id.home_btn_start);
+        mBtnUpdate = view.findViewById(R.id.btn_update);
+        mBtnStartGame = view.findViewById(R.id.btn_start_game);
+        mBtnSettings = view.findViewById(R.id.btn_settings_top_right);
 
-        // Load Nickname
+        // Load Nickname (Bottom-Left)
         String currentNick = SettingsHelper.getNickName(getContext());
         if (mNicknameEdit != null) {
             mNicknameEdit.setText(currentNick);
@@ -69,27 +71,37 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Update FPS Button text
-        updateFpsButtonText();
-
-        // FPS Button Click: Popup dialog to select FPS
-        if (mBtnFps != null) {
-            mBtnFps.setOnTouchListener(new ButtonAnimator(getContext(), mBtnFps));
-            mBtnFps.setOnClickListener(new View.OnClickListener() {
+        // Top-Right Settings Button -> Open FPS Settings Dialog
+        if (mBtnSettings != null) {
+            mBtnSettings.setOnTouchListener(new ButtonAnimator(getContext(), mBtnSettings));
+            mBtnSettings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showFpsPickerDialog();
+                    showFpsSettingsDialog();
                 }
             });
         }
 
-        // Start Game Button Click: Save nickname and open Connect Dialog
-        if (mBtnStart != null) {
-            mBtnStart.setOnTouchListener(new ButtonAnimator(getContext(), mBtnStart));
-            mBtnStart.setOnClickListener(new View.OnClickListener() {
+        // Bottom-Right: Update Button (Check for updates / Discord link)
+        if (mBtnUpdate != null) {
+            mBtnUpdate.setOnTouchListener(new ButtonAnimator(getContext(), mBtnUpdate));
+            mBtnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Save nickname
+                    Toast.makeText(getContext(), "ตัวเกมเป็นเวอร์ชันล่าสุดแล้ว (v0.8.3.0)", Toast.LENGTH_SHORT).show();
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/jvKM7HR3Dc")));
+                    } catch (Exception ignored) {}
+                }
+            });
+        }
+
+        // Bottom-Right: Start Game Button -> Open Connect Dialog
+        if (mBtnStartGame != null) {
+            mBtnStartGame.setOnTouchListener(new ButtonAnimator(getContext(), mBtnStartGame));
+            mBtnStartGame.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (mNicknameEdit != null) {
                         String name = mNicknameEdit.getText().toString().trim();
                         if (name.isEmpty()) {
@@ -100,7 +112,7 @@ public class HomeFragment extends Fragment {
                         SettingsHelper.setNickName(requireContext(), name);
                     }
 
-                    // Get main 4KING server info
+                    // Main 4KING Server
                     SAMPServerInfo targetServer = null;
                     if (getActivity() instanceof MainActivity) {
                         MainActivity act = (MainActivity) getActivity();
@@ -121,43 +133,8 @@ public class HomeFragment extends Fragment {
                         targetServer.setServerStatus(SAMPServerInfo.Status.ONLINE);
                     }
 
-                    // Show Connect Dialog directly
                     ServerInformationFragment dialog = new ServerInformationFragment(getActivity(), targetServer);
                     dialog.show();
-                }
-            });
-        }
-
-        // Community Links
-        ImageView yt_image = view.findViewById(R.id.youtube_logo);
-        if (yt_image != null) {
-            yt_image.setOnTouchListener(new ButtonAnimator(getContext(), yt_image));
-            yt_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bit.ly/x1y2z_yt")));
-                }
-            });
-        }
-
-        ImageView discord_image = view.findViewById(R.id.discord_logo);
-        if (discord_image != null) {
-            discord_image.setOnTouchListener(new ButtonAnimator(getContext(), discord_image));
-            discord_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/jvKM7HR3Dc")));
-                }
-            });
-        }
-
-        ImageView internet_logo = view.findViewById(R.id.internet_button);
-        if (internet_logo != null) {
-            internet_logo.setOnTouchListener(new ButtonAnimator(getContext(), internet_logo));
-            internet_logo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://samp-mobile.shop")));
                 }
             });
         }
@@ -165,39 +142,50 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void updateFpsButtonText() {
-        if (mBtnFps == null || getContext() == null) return;
-        int currentFps = new SharedPreferenceCore().getInt(requireContext().getApplicationContext(), "FPS_LIMIT");
-        if (currentFps == 0) currentFps = 60;
-        mBtnFps.setText("FPS: " + currentFps);
-    }
-
-    private void showFpsPickerDialog() {
+    private void showFpsSettingsDialog() {
         if (getContext() == null || getActivity() == null) return;
-        int currentFps = new SharedPreferenceCore().getInt(requireContext().getApplicationContext(), "FPS_LIMIT");
-        int selectedIndex = 1; // default 60
-        for (int i = 0; i < fpsValues.length; i++) {
-            if (fpsValues[i] == currentFps) {
-                selectedIndex = i;
-                break;
-            }
+
+        final Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.dialog_fps_settings);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("เลือกจำกัดเฟรมเรต (FPS Limit)");
-        builder.setSingleChoiceItems(fpsOptions, selectedIndex, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int chosenFps = fpsValues[which];
-                new SharedPreferenceCore().setInt(requireContext().getApplicationContext(), "FPS_LIMIT", chosenFps);
-                SettingsHelper.setSetting(requireContext(), "gui", "FPSLimit", chosenFps);
-                updateFpsButtonText();
-                Toast.makeText(getContext(), "ตั้งค่า FPS เป็น " + chosenFps + " เรียบร้อย", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("ยกเลิก", null);
-        builder.show();
+        int currentFps = new SharedPreferenceCore().getInt(requireContext().getApplicationContext(), "FPS_LIMIT");
+        if (currentFps == 0) currentFps = 60;
+
+        RadioGroup group = dialog.findViewById(R.id.dialog_fps_group);
+        RadioButton r30 = dialog.findViewById(R.id.fps_30);
+        RadioButton r60 = dialog.findViewById(R.id.fps_60);
+        RadioButton r90 = dialog.findViewById(R.id.fps_90);
+        RadioButton r120 = dialog.findViewById(R.id.fps_120);
+
+        if (currentFps == 30 && r30 != null) r30.setChecked(true);
+        else if (currentFps == 90 && r90 != null) r90.setChecked(true);
+        else if (currentFps == 120 && r120 != null) r120.setChecked(true);
+        else if (r60 != null) r60.setChecked(true);
+
+        Button btnSave = dialog.findViewById(R.id.dialog_fps_btn_save);
+        if (btnSave != null) {
+            btnSave.setOnTouchListener(new ButtonAnimator(getContext(), btnSave));
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int chosenFps = 60;
+                    if (r30 != null && r30.isChecked()) chosenFps = 30;
+                    else if (r60 != null && r60.isChecked()) chosenFps = 60;
+                    else if (r90 != null && r90.isChecked()) chosenFps = 90;
+                    else if (r120 != null && r120.isChecked()) chosenFps = 120;
+
+                    new SharedPreferenceCore().setInt(requireContext().getApplicationContext(), "FPS_LIMIT", chosenFps);
+                    SettingsHelper.setSetting(requireContext(), "gui", "FPSLimit", chosenFps);
+                    Toast.makeText(getContext(), "ตั้งค่าจำกัด FPS เป็น " + chosenFps + " เรียบร้อย", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+        }
+
+        dialog.show();
     }
 
     @Override
@@ -206,6 +194,5 @@ public class HomeFragment extends Fragment {
         if (mNicknameEdit != null && getContext() != null) {
             mNicknameEdit.setText(SettingsHelper.getNickName(getContext()));
         }
-        updateFpsButtonText();
     }
 }

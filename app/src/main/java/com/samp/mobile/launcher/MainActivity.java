@@ -107,46 +107,9 @@ public class MainActivity extends AppCompatActivity {
             file.delete();
         }
 
-        FragmentManager fm = getSupportFragmentManager();
-        ViewPagerAdapter sa = new ViewPagerAdapter(fm);
-        ViewPagerWithoutSwipe pa = findViewById(R.id.fragment_place);
-        pa.setAdapter(sa);
-
-        TabLayout tabLayout = findViewById(R.id.constraintLayout);
-
-        tabLayout.setupWithViewPager(pa);
-
-        for(int  i = 0; i < tabLayout.getTabCount(); i++)
-        {
-            View inflate = LayoutInflater.from(this).inflate(R.layout.tablayout_item, (ViewGroup) tabLayout, false);
-
-            ImageView image = inflate.findViewById(R.id.imageView2);
-            image.setBackgroundResource(tabImages[i]);
-
-            Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(inflate);
-
-            tabLayout.clearOnTabSelectedListeners();
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                    pa.setCurrentItem(tab.getPosition(), true);
-                    ((ImageView)tab.getCustomView().findViewById(R.id.imageView2)).setBackgroundResource(tabSelectedImages[tab.getPosition()]);
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-                    ((ImageView)tab.getCustomView().findViewById(R.id.imageView2)).setBackgroundResource(tabImages[tab.getPosition()]);
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-
-        }
-        ((ImageView)tabLayout.getTabAt(0).getCustomView().findViewById(R.id.imageView2)).setBackgroundResource(tabSelectedImages[0]);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_place, new HomeFragment())
+                .commit();
 
         getServersInfo();
         getFavoriteServersInfo();
