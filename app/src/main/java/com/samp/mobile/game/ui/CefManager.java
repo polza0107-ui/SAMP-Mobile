@@ -407,6 +407,11 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/closecard");
                 }
+            } else if ("cef:saveCardPhoto".equals(event)) {
+                String photoUrl = extractFirstArg(jsonArgs);
+                if (SAMP.getInstance() != null && photoUrl != null && !photoUrl.isEmpty()) {
+                    SAMP.getInstance().sendChatCommand("/setcardphoto " + photoUrl);
+                }
             } else if ("cef:exitAFK".equals(event)) {
                 hideBrowser();
                 if (SAMP.getInstance() != null) {

@@ -27,8 +27,8 @@ android {
         applicationId "com.samp.mobile"
         minSdk 26
         targetSdk 34
-        versionCode 106
-        versionName "0.8.3.8"
+        versionCode 107
+        versionName "0.8.3.9"
 
         multiDexEnabled true
 

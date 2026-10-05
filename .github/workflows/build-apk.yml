@@ -54,10 +54,14 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.8
-          name: "SAMP Mobile v0.8.3.8 (4KING SOBAD - Native Notification Overlay & Mobile Inventory Bridges)"
+          tag_name: v0.8.3.9
+          name: "SAMP Mobile v0.8.3.9 (4KING SOBAD - Discord Card Photo SQL Sync & Native Overlay)"
           body: |
-            ### 4KING SOBAD v0.8.3.8 Update
+            ### 4KING SOBAD v0.8.3.9 Update
+            - **Discord Card Photo Sync (ระบบบันทึกรูปบัตรประจำตัว)**:
+              - ขยายความยาวรองรับ URL รูปภาพ Discord สูงสุด 500 ตัวอักษร (แก้ปัญหาลิงก์ CDN ยาวแล้วไม่บันทึกลง SQL)
+              - เพิ่ม Event Bridge `cef:saveCardPhoto` ใน CefManager บนมือถือ
+              - ซิงค์ลิงก์รูปภาพเปิดโชว์บนบัตรประจำตัวทั้งบน PC และ Mobile ทันที
             - **Native Notification Overlay UI (แจ้งเตือนลอยบนจอมือถือ)**:
               - ระบบแจ้งเตือน Floating Toast/Overlay บน Android แบบ Native (ไม่กินการกดปุ่มบังคับในเกม)
               - ดักจับโปรโตคอล `$notify:<type>|<tag>|<msg>` แปลงฟอนต์ภาษาไทย UTF-8 คมชัด 100%
