@@ -472,6 +472,11 @@ public class CefManager {
                 if (SAMP.getInstance() != null && cmd != null && !cmd.isEmpty()) {
                     SAMP.getInstance().sendChatCommand(cmd);
                 }
+            } else if ("cef:requestSchoolRespawn".equals(event)) {
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/respawn");
+                }
             }
         }
 

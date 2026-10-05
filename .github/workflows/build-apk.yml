@@ -54,14 +54,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.9
-          name: "SAMP Mobile v0.8.3.9 (4KING SOBAD - Discord Card Photo SQL Sync & Native Overlay)"
+          tag_name: v0.8.4.0
+          name: "SAMP Mobile v0.8.4.0 (4KING SOBAD - Mobile Downed Screen & Respawn Bridge)"
           body: |
-            ### 4KING SOBAD v0.8.3.9 Update
+            ### 4KING SOBAD v0.8.4.0 Update
+            - **Mobile Downed Incapacitated Screen (หน้าต่างสลบ/บาดเจ็บสาหัสบนมือถือ)**:
+              - แสดงผลหน้าต่างสลบพร้อมขอบจอกระพริบสีแดง (Red Pulse Vignette)
+              - นับเวลาถอยหลัง 30 วินาที พร้อมแถบหลอดเวลาเรียลไทม์
+              - เมื่อหมดเวลา จะปลดล็อกปุ่มเรืองแสงสีเขียว `🚑 ไปห้องพยาบาล (แตะเพื่อเกิดใหม่)`
+              - ส่งคำสั่งกลับเซิร์ฟเวอร์เพื่อวาร์ปไปเกิดที่ห้องพยาบาลสถาบันของผู้เล่นทันที
             - **Discord Card Photo Sync (ระบบบันทึกรูปบัตรประจำตัว)**:
-              - ขยายความยาวรองรับ URL รูปภาพ Discord สูงสุด 500 ตัวอักษร (แก้ปัญหาลิงก์ CDN ยาวแล้วไม่บันทึกลง SQL)
-              - เพิ่ม Event Bridge `cef:saveCardPhoto` ใน CefManager บนมือถือ
-              - ซิงค์ลิงก์รูปภาพเปิดโชว์บนบัตรประจำตัวทั้งบน PC และ Mobile ทันที
+              - รองรับ URL รูปภาพ Discord ไม่จำกัดความยาว
+              - แก้ไขปัญหาบัตรเปิดไม่ได้บนมือถือหลังจากใส่รูปลิงก์ Discord เรียบร้อยแล้ว
             - **Native Notification Overlay UI (แจ้งเตือนลอยบนจอมือถือ)**:
               - ระบบแจ้งเตือน Floating Toast/Overlay บน Android แบบ Native (ไม่กินการกดปุ่มบังคับในเกม)
               - ดักจับโปรโตคอล `$notify:<type>|<tag>|<msg>` แปลงฟอนต์ภาษาไทย UTF-8 คมชัด 100%
