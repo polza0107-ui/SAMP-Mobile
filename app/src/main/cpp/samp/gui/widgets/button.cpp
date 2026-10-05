@@ -33,7 +33,7 @@ void Button::draw(ImGuiRenderer* renderer)
 	//Outline
 	renderer->drawRect(absolutePosition() + ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
 		(absolutePosition() + size()) - ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		ImColor(0.287f, 0.287f, 0.287f, 0.890f)/*ImColor(0xF5, 0x91, 0x32)*/, false, UISettings::outlineSize());
+		ImColor(229, 169, 60, 160), false, UISettings::outlineSize());
 
 	Widget::draw(renderer);
 }
@@ -76,7 +76,7 @@ void CButton::draw(ImGuiRenderer* renderer)
 	
 	renderer->drawRect(absolutePosition() + ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
 		(absolutePosition() + size()) - ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		ImColor(0x64, 0x95, 0xED)/*ImColor(0, 0, 0, 200)*/, false, UISettings::outlineSize());
+		ImColor(229, 169, 60, 160), false, UISettings::outlineSize());
 
 	Widget::draw(renderer);
 }
@@ -126,7 +126,7 @@ void OButton::draw(ImGuiRenderer* renderer)
 
 	renderer->drawRect(absolutePosition() + ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
 		(absolutePosition() + size()) - ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		ImColor(0x64, 0x95, 0xED)/*ImColor(0, 0, 0, 200)*/, false, UISettings::outlineSize());
+		ImColor(229, 169, 60, 160), false, UISettings::outlineSize());
 
 	Widget::draw(renderer);
 

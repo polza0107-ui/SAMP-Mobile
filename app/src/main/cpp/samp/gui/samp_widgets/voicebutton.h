@@ -36,10 +36,34 @@ public:
 		if (recording() && m_texture_micro_on) raster = m_texture_micro_on->raster;
 		else if (!recording() && m_texture_micro_off) raster = m_texture_micro_off->raster;
 
-		if (raster) {
-			renderer->drawImage(absolutePosition(), absolutePosition() + size(), raster);
+		ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+		ImVec2 center = absolutePosition() + size() * 0.5f;
+		float radius = (size().x < size().y ? size().x : size().y) * 0.44f;
+
+		if (recording()) {
+			// Active transmitting: Glowing Gold / Crimson pulsing circle
+			drawList->AddCircleFilled(center, radius + 4.0f, ImColor(229, 169, 60, 60), 32);
+			drawList->AddCircleFilled(center, radius, ImColor(229, 70, 40, 220), 32);
+			drawList->AddCircle(center, radius, ImColor(255, 215, 0, 255), 32, 2.5f);
 		} else {
-			Button::draw(renderer);
+			// Idle listening: Sleek frosted dark disc with gold-tinted rim
+			drawList->AddCircleFilled(center, radius, ImColor(16, 20, 26, 175), 32);
+			drawList->AddCircle(center, radius, ImColor(229, 169, 60, 140), 32, 1.5f);
+		}
+
+		if (raster) {
+			ImVec2 iconPad = ImVec2(radius * 0.55f, radius * 0.55f);
+			renderer->drawImage(center - iconPad, center + iconPad, raster);
+		} else {
+			// Render vector microphone shape if texture raster isn't loaded
+			float r = radius * 0.45f;
+			ImColor micColor = recording() ? ImColor(255, 255, 255, 255) : ImColor(229, 169, 60, 230);
+			// Mic capsule
+			drawList->AddRectFilled(ImVec2(center.x - r * 0.4f, center.y - r * 0.8f), ImVec2(center.x + r * 0.4f, center.y + r * 0.2f), micColor, r * 0.4f);
+			// Mic base arc & stem
+			drawList->AddCircle(center, r * 0.65f, micColor, 16, 1.8f);
+			drawList->AddLine(ImVec2(center.x, center.y + r * 0.65f), ImVec2(center.x, center.y + r * 1.0f), micColor, 2.0f);
+			drawList->AddLine(ImVec2(center.x - r * 0.5f, center.y + r * 1.0f), ImVec2(center.x + r * 0.5f, center.y + r * 1.0f), micColor, 2.0f);
 		}
 	}
 

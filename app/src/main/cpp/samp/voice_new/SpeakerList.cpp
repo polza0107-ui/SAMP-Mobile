@@ -125,6 +125,25 @@ void SpeakerList::Render()
                             }
                             ImVec2 a = ImVec2(textPos.x, textPos.y);
                             ImVec2 b = ImVec2(textPos.x + pUI->GetFontSize() / 2, textPos.y + pUI->GetFontSize() / 2);
+                            // Modern sleek pill badge background for active speaker
+                            ImVec2 textSize = ImGui::CalcTextSize(szText);
+                            float pillWidth = textSize.x + pUI->GetFontSize() * 1.2f;
+                            float pillHeight = pUI->GetFontSize() * 0.9f;
+                            ImGui::GetBackgroundDrawList()->AddRectFilled(
+                                ImVec2(a.x - 4.0f, a.y - 2.0f),
+                                ImVec2(a.x + pillWidth, a.y + pillHeight),
+                                ImColor(15, 18, 24, 190),
+                                12.0f
+                            );
+                            ImGui::GetBackgroundDrawList()->AddRect(
+                                ImVec2(a.x - 4.0f, a.y - 2.0f),
+                                ImVec2(a.x + pillWidth, a.y + pillHeight),
+                                ImColor(229, 169, 60, 150),
+                                12.0f,
+                                15,
+                                1.2f
+                            );
+
                             if (SpeakerList::tSpeakerIcon && SpeakerList::tSpeakerIcon->raster) {
                                 ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)SpeakerList::tSpeakerIcon->raster, a, b);
                             }

@@ -40,8 +40,8 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="gradient1">#ffce0e03</color>
-    <color name="gradient2">#fff75514</color>
+    <color name="gradient1">#FFE5A93C</color>
+    <color name="gradient2">#FFC87A14</color>
     <color name="white6">#14ffffff</color>
     <color name="black20">#33000000</color>
     <color name="color_0F0F0F">#ff0f0f0f</color>
@@ -55,7 +55,7 @@
     <color name="black_75_transparency">#bf000000</color>
     <color name="blue">#ff3ea2ff</color>
     <color name="gray">#ff666666</color>
-    <color name="colorAccent">#ffed4319</color>
+    <color name="colorAccent">#FFE5A93C</color>
     <color name="colorPrimary">#ff000000</color>
     <color name="colorPrimaryDark">#ff000000</color>
     <color name="red_7">#ff250000</color>

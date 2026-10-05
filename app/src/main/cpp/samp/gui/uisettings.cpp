@@ -65,15 +65,15 @@ ImVec2 UISettings::m_buttonVoiceSize = ImVec2(55.0f, 80.0f);
 /* ////////////////// colors ////////////////// */
 
 /* button */
-ImColor UISettings::m_buttonColor = ImColor(0.11f, 0.11f, 0.11f, 0.80f);
-ImColor UISettings::m_buttonFocusedColor = ImColor(0x64, 0x95, 0xED);/*ImColor(119, 4, 4, 255);*/ //ImColor(80, 80, 80);
+ImColor UISettings::m_buttonColor = ImColor(16, 20, 26, 210);
+ImColor UISettings::m_buttonFocusedColor = ImColor(229, 169, 60, 240);
 
 /* keyboard */
-ImColor UISettings::m_keyboardBackgroundColor = ImColor(0, 0, 0, 150);
+ImColor UISettings::m_keyboardBackgroundColor = ImColor(10, 12, 16, 210);
 
 /* dialog */
-ImColor UISettings::m_dialogBackgroundColor = ImColor(0, 0, 0, 200);
-ImColor UISettings::m_dialogTitleBackgroundColor = ImColor(0, 0, 0, 200);/*ImColor(0xF5, 0x91, 0x32);*/// ImColor(50, 50, 50, 255);
+ImColor UISettings::m_dialogBackgroundColor = ImColor(12, 15, 20, 230);
+ImColor UISettings::m_dialogTitleBackgroundColor = ImColor(20, 24, 32, 240);
 
 void UISettings::Initialize(const ImVec2& display_size)
 {

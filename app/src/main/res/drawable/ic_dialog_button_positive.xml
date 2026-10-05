@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:aapt="http://schemas.android.com/aapt">
-    <item>
-        <shape>
-            <corners
-                android:radius="12.0dip" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp"/>
             <gradient
-                android:startColor="#008BF6"
-                android:endColor="#1900FD"
-                android:angle="315.0" />
+                android:startColor="#FFA818"
+                android:endColor="#D97200"
+                android:angle="0"/>
         </shape>
     </item>
-</layer-list>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp"/>
+            <gradient
+                android:startColor="#FFE5A93C"
+                android:endColor="#FFC87A14"
+                android:angle="0"/>
+        </shape>
+    </item>
+</selector>

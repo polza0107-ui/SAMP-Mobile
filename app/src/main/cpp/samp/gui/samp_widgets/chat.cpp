@@ -78,6 +78,22 @@ void Chat::addPlayerMessage(const std::string& message, const std::string& nick,
 
 void Chat::draw(ImGuiRenderer* renderer)
 {
+	// Modern glassmorphic background with smooth rounded borders for chat
+	if (itemsCount() > 0)
+	{
+		ImVec2 pMin = absolutePosition() - ImVec2(6.0f, 4.0f);
+		ImVec2 pMax = absolutePosition() + size() + ImVec2(6.0f, 4.0f);
+		
+		// Semi-transparent dark background
+		ImColor bgColor = active() ? ImColor(12, 15, 20, 180) : ImColor(8, 10, 14, 90);
+		ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+		drawList->AddRectFilled(pMin, pMax, bgColor, 8.0f);
+		
+		// Sleek left accent indicator
+		ImColor accentColor = active() ? ImColor(229, 169, 60, 220) : ImColor(229, 169, 60, 110);
+		drawList->AddRectFilled(pMin, ImVec2(pMin.x + 3.0f, pMax.y), accentColor, 4.0f);
+	}
+
 	ListBox::draw(renderer);
 }
 
