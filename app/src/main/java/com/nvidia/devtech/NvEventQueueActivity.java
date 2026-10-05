@@ -1190,12 +1190,16 @@ public abstract class NvEventQueueActivity extends AppCompatActivity implements 
         try
         {
             try {
-                toReturn = retn.getBytes("windows-874");
+                toReturn = retn.getBytes("TIS-620");
             } catch (Exception ex) {
-                toReturn = retn.getBytes("windows-1251");
+                try {
+                    toReturn = retn.getBytes("windows-874");
+                } catch (Exception ex2) {
+                    toReturn = retn.getBytes(StandardCharsets.UTF_8);
+                }
             }
         }
-        catch(UnsupportedEncodingException e)
+        catch(Exception e)
         {
 
         }

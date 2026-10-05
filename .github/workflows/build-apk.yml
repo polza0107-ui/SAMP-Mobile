@@ -53,23 +53,22 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.2.6
-          name: "SAMP Mobile v0.8.2.6 (4KING SOBAD - Thai Language & Logo)"
+          tag_name: v0.8.2.7
+          name: "SAMP Mobile v0.8.2.7 (4KING SOBAD - Fix Thai Characters & Fonts)"
           body: |
-            ### 4KING SOBAD v0.8.2.6
-            - **Thai Language & Encoding Support**: Added CP874 (TIS-620) & UTF-8 passthrough decoder for chat, dialogs, labels, and input
-            - **Thai Fonts**: Integrated Thai TTF font (Tahoma/Arial) auto-extracted to `/storage/emulated/0/GTA/SAMP/fonts/`
-            - **Android Keyboard**: Enabled `androidkeyboard = 1` for native Thai keyboard input
-            - **App Branding**: Updated App Name to `4KING SOBAD`
-            - **New Logo**: Applied custom 4KING SOBAD logo across launcher icons, splash screen, and loading screen
-            - Direct connection to `192.168.1.112:7777`
-            - Support cache in `/storage/emulated/0/GTA/` and `/sdcard/GTA/`
-            - Added All Files Access permission handling for Android 11-16
-            - Fixed `OS_FileRead` null pointer crash when game files are missing
-            - Removed `android:gwpAsanMode="always"` causing HyperOS memory aborts
-            - Configured Server: `192.168.1.112:7777` ([TH] 4KING ROLEPLAY)
-            - Default Nickname: `Tham_Player`
-            - Supports both ARM64-v8a and ARMeabi-v7a
+            ### 4KING SOBAD v0.8.2.7 - Thai Character & Font Rendering Fix
+            - **Fixed Thai Character Scrambling in Chat & 3D Labels**:
+              - Corrected `Encoding::cp2utf` which previously mistook Thai vowel+consonant pairs (e.g., `ิด`, `ัก`, `ัน`, `ิส`, `ูก`) for 2-byte UTF-8, causing `เปิ?`, `รัก?`, `ด?`, and Russian letters `Ф`/`ç`.
+              - Properly prioritize CP874 (TIS-620) single-byte Thai conversion (`0xA1..0xFB`) into valid 3-byte Thai UTF-8 (`0xE0 0xB8/B9 xx`).
+            - **Enhanced Thai Font Atlas & Fallback**:
+              - Added Thai PUA code point range (`0xF700..0xF71A`) for positioned/shifted tone marks.
+              - ImGui now loads bundled full Thai fonts directly from internal app storage and merges system fonts (`NotoSansThai`).
+              - `ConfigValidator` now checks exact font file size and reliably overwrites old/incomplete Russian fonts.
+            - **Input & Dialog Encoding**:
+              - Updated `SAMP.java`, `DialogManager.java`, and `NvEventQueueActivity.java` to use standard Android `TIS-620` with `windows-874` fallback.
+              - Changed dialog placeholder and buttons to Thai (`แตะเพื่อพิมพ์`, `ตกลง`, `ยกเลิก`).
+            - **Server**: `192.168.1.112:7777` ([TH] 4KING ROLEPLAY)
+            - **Direct connection & Android 16 HyperOS support**
           files: app/build/outputs/apk/**/*.apk
 
       - name: Push Build Failure Log to Branch

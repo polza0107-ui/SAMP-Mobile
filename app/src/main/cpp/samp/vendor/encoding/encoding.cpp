@@ -7,7 +7,7 @@ constexpr Encoding::Letter Encoding::m_letters[];
 std::string Encoding::cp2utf(const std::string& s)
 {
 	std::string ns;
-	ns.reserve(s.size() * 2);
+	ns.reserve(s.size() * 3);
 
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s.c_str());
 	size_t len = s.size();
@@ -17,27 +17,35 @@ std::string Encoding::cp2utf(const std::string& s)
 	{
 		unsigned char c = p[i];
 
-		// Check if it's already a valid UTF-8 multibyte sequence
-		if ((c & 0xE0) == 0xC0 && (i + 1 < len) && ((p[i + 1] & 0xC0) == 0x80))
+		// 1. Single-byte ASCII (0x00..0x7F)
+		if (c < 0x80)
 		{
-			// 2-byte UTF-8
 			ns.push_back((char)c);
-			ns.push_back((char)p[i + 1]);
-			i += 2;
+			i++;
 			continue;
 		}
-		else if ((c & 0xF0) == 0xE0 && (i + 2 < len) && ((p[i + 1] & 0xC0) == 0x80) && ((p[i + 2] & 0xC0) == 0x80))
+
+		// 2. Check if already a valid 3-byte UTF-8 Thai character (0xE0, 0xB8/0xB9, 0x80..0xBF)
+		if (c == 0xE0 && (i + 2 < len))
 		{
-			// 3-byte UTF-8 (e.g. Thai characters U+0E00..U+0E7F: E0 B8/B9 xx)
-			ns.push_back((char)c);
-			ns.push_back((char)p[i + 1]);
-			ns.push_back((char)p[i + 2]);
-			i += 3;
-			continue;
+			unsigned char b2 = p[i + 1];
+			unsigned char b3 = p[i + 2];
+			if ((b2 == 0xB8 || b2 == 0xB9) && (b3 >= 0x80 && b3 <= 0xBF))
+			{
+				ns.push_back((char)c);
+				ns.push_back((char)b2);
+				ns.push_back((char)b3);
+				i += 3;
+				continue;
+			}
 		}
-		else if ((c & 0xF8) == 0xF0 && (i + 3 < len) && ((p[i + 1] & 0xC0) == 0x80) && ((p[i + 2] & 0xC0) == 0x80) && ((p[i + 3] & 0xC0) == 0x80))
+
+		// 3. Check for valid 4-byte UTF-8 (e.g. emojis U+10000..U+10FFFF)
+		if ((c & 0xF8) == 0xF0 && (i + 3 < len) &&
+			((p[i + 1] & 0xC0) == 0x80) &&
+			((p[i + 2] & 0xC0) == 0x80) &&
+			((p[i + 3] & 0xC0) == 0x80))
 		{
-			// 4-byte UTF-8
 			ns.push_back((char)c);
 			ns.push_back((char)p[i + 1]);
 			ns.push_back((char)p[i + 2]);
@@ -46,19 +54,8 @@ std::string Encoding::cp2utf(const std::string& s)
 			continue;
 		}
 
-		// Single-byte ASCII
-		if (c < 0x80)
-		{
-			ns.push_back((char)c);
-			i++;
-			continue;
-		}
-
-		// Thai (CP874 / TIS-620) character range 0xA1..0xFB
-		// Unicode code point = c + 0x0D60 (0x0E01..0x0E5B)
-		// Encoded in UTF-8:
-		// 0x0E01..0x0E3F (c: 0xA1..0xDF) -> 3 bytes: 0xE0, 0xB8, (c - 0x20)
-		// 0x0E40..0x0E5B (c: 0xE0..0xFB) -> 3 bytes: 0xE0, 0xB9, (c - 0x60)
+		// 4. CP874 / TIS-620 Thai character range (0xA1..0xFB):
+		// Consonants, vowels, baht sign (0xA1..0xDF) -> Unicode U+0E01..U+0E3F
 		if (c >= 0xA1 && c <= 0xDF)
 		{
 			ns.push_back((char)0xE0);
@@ -67,6 +64,7 @@ std::string Encoding::cp2utf(const std::string& s)
 			i++;
 			continue;
 		}
+		// Leading vowels, tone marks, digits (0xE0..0xFB) -> Unicode U+0E40..U+0E5B
 		else if (c >= 0xE0 && c <= 0xFB)
 		{
 			ns.push_back((char)0xE0);
@@ -76,7 +74,27 @@ std::string Encoding::cp2utf(const std::string& s)
 			continue;
 		}
 
-		// Windows-1251 fallback for other high-ASCII bytes (e.g. 0x80..0xA0, 0xFC..0xFF)
+		// 5. Check if it's an existing valid 2-byte UTF-8 sequence (e.g. Cyrillic U+0400..U+04FF)
+		// Only check for bytes not in the Thai single-byte range handled above
+		if ((c & 0xE0) == 0xC0 && (i + 1 < len) && ((p[i + 1] & 0xC0) == 0x80))
+		{
+			ns.push_back((char)c);
+			ns.push_back((char)p[i + 1]);
+			i += 2;
+			continue;
+		}
+
+		// 6. Any other 3-byte UTF-8 sequence
+		if ((c & 0xF0) == 0xE0 && (i + 2 < len) && ((p[i + 1] & 0xC0) == 0x80) && ((p[i + 2] & 0xC0) == 0x80))
+		{
+			ns.push_back((char)c);
+			ns.push_back((char)p[i + 1]);
+			ns.push_back((char)p[i + 2]);
+			i += 3;
+			continue;
+		}
+
+		// 7. Fallback for other high-ASCII bytes (e.g. 0x80..0xA0, 0xFC..0xFF)
 		char buf[8] = { 0 };
 		char in[2] = { (char)c, 0 };
 		convert_windows1251_to_utf8(buf, in, 1);

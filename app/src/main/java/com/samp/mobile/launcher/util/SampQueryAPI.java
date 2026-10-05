@@ -60,7 +60,15 @@ public final class SampQueryAPI {
             } catch (Exception unused) {
             }
         }
-        return new String(bArr, "windows-1251");
+        try {
+            return new String(bArr, "TIS-620");
+        } catch (Exception e) {
+            try {
+                return new String(bArr, "windows-874");
+            } catch (Exception e2) {
+                return new String(bArr, "windows-1251");
+            }
+        }
     }
 
     /* renamed from: b */

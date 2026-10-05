@@ -51,39 +51,67 @@ bool ImGuiWrapper::initialize()
         0x0020, 0x00FF, // Basic Latin + Latin Supplement
         0x0400, 0x04FF, // Cyrillic + Cyrillic Supplement
 		0x0E00, 0x0E7F, // Thai
+		0xF700, 0xF71A, // Thai PUA (shifted tone marks)
         0x2DE0, 0x2DFF, // Cyrillic Extended-A
         0xA640, 0xA69F, // Cyrillic Extended-B
         0xF020, 0xF0FF,
 		0
     };
 	
-	ImFont* font = io.Fonts->AddFontFromFileTTF(m_fontPath.c_str(),
-		UISettings::fontSize(), &fontCfg, ranges);
+	const char* fontCandidates[] = {
+		"/data/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
+		"/data/data/com.samp.mobile/files/SAMP/fonts/arial.ttf",
+		"/storage/emulated/0/Android/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
+		"/storage/emulated/0/Android/data/com.samp.mobile/files/SAMP/fonts/arial.ttf",
+		m_fontPath.c_str(),
+		"/storage/emulated/0/GTA/SAMP/fonts/arial_bold.ttf",
+		"/storage/emulated/0/GTA/SAMP/fonts/arial.ttf",
+		"/sdcard/GTA/SAMP/fonts/arial_bold.ttf",
+		"/sdcard/GTA/SAMP/fonts/arial.ttf",
+		nullptr
+	};
 
-	if (font == nullptr)
-	{
-		const char* fallbackFonts[] = {
-			"/storage/emulated/0/GTA/SAMP/fonts/arial_bold.ttf",
-			"/storage/emulated/0/GTA/SAMP/fonts/arial.ttf",
-			"/sdcard/GTA/SAMP/fonts/arial_bold.ttf",
-			"/sdcard/GTA/SAMP/fonts/arial.ttf",
-			"/storage/emulated/0/Android/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
-			"/data/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
-			nullptr
-		};
-
-		for (int i = 0; fallbackFonts[i] != nullptr; i++) {
-			font = io.Fonts->AddFontFromFileTTF(fallbackFonts[i], UISettings::fontSize(), &fontCfg, ranges);
-			if (font != nullptr) {
-				m_fontPath = fallbackFonts[i];
-				break;
-			}
+	ImFont* font = nullptr;
+	for (int i = 0; fontCandidates[i] != nullptr; i++) {
+		font = io.Fonts->AddFontFromFileTTF(fontCandidates[i], UISettings::fontSize(), &fontCfg, ranges);
+		if (font != nullptr) {
+			m_fontPath = fontCandidates[i];
+			Log::addParameter("Successfully loaded font: %s", fontCandidates[i]);
+			break;
 		}
 	}
 
 	if (font == nullptr)
 	{
 		font = io.Fonts->AddFontDefault();
+	}
+
+	// Merge system / bundled Thai fonts if available to ensure 100% complete glyph coverage
+	static const ImWchar thaiRanges[] =
+	{
+		0x0E00, 0x0E7F, // Thai
+		0xF700, 0xF71A, // Thai PUA
+		0
+	};
+	ImFontConfig thaiCfg;
+	thaiCfg.MergeMode = true;
+	thaiCfg.GlyphExtraSpacing.x = UISettings::outlineSize();
+
+	const char* thaiMergeCandidates[] = {
+		"/data/data/com.samp.mobile/files/SAMP/fonts/arial_bold.ttf",
+		"/system/fonts/NotoSansThai-Bold.ttf",
+		"/system/fonts/NotoSansThai-Regular.ttf",
+		"/system/fonts/DroidSansThai.ttf",
+		nullptr
+	};
+
+	for (int i = 0; thaiMergeCandidates[i] != nullptr; i++) {
+		if (m_fontPath != thaiMergeCandidates[i]) {
+			if (io.Fonts->AddFontFromFileTTF(thaiMergeCandidates[i], UISettings::fontSize(), &thaiCfg, thaiRanges)) {
+				Log::addParameter("Merged Thai font: %s", thaiMergeCandidates[i]);
+				break;
+			}
+		}
 	}
 
 	createFontTexture();

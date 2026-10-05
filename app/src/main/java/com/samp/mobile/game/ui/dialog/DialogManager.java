@@ -208,14 +208,18 @@ public class DialogManager {
         try {
             byte[] Str2;
             try {
-                Str2 = str.getBytes("windows-874");
+                Str2 = str.getBytes("TIS-620");
             } catch (Exception ex) {
-                Str2 = str.getBytes("windows-1251");
+                try {
+                    Str2 = str.getBytes("windows-874");
+                } catch (Exception ex2) {
+                    Str2 = str.getBytes(StandardCharsets.UTF_8);
+                }
             }
 
             Hide();
             sendDialogResponse(i, DialogManager.this.mCurrentDialogId, i2, Str2);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
