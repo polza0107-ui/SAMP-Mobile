@@ -37,6 +37,10 @@ public class SAMP extends GTASA implements CustomKeyboard.InputListener, HeightP
         return instance;
     }
 
+    public com.samp.mobile.game.ui.dialog.DialogManager getDialogManager() {
+        return mDialog;
+    }
+
     public com.samp.mobile.game.ui.CefManager getCefManager() {
         return mCefManager;
     }

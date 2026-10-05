@@ -184,23 +184,23 @@ public class CefManager {
             if ("cef:onLoginSubmit".equals(event)) {
                 // Parse password argument from jsonArgs array [ "password" ]
                 String pass = extractFirstArg(jsonArgs);
-                if (SAMP.getInstance() != null) {
+                if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
                     try {
                         byte[] strBytes = pass.getBytes("TIS-620");
-                        SAMP.getInstance().sendDialogResponse(1, 1100, 0, strBytes);
+                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1100, 1, strBytes);
                     } catch (Exception e) {
-                        SAMP.getInstance().sendDialogResponse(1, 1100, 0, pass.getBytes());
+                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1100, 1, pass.getBytes());
                     }
                 }
                 hideBrowser();
             } else if ("cef:onRegisterSubmit".equals(event)) {
                 String pass = extractFirstArg(jsonArgs);
-                if (SAMP.getInstance() != null) {
+                if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
                     try {
                         byte[] strBytes = pass.getBytes("TIS-620");
-                        SAMP.getInstance().sendDialogResponse(1, 1101, 0, strBytes);
+                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1101, 1, strBytes);
                     } catch (Exception e) {
-                        SAMP.getInstance().sendDialogResponse(1, 1101, 0, pass.getBytes());
+                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1101, 1, pass.getBytes());
                     }
                 }
                 hideBrowser();
@@ -211,9 +211,9 @@ public class CefManager {
                 else if ("pcc".equalsIgnoreCase(school) || "prachachuen".equalsIgnoreCase(school)) listitem = 2;
                 else if ("brp".equalsIgnoreCase(school) || "buranapon".equalsIgnoreCase(school)) listitem = 3;
 
-                if (SAMP.getInstance() != null) {
+                if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
                     try {
-                        SAMP.getInstance().sendDialogResponse(1, 1099, listitem, school.getBytes());
+                        SAMP.getInstance().getDialogManager().sendDialogResponse(listitem, 1099, 1, school.getBytes());
                     } catch (Exception ignored) {}
                 }
                 hideBrowser();
@@ -221,6 +221,7 @@ public class CefManager {
                 hideBrowser();
             }
         }
+
 
         private String extractFirstArg(String jsonArgs) {
             try {
