@@ -221,10 +221,22 @@ public class CefManager {
                     });
                 }
                 hideBrowser();
-            } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event) || "cef:closeCard".equals(event)) {
+            } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event) || "cef:closeCard".equals(event) || "cef:closeWheel".equals(event)) {
                 hideBrowser();
+            } else if ("cef:wheelAction".equals(event)) {
+                String action = extractFirstArg(jsonArgs);
+                if ("inventory".equalsIgnoreCase(action)) {
+                    // Open inventory CEF WebUI
+                    if (SAMP.getInstance() != null) {
+                        SAMP.getInstance().sendChatCommand("/inv");
+                    }
+                    showBrowser(4, "http://192.168.1.112/gui/inventory.html?v=" + System.currentTimeMillis());
+                } else {
+                    hideBrowser();
+                }
             }
         }
+
 
 
         private String extractFirstArg(String jsonArgs) {

@@ -54,12 +54,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.5
-          name: "SAMP Mobile v0.8.3.5 (4KING SOBAD - Fix Dialog Kick on Login)"
+          tag_name: v0.8.3.6
+          name: "SAMP Mobile v0.8.3.6 (4KING SOBAD - Key Y Radial Wheel Menu & Inventory)"
           body: |
-            ### 4KING SOBAD v0.8.3.5 Update
-            - Fix SendDialogResponse parameter order matching RakNet native C++ (response=1, dialogId=1100, listitem=0).
-            - Fix Server closed connection / Kick on CEF login submission.
+            ### 4KING SOBAD v0.8.3.6 Update
+            - Add Key Y Radial Wheel Action Menu UI (6 slots: Inventory active, 5 slots locked for future updates).
+            - Mobile CEF support for opening Inventory WebUI directly from Wheel Menu.
             - **ระบบ CEF WebUI Overlay บนมือถือ (CEF Bridge for Android)**:
               - เพิ่มโมดูล CefManager (WebView Bridge) ดักจับอีเวนต์ JavaScript `window.cef.emit` และ `window.cef.on`
               - รองรับการเปิดหน้าต่าง CEF จากโฟลเดอร์ Web GUI (index.html, 4.html, inventory.html ฯลฯ) บนมือถือได้เหมือน PC
