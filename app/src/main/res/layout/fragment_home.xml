@@ -1,91 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:maxads="http://schemas.applovin.com/android/1.0"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/gpu"
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
+    <!-- App / Server Logo -->
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/home_logo"
+        android:layout_width="@dimen/_105sdp"
+        android:layout_height="@dimen/_105sdp"
+        android:layout_marginTop="@dimen/_18sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.09"
         app:srcCompat="@drawable/logo" />
 
-        <TextView
-        android:id="@+id/textView9"
+    <!-- Server / Community Title -->
+    <TextView
+        android:id="@+id/home_server_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
         android:fontFamily="@font/montserrat_bold"
-        android:text="ชุมชน 4KING SOBAD"
+        android:text="[TH] 4KING ROLEPLAY"
         android:textColor="@color/white"
-        android:textSize="@dimen/_17sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="@dimen/_16sdp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.339" />
+        app:layout_constraintTop_toBottomOf="@+id/home_logo" />
 
     <View
-        android:id="@+id/view2"
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_3sdp"
+        android:id="@+id/home_divider"
+        android:layout_width="@dimen/_210sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:background="#FF0037"
-        app:layout_constraintBottom_toTopOf="@+id/discord_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.434" />
+        app:layout_constraintTop_toBottomOf="@+id/home_server_title" />
 
-    <ImageView
-        android:id="@+id/discord_logo"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.55"
-        app:srcCompat="@drawable/discord_logo" />
+    <!-- Nickname Label -->
+    <TextView
+        android:id="@+id/home_nickname_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="ชื่อตัวละคร (Nickname)"
+        android:textColor="#AEAEAE"
+        android:textSize="@dimen/_11sdp"
+        app:layout_constraintStart_toStartOf="@+id/home_nickname_edit"
+        app:layout_constraintTop_toBottomOf="@+id/home_divider" />
 
-    <ImageView
-        android:id="@+id/youtube_logo"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Nickname Input Box -->
+    <EditText
+        android:id="@+id/home_nickname_edit"
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@drawable/ic_nickname_bg"
+        android:ems="24"
+        android:focusable="auto"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:hint="ใส่ชื่อตัวละครที่นี่..."
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
+        android:maxLength="24"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_14sdp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.55"
-        app:srcCompat="@drawable/youtube_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/home_nickname_label" />
 
-    <ImageView
-        android:id="@+id/internet_button"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Action Buttons Row: Settings (FPS) & Big Start Game Button -->
+    <LinearLayout
+        android:id="@+id/home_action_row"
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.55"
-        app:srcCompat="@drawable/internet" />
+        app:layout_constraintTop_toBottomOf="@+id/home_nickname_edit">
+
+        <!-- FPS Config Button -->
+        <Button
+            android:id="@+id/home_btn_fps"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@drawable/ic_buttoncolor3"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="FPS: 60"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10sdp" />
+
+        <Space
+            android:layout_width="@dimen/_8sdp"
+            android:layout_height="wrap_content" />
+
+        <!-- Big Start Game Button -->
+        <Button
+            android:id="@+id/home_btn_start"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_buttoncolor"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="▶ เริ่มเกม (CONNECT)"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_11sdp" />
+    </LinearLayout>
+
+    <!-- Social / Community Icons Row -->
+    <TextView
+        android:id="@+id/home_community_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="ช่องทางติดตามคอมมูนิตี้"
+        android:textColor="#808080"
+        android:textSize="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_action_row" />
+
+    <LinearLayout
+        android:id="@+id/home_social_row"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_community_label">
+
+        <ImageView
+            android:id="@+id/discord_logo"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            app:srcCompat="@drawable/discord_logo" />
+
+        <ImageView
+            android:id="@+id/youtube_logo"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            app:srcCompat="@drawable/youtube_logo" />
+
+        <ImageView
+            android:id="@+id/internet_button"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            app:srcCompat="@drawable/internet" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

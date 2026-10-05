@@ -93,11 +93,13 @@ public class MainActivity extends AppCompatActivity {
 
         ConfigValidator.validateConfigFiles(this);
 
-        //if(!SignatureChecker.isSignatureValid(this, getPackageName()))
-        //{
-        //Toast.makeText(this, "Use original launcher! No remake", Toast.LENGTH_LONG).show();
-        //return;
-        //}
+        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.RECORD_AUDIO
+            }, 100);
+        }
 
 
         File file = new File(getExternalFilesDir(null) + "/download/update.apk");

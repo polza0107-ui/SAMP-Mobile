@@ -44,6 +44,15 @@ public class ServerInformationFragment extends Dialog {
         this.position = position;
     }
 
+    public ServerInformationFragment(Activity a, SAMPServerInfo sampServerInfo1)
+    {
+        super(a);
+        activity = a;
+        mServerAdapter = null;
+        sampServerInfo = sampServerInfo1;
+        this.position = 0;
+    }
+
     @Nullable
     @Override
     public void onCreate(Bundle savedInstanceState) {
