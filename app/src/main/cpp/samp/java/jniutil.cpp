@@ -33,6 +33,9 @@ CJavaWrapper::CJavaWrapper(JNIEnv *env, jobject activity)
     s_showEditObject = env->GetMethodID(clas, "showEditObject", "()V");
     s_hideEditObject = env->GetMethodID(clas, "hideEditObject", "()V");
 
+    s_showCefBrowser = env->GetMethodID(clas, "showCefBrowser", "(ILjava/lang/String;)V");
+    s_hideCefBrowser = env->GetMethodID(clas, "hideCefBrowser", "()V");
+
     env->DeleteLocalRef(clas);
 }
 
@@ -191,3 +194,24 @@ void CJavaWrapper::HideEditObject() {
 
     env->CallVoidMethod(this->activity, this->s_hideEditObject);
 }
+
+void CJavaWrapper::ShowCefBrowser(int browserId, const char* url) {
+    if (!url) return;
+    JNIEnv* env;
+    javaVM->GetEnv((void**)&env, JNI_VERSION_1_6);
+    if (!env || !s_showCefBrowser) return;
+
+    jstring jUrl = env->NewStringUTF(url);
+    env->CallVoidMethod(this->activity, this->s_showCefBrowser, (jint)browserId, jUrl);
+    env->DeleteLocalRef(jUrl);
+    EXCEPTION_CHECK(env);
+}
+
+void CJavaWrapper::HideCefBrowser() {
+    JNIEnv* env;
+    javaVM->GetEnv((void**)&env, JNI_VERSION_1_6);
+    if (!env || !s_hideCefBrowser) return;
+
+    env->CallVoidMethod(this->activity, this->s_hideCefBrowser);
+    EXCEPTION_CHECK(env);
+}

@@ -304,6 +304,18 @@ extern "C" {
 
 		pEnv->ReleaseByteArrayElements(str, pMsg, JNI_ABORT);
 	}
+
+	JNIEXPORT void JNICALL Java_com_samp_mobile_game_SAMP_sendChatCommand(JNIEnv* pEnv, jobject thiz, jstring cmdStr)
+	{
+		if (!cmdStr) return;
+		const char* pCmd = pEnv->GetStringUTFChars(cmdStr, NULL);
+		if (pCmd) {
+			if (pNetGame) {
+				pNetGame->SendChatCommand(pCmd);
+			}
+			pEnv->ReleaseStringUTFChars(cmdStr, pCmd);
+		}
+	}
 }
 
 void MainLoop()

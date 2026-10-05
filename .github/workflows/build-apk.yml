@@ -54,19 +54,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.1
-          name: "SAMP Mobile v0.8.3.1 (4KING SOBAD - Fullscreen Immersive, Custom Loading & Fixed HUD Buttons)"
+          tag_name: v0.8.3.2
+          name: "SAMP Mobile v0.8.3.2 (4KING SOBAD - Full CEF WebUI Bridge for Mobile)"
           body: |
-            ### 4KING SOBAD v0.8.3.1 Update
-            - **แก้ไขแถบแจ้งเตือนด้านบน (Fullscreen Immersive Sticky Mode)**:
-              - ซ่อน Status Bar และ Navigation Bar ไม่ให้แถบแจ้งเตือนของโทรศัพท์เลื่อนลงมาบดบังหน้าจอตอนเปิดแอป
-            - **หน้าต่างโหลด (Loading Screen & Splash)**:
-              - เปลี่ยนโลโก้เป็น 4KING SOBAD ขนาดใหญ่ คมชัด สวยงาม
-              - เปลี่ยนหลอดวิ่งเป็น Progress Bar สีฟ้า-ม่วงนีออน พร้อมข้อความสถานะการโหลดก่อนเข้าเกม
-              - อัปเดตไอคอนของแอป (App Launcher Icons) เป็นโลโก้ 4KING SOBAD
-            - **แก้ไขปุ่มควบคุมผู้เล่น (HUD Widgets / Touch Buttons)**:
-              - แก้ไขระบบ RLE Decompression ใน libsamp.so ไม่ให้เกิด rled error 3 ข้อมูลเท็กซ์เจอร์ปุ่มถูกตัดทอน
-              - แก้ไขปัญหาปุ่มวิ่ง ต่อย กระโดด ขับรถ ที่ไอคอนขาดหายหรือเป็นวงกลมว่างเปล่า ให้แสดงภาพครบถ้วน 100%
+            ### 4KING SOBAD v0.8.3.2 Update
+            - **ระบบ CEF WebUI Overlay บนมือถือ (CEF Bridge for Android)**:
+              - เพิ่มโมดูล CefManager (WebView Bridge) ดักจับอีเวนต์ JavaScript `window.cef.emit` และ `window.cef.on`
+              - รองรับการเปิดหน้าต่าง CEF จากโฟลเดอร์ Web GUI (index.html, 4.html, inventory.html ฯลฯ) บนมือถือได้เหมือน PC
+              - สามารถรับคำสั่ง `$cef:open <url>` และ `$cef:close` จากเซิร์ฟเวอร์เพื่อเปิด/ปิดหน้าเว็บได้ทันที
+              - สะพานคำสั่งส่งต่อ `/login <pass>`, `/register <pass>`, `/selectschool <key>` กลับไปประมวลผลบนเซิร์ฟเวอร์
+            - **ระบบแสดงผลเต็มจอสมบูรณ์แบบ & ไอคอนและปุ่ม HUD คมชัด**:
+              - ซ่อนแถบ Status Bar / Navigation Bar อัตโนมัติ
+              - ปรับแต่งหน้าโหลดและปุ่มสัมผัสในเกมครบถ้วน
           files: app/build/outputs/apk/**/*.apk
 
       - name: Push Build Failure Log to Branch

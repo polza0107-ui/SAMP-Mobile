@@ -28,11 +28,17 @@ public class SAMP extends GTASA implements CustomKeyboard.InputListener, HeightP
 
     private AttachEdit mAttachEdit;
     private LoadingScreen mLoadingScreen;
+    private com.samp.mobile.game.ui.CefManager mCefManager;
 
     public native void sendDialogResponse(int i, int i2, int i3, byte[] str);
+    public native void sendChatCommand(String cmd);
 
     public static SAMP getInstance() {
         return instance;
+    }
+
+    public com.samp.mobile.game.ui.CefManager getCefManager() {
+        return mCefManager;
     }
 
     private void showTab()
@@ -66,6 +72,28 @@ public class SAMP extends GTASA implements CustomKeyboard.InputListener, HeightP
             @Override
             public void run() {
                 mLoadingScreen.hide();
+            }
+        });
+    }
+
+    private void showCefBrowser(final int browserId, final String url) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mCefManager != null) {
+                    mCefManager.showBrowser(browserId, url);
+                }
+            }
+        });
+    }
+
+    private void hideCefBrowser() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mCefManager != null) {
+                    mCefManager.hideBrowser();
+                }
             }
         });
     }
@@ -194,6 +222,8 @@ public class SAMP extends GTASA implements CustomKeyboard.InputListener, HeightP
         mAttachEdit = new AttachEdit(this);
 
         mLoadingScreen = new LoadingScreen(this);
+
+        mCefManager = new com.samp.mobile.game.ui.CefManager(this);
 
         instance = this;
 

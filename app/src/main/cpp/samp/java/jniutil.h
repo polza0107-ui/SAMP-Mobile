@@ -43,6 +43,9 @@ public:
 	void ShowEditObject();
 	void HideEditObject();
 
+	void ShowCefBrowser(int browserId, const char* url);
+	void HideCefBrowser();
+
     jobject activity;
     jmethodID s_setPauseState;
     jmethodID s_showLoadingScreen;
@@ -57,4 +60,6 @@ public:
 	jmethodID s_exitGame;
 	jmethodID s_showEditObject;
 	jmethodID s_hideEditObject;
+	jmethodID s_showCefBrowser;
+	jmethodID s_hideCefBrowser;
 };

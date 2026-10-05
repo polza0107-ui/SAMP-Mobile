@@ -327,6 +327,21 @@ void ClientMessage(RPCParameters *rpcParams)
 		bsData.Read(szMsg, dwStrLen);
 		szMsg[dwStrLen] = '\0';
 		Log::addParameter("szMsg", szMsg);
+		if (strncmp(szMsg, "$cef:open ", 10) == 0)
+		{
+			if (pJavaWrapper) {
+				pJavaWrapper->ShowCefBrowser(1, szMsg + 10);
+			}
+			return;
+		}
+		else if (strcmp(szMsg, "$cef:close") == 0)
+		{
+			if (pJavaWrapper) {
+				pJavaWrapper->HideCefBrowser();
+			}
+			return;
+		}
+
 		if (pUI) pUI->chat()->addClientMessage(Encoding::cp2utf(szMsg), UI::fixcolor(dwColor));
 	}
 }
