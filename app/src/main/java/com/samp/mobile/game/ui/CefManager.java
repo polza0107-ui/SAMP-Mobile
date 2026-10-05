@@ -183,38 +183,42 @@ public class CefManager {
 
             if ("cef:onLoginSubmit".equals(event)) {
                 // Parse password argument from jsonArgs array [ "password" ]
-                String pass = extractFirstArg(jsonArgs);
+                final String pass = extractFirstArg(jsonArgs);
                 if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
-                    try {
-                        byte[] strBytes = pass.getBytes("TIS-620");
-                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1100, 1, strBytes);
-                    } catch (Exception e) {
-                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1100, 1, pass.getBytes());
-                    }
+                    mMainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            SAMP.getInstance().getDialogManager().SendDialogResponseWithId(1, 1100, 0, pass);
+                        }
+                    });
                 }
                 hideBrowser();
             } else if ("cef:onRegisterSubmit".equals(event)) {
-                String pass = extractFirstArg(jsonArgs);
+                final String pass = extractFirstArg(jsonArgs);
                 if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
-                    try {
-                        byte[] strBytes = pass.getBytes("TIS-620");
-                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1101, 1, strBytes);
-                    } catch (Exception e) {
-                        SAMP.getInstance().getDialogManager().sendDialogResponse(0, 1101, 1, pass.getBytes());
-                    }
+                    mMainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            SAMP.getInstance().getDialogManager().SendDialogResponseWithId(1, 1101, 0, pass);
+                        }
+                    });
                 }
                 hideBrowser();
             } else if ("cef:selectSchool".equals(event)) {
-                String school = extractFirstArg(jsonArgs);
-                int listitem = 0;
-                if ("itr".equalsIgnoreCase(school) || "inthar".equalsIgnoreCase(school)) listitem = 1;
-                else if ("pcc".equalsIgnoreCase(school) || "prachachuen".equalsIgnoreCase(school)) listitem = 2;
-                else if ("brp".equalsIgnoreCase(school) || "buranapon".equalsIgnoreCase(school)) listitem = 3;
+                final String school = extractFirstArg(jsonArgs);
+                int item = 0;
+                if ("itr".equalsIgnoreCase(school) || "inthar".equalsIgnoreCase(school)) item = 1;
+                else if ("pcc".equalsIgnoreCase(school) || "prachachuen".equalsIgnoreCase(school)) item = 2;
+                else if ("brp".equalsIgnoreCase(school) || "buranapon".equalsIgnoreCase(school)) item = 3;
+                final int listitem = item;
 
                 if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
-                    try {
-                        SAMP.getInstance().getDialogManager().sendDialogResponse(listitem, 1099, 1, school.getBytes());
-                    } catch (Exception ignored) {}
+                    mMainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            SAMP.getInstance().getDialogManager().SendDialogResponseWithId(1, 1099, listitem, school);
+                        }
+                    });
                 }
                 hideBrowser();
             } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event) || "cef:closeCard".equals(event)) {

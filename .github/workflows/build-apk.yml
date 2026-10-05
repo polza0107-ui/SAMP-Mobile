@@ -54,12 +54,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.4
-          name: "SAMP Mobile v0.8.3.4 (4KING SOBAD - Fix CEF Login Dialog Submission)"
+          tag_name: v0.8.3.5
+          name: "SAMP Mobile v0.8.3.5 (4KING SOBAD - Fix Dialog Kick on Login)"
           body: |
-            ### 4KING SOBAD v0.8.3.4 Update
-            - Fix SendDialogResponse parameter order and bridge binding in CefManager.
-            - Now Login and Register submits immediately to SAMP server and enters game without infinite loading!
+            ### 4KING SOBAD v0.8.3.5 Update
+            - Fix SendDialogResponse parameter order matching RakNet native C++ (response=1, dialogId=1100, listitem=0).
+            - Fix Server closed connection / Kick on CEF login submission.
             - **ระบบ CEF WebUI Overlay บนมือถือ (CEF Bridge for Android)**:
               - เพิ่มโมดูล CefManager (WebView Bridge) ดักจับอีเวนต์ JavaScript `window.cef.emit` และ `window.cef.on`
               - รองรับการเปิดหน้าต่าง CEF จากโฟลเดอร์ Web GUI (index.html, 4.html, inventory.html ฯลฯ) บนมือถือได้เหมือน PC

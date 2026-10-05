@@ -136,6 +136,9 @@ public class DialogManager {
     }
 
     public void show(int i, int i2, String str, String str2, String str3, String str4) {
+        this.mCurrentDialogId = i;
+        this.mDialogStyle = i2;
+
         // Intercept 4KING Dialogs (1100=LOGIN, 1101=REGISTER, 1099=SELECT_SCHOOL) and open WebUI CEF instead!
         if (i == 1100 || i == 1101) {
             String mode = (i == 1100) ? "login" : "register";
@@ -155,12 +158,11 @@ public class DialogManager {
         }
 
         isShow = true;
-        this.mCurrentDialogId = i;
-        this.mDialogStyle = i2;
         this.mCaption = str;
         this.mText = str2;
         this.mButtonPositive = str3;
         this.mButtonNegative = str4;
+
 
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) this.mDialogTextLayout.getLayoutParams();
         layoutParams.height = -2;
@@ -216,6 +218,10 @@ public class DialogManager {
     }
 
     public void SendDialogResponse(int i, int i2, String str) {
+        SendDialogResponseWithId(i, this.mCurrentDialogId, i2, str);
+    }
+
+    public void SendDialogResponseWithId(int i, int dialogId, int i2, String str) {
         if (i2 == -1) {
             int i3 = this.mDialogStyle;
             if (i3 == 2 || i3 == 4 || i3 == 5) {
@@ -236,11 +242,12 @@ public class DialogManager {
             }
 
             Hide();
-            sendDialogResponse(i, DialogManager.this.mCurrentDialogId, i2, Str2);
+            sendDialogResponse(i, dialogId, i2, Str2);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public void loadDialog() {
         if (this.activity.getCurrentFocus() != null) {
