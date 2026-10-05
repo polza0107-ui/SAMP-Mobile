@@ -38,6 +38,7 @@ jobs:
       - name: Build APK
         id: build_step
         run: |
+          set -o pipefail
           ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log
 
       - name: Upload APK

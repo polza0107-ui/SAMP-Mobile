@@ -213,7 +213,7 @@ public class DialogManager {
                 try {
                     Str2 = str.getBytes("windows-874");
                 } catch (Exception ex2) {
-                    Str2 = str.getBytes(StandardCharsets.UTF_8);
+                    Str2 = str.getBytes("UTF-8");
                 }
             }
 
