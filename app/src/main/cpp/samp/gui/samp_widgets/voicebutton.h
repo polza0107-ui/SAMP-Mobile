@@ -16,14 +16,13 @@ public:
 	VoiceButton() : Button("TALK", UISettings::fontSize() / 2) {
 		m_recording = false;
 		/* 5:3 aspect ratio */
-		//m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "icon_micro_on");
-		//m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "icon_micro_off");
-		m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voiceactive"); //default
-		//if (Server == 40) m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voiceactive");
-		//if (Server == 40) m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voicepassive");
-		m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voicepassive"); //default
-		//if (Server == 13) m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "icon_micro_on");
-		//if (Server == 13) m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "icon_micro_off");
+		m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voiceactive");
+		if (!m_texture_micro_on) m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "icon_micro_on");
+		if (!m_texture_micro_on) m_texture_micro_on = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voice_on");
+
+		m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voicepassive");
+		if (!m_texture_micro_off) m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "icon_micro_off");
+		if (!m_texture_micro_off) m_texture_micro_off = (RwTexture*)CUtil::LoadTextureFromDB("samp", "voice_off");
 	}
 
 	virtual void draw(ImGuiRenderer* renderer) override
@@ -32,14 +31,16 @@ public:
 
 		if (countdown > 0 && recording() == 1) countdown--;
 		if (countdown == 0 && recording() == 1) setRecording(0);
-		renderer->drawImage(absolutePosition(), absolutePosition() + size(),
-			recording() ? m_texture_micro_on->raster : m_texture_micro_off->raster);
 
-		//MyLog2("%f,%f",absolutePosition(), absolutePosition() + size());
-		//MyLog2("countdown %d", countdown);
-		//MyLog2("recording %d", recording());
-		//MyLog2("press %d", press);
-		
+		RwRaster* raster = nullptr;
+		if (recording() && m_texture_micro_on) raster = m_texture_micro_on->raster;
+		else if (!recording() && m_texture_micro_off) raster = m_texture_micro_off->raster;
+
+		if (raster) {
+			renderer->drawImage(absolutePosition(), absolutePosition() + size(), raster);
+		} else {
+			Button::draw(renderer);
+		}
 	}
 
 	void touchPopEvent() override

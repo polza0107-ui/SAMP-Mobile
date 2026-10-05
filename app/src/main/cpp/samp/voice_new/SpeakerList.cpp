@@ -125,7 +125,9 @@ void SpeakerList::Render()
                             }
                             ImVec2 a = ImVec2(textPos.x, textPos.y);
                             ImVec2 b = ImVec2(textPos.x + pUI->GetFontSize() / 2, textPos.y + pUI->GetFontSize() / 2);
-                            ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)SpeakerList::tSpeakerIcon->raster, a, b);
+                            if (SpeakerList::tSpeakerIcon && SpeakerList::tSpeakerIcon->raster) {
+                                ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)SpeakerList::tSpeakerIcon->raster, a, b);
+                            }
                             
                             ImGui::PushFontOutline(0xFF000000, 2);
                             textPos.x = pUI->GetFontSize();
@@ -178,7 +180,9 @@ void SpeakerList::Draw(CVector* vec, float fDist)
 
     ImVec2 a = ImVec2(pos.x, pos.y);
     ImVec2 b = ImVec2(pos.x + PluginConfig::kDefValSpeakerIconSize, pos.y + PluginConfig::kDefValSpeakerIconSize);
-    ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)SpeakerList::tSpeakerIcon->raster, a, b);
+    if (SpeakerList::tSpeakerIcon && SpeakerList::tSpeakerIcon->raster) {
+        ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)SpeakerList::tSpeakerIcon->raster, a, b);
+    }
 }
 
 void SpeakerList::OnSpeakerPlay(const Stream& stream, const uint16_t speaker) noexcept

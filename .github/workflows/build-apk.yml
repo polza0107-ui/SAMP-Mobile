@@ -53,11 +53,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.2.4
-          name: "SAMP Mobile v0.8.2.4 ([TH] 4KING ROLEPLAY)"
+          tag_name: v0.8.2.5
+          name: "SAMP Mobile v0.8.2.5 ([TH] 4KING ROLEPLAY)"
           body: |
-            ### SAMP Mobile v0.8.2.4 (Fix Connection to 192.168.1.112:7777)
-            - Fixed hardcoded Russian IP (94.23.168.153:2305) in main.cpp, now connects directly to 192.168.1.112:7777
+            ### SAMP Mobile v0.8.2.5 (Fix Texture Crash on Render)
+            - Fixed null pointer crash in VoiceButton, Image widgets, and PlayerTags when voice textures are missing
+            - Direct connection to 192.168.1.112:7777
             - Support cache in `/storage/emulated/0/GTA/` and `/sdcard/GTA/`
             - Added All Files Access permission handling for Android 11-16
             - Fixed `OS_FileRead` null pointer crash when game files are missing

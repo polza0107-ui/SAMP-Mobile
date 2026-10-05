@@ -199,7 +199,11 @@ void Plugin::MainLoop()
                 if (Plugin::MicPress > 1) {
                     Plugin::MicPress--;
                 }
-                if (ImGui::ImageButton(Plugin::recordStatus ? (ImTextureID)MicroIcon::tActiveIcon->raster : (ImTextureID)MicroIcon::tPassiveIcon->raster, vecButSize))
+                RwRaster* btnRaster = nullptr;
+                if (Plugin::recordStatus && MicroIcon::tActiveIcon) btnRaster = MicroIcon::tActiveIcon->raster;
+                else if (!Plugin::recordStatus && MicroIcon::tPassiveIcon) btnRaster = MicroIcon::tPassiveIcon->raster;
+
+                if (btnRaster && ImGui::ImageButton((ImTextureID)btnRaster, vecButSize))
                 {
                     if (PluginConfig::GetMicroEnable())
                     {
@@ -265,7 +269,7 @@ void Plugin::MainLoop()
             }
             else
             {
-                if (ImGui::ImageButton((ImTextureID)MicroIcon::tMutedIcon->raster, vecButSize))
+                if (MicroIcon::tMutedIcon && MicroIcon::tMutedIcon->raster && ImGui::ImageButton((ImTextureID)MicroIcon::tMutedIcon->raster, vecButSize))
                 {
                     // ~ none
                 }
