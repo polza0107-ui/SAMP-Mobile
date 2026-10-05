@@ -54,20 +54,19 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.0
-          name: "SAMP Mobile v0.8.3.0 (4KING SOBAD - Landscape Launcher UI & FPS Settings)"
+          tag_name: v0.8.3.1
+          name: "SAMP Mobile v0.8.3.1 (4KING SOBAD - Fullscreen Immersive, Custom Loading & Fixed HUD Buttons)"
           body: |
-            ### 4KING SOBAD v0.8.3.0 Update
-            - **Launcher แนวนอน (Landscape Fullscreen)**:
-              - หน้าจอเปิดแอปแบบแนวนอนเต็มจอ สวยงามด้วยภาพพื้นหลัง 4KING SOBAD
-              - ซ้ายล่าง: ช่องกรอกชื่อตัวละคร (Nickname)
-              - ขวาล่าง: ปุ่มอัปเดต (Update) และ ปุ่มเริ่มเกม (Start Game)
-              - ขวาบน: ปุ่มฟันเฟืองสำหรับตั้งค่า FPS (30 / 60 / 90 / 120 FPS) เท่านั้น
-              - ซ่อนแท็บเลือกเซิร์ฟเวอร์ และไม่แสดง IP เซิร์ฟเวอร์ตามที่ต้องการ
-            - **แก้ไขระบบตัวเกม**:
-              - ดาเมจ PC ตี/ยิง มือถือเข้าปกติ
-              - แก้นาฬิกาทราย/AFK บนหัวเมื่อยืนนิ่ง
-              - ซิงค์ไฟล์ config settings.ini อัตโนมัติ
+            ### 4KING SOBAD v0.8.3.1 Update
+            - **แก้ไขแถบแจ้งเตือนด้านบน (Fullscreen Immersive Sticky Mode)**:
+              - ซ่อน Status Bar และ Navigation Bar ไม่ให้แถบแจ้งเตือนของโทรศัพท์เลื่อนลงมาบดบังหน้าจอตอนเปิดแอป
+            - **หน้าต่างโหลด (Loading Screen & Splash)**:
+              - เปลี่ยนโลโก้เป็น 4KING SOBAD ขนาดใหญ่ คมชัด สวยงาม
+              - เปลี่ยนหลอดวิ่งเป็น Progress Bar สีฟ้า-ม่วงนีออน พร้อมข้อความสถานะการโหลดก่อนเข้าเกม
+              - อัปเดตไอคอนของแอป (App Launcher Icons) เป็นโลโก้ 4KING SOBAD
+            - **แก้ไขปุ่มควบคุมผู้เล่น (HUD Widgets / Touch Buttons)**:
+              - แก้ไขระบบ RLE Decompression ใน libsamp.so ไม่ให้เกิด rled error 3 ข้อมูลเท็กซ์เจอร์ปุ่มถูกตัดทอน
+              - แก้ไขปัญหาปุ่มวิ่ง ต่อย กระโดด ขับรถ ที่ไอคอนขาดหายหรือเป็นวงกลมว่างเปล่า ให้แสดงภาพครบถ้วน 100%
           files: app/build/outputs/apk/**/*.apk
 
       - name: Push Build Failure Log to Branch

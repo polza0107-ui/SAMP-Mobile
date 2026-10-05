@@ -22,4 +22,11 @@
     <style name="Theme.SAMPLauncher.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.SAMPLauncher.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.SAMPLauncher.Fullscreen" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>
