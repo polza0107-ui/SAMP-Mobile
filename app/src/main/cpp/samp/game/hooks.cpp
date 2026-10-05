@@ -780,8 +780,6 @@ bool ComputeDamageResponse(CPedDamageResponseCalculator* calculator, CPedGTA* pP
 	if (!pNetGame) return false;
 
     CPedGTA* pDamager = calculator->m_pDamager;
-	if (pDamager != pGamePed && IsValidGamePed(pGamePed)) /* CCivilianPed */
-		return true;
 
 	if (pPed == pGamePed) {
 		isLocalPed = true;
@@ -791,8 +789,10 @@ bool ComputeDamageResponse(CPedDamageResponseCalculator* calculator, CPedGTA* pP
 	}
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (!pPlayerPool) return false;
 	CLocalPlayer* pLocalPlayer = pPlayerPool->GetLocalPlayer();
-	PLAYERID PlayerID;
+	if (!pLocalPlayer) return false;
+	PLAYERID PlayerID = INVALID_PLAYER_ID;
 
 	if (isLocalPed)
 	{
@@ -818,7 +818,7 @@ bool ComputeDamageResponse(CPedDamageResponseCalculator* calculator, CPedGTA* pP
 		{
 			PLAYERID ActorID = FindActorIDFromGtaPtr(pPed);
 			if (ActorID != INVALID_PLAYER_ID) {
-				pLocalPlayer->SendGiveDamageEvent(ActorID,
+				pLocalPlayer->SendGiveDamageActorEvent(ActorID,
 												  calculator->m_fDamageFactor,
 												  calculator->m_weaponType,
 												  calculator->m_pedPieceType);
@@ -827,13 +827,13 @@ bool ComputeDamageResponse(CPedDamageResponseCalculator* calculator, CPedGTA* pP
 		}
 	}
 
-
 	// :check_friendly_fire
 	if (!pNetGame->m_pNetSet->bFriendlyFire)
 		return false;
-	uint8_t byteTeam = pPlayerPool->GetLocalPlayer()->m_byteTeam;
+	uint8_t byteTeam = pLocalPlayer->m_byteTeam;
 	if (byteTeam == NO_TEAM ||
 		PlayerID == INVALID_PLAYER_ID ||
+		!pPlayerPool->GetSlotState(PlayerID) ||
 		pPlayerPool->GetAt(PlayerID)->m_byteTeam != byteTeam) {
 		return false;
 	}
@@ -1330,7 +1330,11 @@ void NvUtilInit_hook()
 
     ReadSettingFile();
 
-    ApplyFPSPatch(120);
+    uint8_t fpsLimit = 60;
+    if (pSettings && pSettings->Get().iFPSCount > 0) {
+        fpsLimit = (uint8_t)pSettings->Get().iFPSCount;
+    }
+    ApplyFPSPatch(fpsLimit);
 }
 
 struct stFile

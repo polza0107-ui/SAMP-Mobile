@@ -81,32 +81,14 @@ public class SettingsFragment extends Fragment {
         adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         autoCompleteTextView.setAdapter(adapter);
 
-        File file = new File(getActivity().getExternalFilesDir(null) + "/SAMP/settings.ini");
-        try {
-            mWini = new Wini(file);
-
-            mNickName.setText(mWini.get("client", "name"));
-
-            mWini.store();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String currentNick = SettingsHelper.getNickName(getContext());
+        mNickName.setText(currentNick);
 
         autoCompleteTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 new SharedPreferenceCore().setInt(requireContext().getApplicationContext(), "VERSION", position);
-                File file = new File(getActivity().getExternalFilesDir(null) + "/SAMP/settings.ini");
-                if(file.exists()) {
-                    try {
-                        if(mWini != null) {
-                            mWini.put("client", "version", titles[new SharedPreferenceCore().getInt(requireContext().getApplicationContext(), "VERSION")]);
-                            mWini.store();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                SettingsHelper.setSetting(requireContext(), "client", "version", titles[position]);
             }
 
             @Override
@@ -124,16 +106,8 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String text = charSequence.toString();
-                File file = new File(getActivity().getExternalFilesDir(null) + "/SAMP/settings.ini");
-                if(file.exists()) {
-                    try {
-                        if(mWini != null) {
-                            mWini.put("client", "name", text);
-                            mWini.store();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if (!text.trim().isEmpty()) {
+                    SettingsHelper.setNickName(requireContext(), text);
                 }
             }
 
@@ -154,14 +128,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 new SharedPreferenceCore().setBoolean(requireContext().getApplicationContext(), "ANDROID_KEYBOARD", b);
-                try {
-                    if(mWini != null) {
-                        mWini.put("gui", "androidkeyboard", b);
-                        mWini.store();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                SettingsHelper.setSetting(requireContext(), "gui", "androidkeyboard", b ? 1 : 0);
             }
         });
 
@@ -169,14 +136,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 new SharedPreferenceCore().setBoolean(requireContext().getApplicationContext(), "AIM", b);
-                try {
-                    if(mWini != null) {
-                        mWini.put("gui", "autoaim", b);
-                        mWini.store();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                SettingsHelper.setSetting(requireContext(), "client", "autoaim", b ? 1 : 0);
             }
         });
 
@@ -184,14 +144,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 new SharedPreferenceCore().setBoolean(requireContext().getApplicationContext(), "FPS_DISPLAY", b);
-                try {
-                    if(mWini != null) {
-                        mWini.put("gui", "fps", b ? 1 : 0);
-                        mWini.store();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                SettingsHelper.setSetting(requireContext(), "gui", "fps", b ? 1 : 0);
             }
         });
 
@@ -226,22 +179,11 @@ public class SettingsFragment extends Fragment {
                     }
                 }
                 new SharedPreferenceCore().setInt(requireContext().getApplicationContext(), "MESSAGE_COUNT", realProgress);
-                File file = new File(getActivity().getExternalFilesDir(null) + "/SAMP/settings.ini");
-                if(file.exists()) {
-                    try {
-                        if(mWini != null) {
-                            mWini.put("gui", "ChatMaxMessages", realProgress);
-                            mWini.store();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                SettingsHelper.setSetting(requireContext(), "gui", "ChatMaxMessages", realProgress);
                 mMessagesText.setText(String.valueOf(realProgress));
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -272,22 +214,11 @@ public class SettingsFragment extends Fragment {
                     }
                 }
                 new SharedPreferenceCore().setInt(requireContext().getApplicationContext(), "FPS_LIMIT", realProgress);
-                File file = new File(getActivity().getExternalFilesDir(null) + "/SAMP/settings.ini");
-                if(file.exists()) {
-                    try {
-                        if(mWini != null) {
-                            mWini.put("gui", "FPSLimit", realProgress);
-                            mWini.store();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                SettingsHelper.setSetting(requireContext(), "gui", "FPSLimit", realProgress);
                 mFPSText.setText(String.valueOf(realProgress));
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {

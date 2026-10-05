@@ -86,17 +86,16 @@ public class ServerPagesItemFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Log.d("gor", "clicked add server button");
-                    builder.setMessage("Write me to add here your server (25$ per month)!\nTelegram: @gorgrigoryan18\n" +
-                                    "Discord: x1y2z")
+                    builder.setMessage("ติดต่อทีมงาน 4KING เพื่อเพิ่มเซิร์ฟเวอร์ของคุณได้ที่ดิสคอร์ด\n4KING SOBAD TEAM © 2026")
                             .setCancelable(false)
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.dismiss();
                                 }
                             })
                             .setNegativeButton("", null);
                     AlertDialog alert = builder.create();
-                    alert.setTitle("Update");
+                    alert.setTitle("4KING SOBAD");
                     alert.show();
                 }
             });

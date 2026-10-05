@@ -42,13 +42,13 @@ public class ServersFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "Favorites";
+                return "รายการโปรด";
             }
             else if (position == 1) {
-                return "Hosted";
+                return "เซิร์ฟเวอร์ทั้งหมด";
             }
 
-            return "None";
+            return "";
         }
     }
 

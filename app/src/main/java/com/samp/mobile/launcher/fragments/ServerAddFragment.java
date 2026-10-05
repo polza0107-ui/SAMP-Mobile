@@ -88,7 +88,7 @@ public class ServerAddFragment extends Dialog {
                         e.printStackTrace();
                     }*/
                     if (FavoritesInfo.IsServerExists(getContext(), 0, 0, editText.getText().toString().split(":")[0], Integer.parseInt(editText.getText().toString().split(":")[1]), false)) {
-                        Toast.makeText(getContext(), "This server has been already added!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "เซิร์ฟเวอร์นี้ถูกเพิ่มไปแล้ว!", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     FavoritesInfo.AddServer(getContext(), 0, 0, editText.getText().toString().split(":")[0], Integer.parseInt(editText.getText().toString().split(":")[1]));
@@ -96,7 +96,7 @@ public class ServerAddFragment extends Dialog {
                     ((MainActivity)activity).getFavoriteServerList().add(new SAMPServerInfo(0,0,"Loading...", editText.getText().toString().split(":")[0], Integer.parseInt(editText.getText().toString().split(":")[1]), 0,0,0,0,0,"English"));
                     ((MainActivity)activity).refreshFavoriteServers();
                 } else {
-                    Toast.makeText(activity, "Invalid ip and port. (Use IP:PORT or IP)", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "รูปแบบ IP หรือ PORT ไม่ถูกต้อง (เช่น 192.168.1.1:7777)", Toast.LENGTH_LONG).show();
                 }
 
                /* if(((MainActivity)activity).interstitialAd.isReady())

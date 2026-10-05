@@ -5,7 +5,7 @@
     android:layout_width="@dimen/_250sdp"
     android:layout_height="@dimen/_200sdp"
     android:layout_gravity="center"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/ic_dialog_bg">
 
     <TextView
         android:id="@+id/server_hostname"
@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/montserrat_bold"
         android:gravity="center"
-        android:text="IP : Port"
+        android:text="เพิ่มเซิร์ฟเวอร์"
         android:textColor="@color/white"
         android:textSize="@dimen/_14sdp"
         android:textStyle="bold"
@@ -31,7 +31,7 @@
         android:layout_height="@dimen/_28sdp"
         android:background="@drawable/ic_buttoncolor"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Add"
+        android:text="เพิ่ม"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/_9sdp"

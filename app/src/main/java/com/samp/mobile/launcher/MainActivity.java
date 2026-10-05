@@ -66,7 +66,7 @@ import java.util.concurrent.TimeUnit;
 @Obfuscate
 public class MainActivity extends AppCompatActivity {
 
-    public String[] tabTitles = { "Servers", "Info", "Settings" };
+    public String[] tabTitles = { "หน้าแรก", "เซิร์ฟเวอร์", "ตั้งค่า" };
     public int[] tabImages = { R.drawable.ic_mainmenu, R.drawable.ic_server, R.drawable.ic_settingsmenu};
     public int[] tabSelectedImages = { R.drawable.ic_mainmenu_on, R.drawable.ic_serveron, R.drawable.ic_settingsmenu_on};
 

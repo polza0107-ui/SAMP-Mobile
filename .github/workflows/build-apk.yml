@@ -54,22 +54,22 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.2.7
-          name: "SAMP Mobile v0.8.2.7 (4KING SOBAD - Fix Thai Characters & Fonts)"
+          tag_name: v0.8.2.8
+          name: "SAMP Mobile v0.8.2.8 (4KING SOBAD - Damage Sync Fix, AFK Hourglass Fix & Custom Nickname)"
           body: |
-            ### 4KING SOBAD v0.8.2.7 - Thai Character & Font Rendering Fix
-            - **Fixed Thai Character Scrambling in Chat & 3D Labels**:
-              - Corrected `Encoding::cp2utf` which previously mistook Thai vowel+consonant pairs (e.g., `ิด`, `ัก`, `ัน`, `ิส`, `ูก`) for 2-byte UTF-8, causing `เปิ?`, `รัก?`, `ด?`, and Russian letters `Ф`/`ç`.
-              - Properly prioritize CP874 (TIS-620) single-byte Thai conversion (`0xA1..0xFB`) into valid 3-byte Thai UTF-8 (`0xE0 0xB8/B9 xx`).
-            - **Enhanced Thai Font Atlas & Fallback**:
-              - Added Thai PUA code point range (`0xF700..0xF71A`) for positioned/shifted tone marks.
-              - ImGui now loads bundled full Thai fonts directly from internal app storage and merges system fonts (`NotoSansThai`).
-              - `ConfigValidator` now checks exact font file size and reliably overwrites old/incomplete Russian fonts.
-            - **Input & Dialog Encoding**:
-              - Updated `SAMP.java`, `DialogManager.java`, and `NvEventQueueActivity.java` to use standard Android `TIS-620` with `windows-874` fallback.
-              - Changed dialog placeholder and buttons to Thai (`แตะเพื่อพิมพ์`, `ตกลง`, `ยกเลิก`).
-            - **Server**: `192.168.1.112:7777` ([TH] 4KING ROLEPLAY)
-            - **Direct connection & Android 16 HyperOS support**
+            ### 4KING SOBAD v0.8.2.8 Update
+            - **แก้ไขระบบดาเมจ (Damage Sync Fix)**:
+              - แก้ไขบั๊กใน `ComputeDamageResponse` ที่ผู้เล่น PC ตี/ยิง ผู้เล่นมือถือแล้วดาเมจไม่เข้า (ก่อนหน้านี้มีเงื่อนไข abort ผิดพลาด ทำให้ดาเมจไม่ถูกส่งต่อไปยังตัวเกมและเซิร์ฟเวอร์)
+              - แก้ไข pointer Entity ของผู้ยิงใน Bullet Sync Packet (`StoreBulletFullSyncData`)
+            - **แก้ไขปัญหายืนนิ่งแล้วขึ้นนาฬิกาทราย (AFK / Hourglass Fix)**:
+              - แก้ไขใน `SendOnFootFullSyncData` ให้ส่ง sync packet ทุกๆ 500ms แม้ตัวละครจะยืนอยู่นิ่งๆ ป้องกันเซิร์ฟเวอร์ตัดเข้าโหมด AFK/Pause
+            - **ตั้งชื่อตัวละครเองได้ในรันเชอร์ (Custom Nickname & Settings Sync)**:
+              - เพิ่มช่องกรอกชื่อตัวละคร (Nickname) ในหน้าต่างเชื่อมต่อเซิร์ฟเวอร์ สามารถตั้งหรือเปลี่ยนชื่อก่อนกด "เข้าเล่นเกม" ได้ทันที
+              - ซิงค์การตั้งค่า (`settings.ini`) ไปยังทุก Path บนเครื่องของผู้เล่น ทั้ง `/storage/emulated/0/GTA/SAMP/`, `/sdcard/GTA/SAMP/` และ internal files
+            - **ปรับแต่งหน้าตารันเชอร์ภาษาไทย (Beautiful Thai Launcher UI)**:
+              - แปลเมนูและการตั้งค่าเป็นภาษาไทยทั้งหมด (คีย์บอร์ดไทย, สลับเสียงไมค์, แสดง FPS, จำกัด FPS, จำนวนแชท)
+              - อัปเดตเครดิตเป็น `4KING SOBAD TEAM © 2026`
+              - เชื่อมต่อการตั้งค่า FPS Limit (30, 60, 90, 120 FPS) ให้มีผลต่อ Game Engine โดยตรง
           files: app/build/outputs/apk/**/*.apk
 
       - name: Push Build Failure Log to Branch

@@ -3,42 +3,32 @@ package com.samp.mobile.launcher.adapters;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.joom.paranoid.Obfuscate;
 import com.samp.mobile.R;
-import com.samp.mobile.game.GTASA;
 import com.samp.mobile.game.SAMP;
 import com.samp.mobile.launcher.MainActivity;
 import com.samp.mobile.launcher.data.FavoritesInfo;
 import com.samp.mobile.launcher.util.ButtonAnimator;
 import com.samp.mobile.launcher.util.SAMPServerInfo;
+import com.samp.mobile.launcher.util.SettingsHelper;
 import com.samp.mobile.launcher.util.SharedPreferenceCore;
 
-import org.ini4j.Wini;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
 
 @Obfuscate
 public class FavouriteServerInformationFragment extends Dialog {
@@ -62,8 +52,9 @@ public class FavouriteServerInformationFragment extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alertdialog_server);
 
-        File file = new File(act.getExternalFilesDir(null), "favoriteservers.txt");
-        File file2 = new File(act.getExternalFilesDir(null), "favoriteservers_temp.txt");
+        if (getWindow() != null) {
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
 
         TextView mHostName = findViewById(R.id.server_hostname);
         TextView mIP = findViewById(R.id.server_ip);
@@ -72,55 +63,39 @@ public class FavouriteServerInformationFragment extends Dialog {
         TextView mMode = findViewById(R.id.server_mode);
         TextView mLanguage = findViewById(R.id.server_language);
         ImageView mClose = findViewById(R.id.server_close);
+        EditText mServerNickname = findViewById(R.id.server_nickname);
         EditText mServerPassword = findViewById(R.id.server_password);
         Button mSave = findViewById(R.id.save_favorites);
 
         mSave.setVisibility(View.VISIBLE);
+        mSave.setText("ลบ");
 
-        if(!sampServerInfo.getHasPassword())
+        if (!sampServerInfo.getHasPassword()) {
             mServerPassword.setVisibility(View.GONE);
-        else
+        } else {
             mServerPassword.setVisibility(View.VISIBLE);
+        }
 
         mHostName.setText(sampServerInfo.getServerName());
-
         mIP.setText(sampServerInfo.getAddress());
         mPort.setText(String.valueOf(sampServerInfo.getPort()));
         mOnlineServer.setText(sampServerInfo.getCurrentPlayerCount() + "/" + sampServerInfo.getMaxPlayerCount());
         mMode.setText(sampServerInfo.getServerMode());
-
         mLanguage.setText(sampServerInfo.getLanguage());
+
+        if (mServerNickname != null) {
+            mServerNickname.setText(SettingsHelper.getNickName(getContext()));
+        }
 
         mSave.setOnTouchListener(new ButtonAnimator(getContext(), mSave));
         mSave.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
-                //try {
-                    /*BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file2));
-                    while (true) {
-                        String readLine = bufferedReader.readLine();
-                        if (readLine != null) {
-                            if (!(mFavouriteServerAdapter.mServersInfo.get(position).getAddress() + ":" + mFavouriteServerAdapter.mServersInfo.get(position).getPort()).equals(readLine)) {
-                                bufferedWriter.write(readLine + System.getProperty("line.separator"));
-                            }
-                        } else {
-                            bufferedWriter.close();
-                            bufferedReader.close();
-                            file.delete();
-                            file2.renameTo(file);
-                            dismiss();
-                            mFavouriteServerAdapter.refreshServers();
-                            return;
-                        }
-                    }*/
                 FavoritesInfo.RemoveServer(getContext(), ((MainActivity)act).getFavoriteServerList().get(position).getAddress(), ((MainActivity)act).getFavoriteServerList().get(position).getPort());
                 FavoritesInfo.Save(getContext());
                 ((MainActivity)act).getFavoriteServerList().remove(position);
                 ((MainActivity)act).refreshFavoriteServers();
                 dismiss();
-                //} catch (IOException e) {
-                //    e.printStackTrace();
-               // }
             }
         });
 
@@ -129,29 +104,32 @@ public class FavouriteServerInformationFragment extends Dialog {
         mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = new File(act.getExternalFilesDir(null) + "/SAMP/settings.ini");
-                if(file.exists()) {
-                    try {
-                        Wini wini = new Wini(file);
-                        String name = wini.get("client", "name");
-                        wini.put("client", "host", sampServerInfo.getAddress());
-                        wini.put("client", "port", sampServerInfo.getPort());
-                        wini.store();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                // Save Nickname
+                if (mServerNickname != null) {
+                    String enteredNick = mServerNickname.getText().toString().trim();
+                    if (!enteredNick.isEmpty()) {
+                        SettingsHelper.setNickName(getContext(), enteredNick);
                     }
                 }
 
-                if(new SharedPreferenceCore().getBoolean(getContext(), "MLOADER"))
-                {
+                // Save Server IP & Port to settings.ini in all locations
+                SettingsHelper.setSetting(getContext(), "client", "host", sampServerInfo.getAddress());
+                SettingsHelper.setSetting(getContext(), "client", "port", sampServerInfo.getPort());
+
+                // Save password if provided
+                if (sampServerInfo.getHasPassword() && mServerPassword != null) {
+                    SettingsHelper.setSetting(getContext(), "client", "password", mServerPassword.getText().toString());
+                } else {
+                    SettingsHelper.setSetting(getContext(), "client", "password", "");
+                }
+
+                if (new SharedPreferenceCore().getBoolean(getContext(), "MLOADER")) {
                     String data = Environment.getExternalStorageDirectory() + "/Android/media/com.samp.mobile";
                     File file4 = new File(data + "/monetloader/compat/profile.json");
                     Log.d("AXL", data + "/monetloader/compat/profile.json");
-                    if(file4.isDirectory() || !file4.exists())
-                    {
+                    if (file4.isDirectory() || !file4.exists()) {
                         file4.delete();
                         try {
-                            file.createNewFile();
                             FileWriter writer = new FileWriter(file4);
                             writer.append("{\n" +
                                     "  \"gtasa_name\": \"libGTASA.so\",\n" +
@@ -172,28 +150,9 @@ public class FavouriteServerInformationFragment extends Dialog {
                     }
                 }
 
-                File file1 = new File(act.getExternalFilesDir(null) + "/Text/american.dxt");
-                if(!file1.exists())
-                {
-                    File file2 = new File(act.getExternalFilesDir(null) + "/Textures/fonts/RussianFont.png");
-                    if(!file2.exists())
-                    {
-                        Toast.makeText(act, "Some important files in your modified data are missing, such as \"Text\" and \"Textures\"" +
-                                "Please, fix it and after try again. ( You can get that files in my discord channel )", Toast.LENGTH_LONG).show();
-
-                        dismiss();
-                    }
-                    else {
-                        act.startActivity(new Intent(act, SAMP.class));
-                        act.finish();
-                        dismiss();
-                    }
-                }
-                else {
-                    act.startActivity(new Intent(act, SAMP.class));
-                    act.finish();
-                    dismiss();
-                }
+                act.startActivity(new Intent(act, SAMP.class));
+                act.finish();
+                dismiss();
             }
         });
 
@@ -205,5 +164,4 @@ public class FavouriteServerInformationFragment extends Dialog {
             }
         });
     }
-
 }

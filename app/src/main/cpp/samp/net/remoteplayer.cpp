@@ -778,7 +778,9 @@ void CRemotePlayer::StoreBulletFullSyncData(BULLET_SYNC_DATA* btSync)
 			{
 				if (btSync->PlayerID == pPlayerPool->GetLocalPlayerID())
 				{
-					pEntity = reinterpret_cast<CEntityGTA *>(&pGame->FindPlayerPed()->m_pPed);
+					if (pGame->FindPlayerPed()) {
+						pEntity = reinterpret_cast<CEntityGTA *>(pGame->FindPlayerPed()->m_pPed);
+					}
 				}
 				else if (btSync->PlayerID == m_PlayerID)
 				{
@@ -788,7 +790,7 @@ void CRemotePlayer::StoreBulletFullSyncData(BULLET_SYNC_DATA* btSync)
 				{
 					CPlayerPed* pPlayerPed = pPlayerPool->GetAt(btSync->PlayerID)->GetPlayerPed();
 					if (pPlayerPed) {
-						pEntity = reinterpret_cast<CEntityGTA *>(&pPlayerPed->m_pPed);
+						pEntity = reinterpret_cast<CEntityGTA *>(pPlayerPed->m_pPed);
 					}
 				}
 			}
@@ -798,10 +800,9 @@ void CRemotePlayer::StoreBulletFullSyncData(BULLET_SYNC_DATA* btSync)
 			CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 			if (pVehiclePool)
 			{
-				if (pVehiclePool->GetSlotState(btSync->PlayerID))
+				if (pVehiclePool->GetSlotState(btSync->PlayerID) && pVehiclePool->GetAt(btSync->PlayerID))
 				{
-					pEntity = reinterpret_cast<CEntityGTA *>(&pVehiclePool->GetAt(
-                            btSync->PlayerID)->m_pVehicle);
+					pEntity = reinterpret_cast<CEntityGTA *>(pVehiclePool->GetAt(btSync->PlayerID)->m_pVehicle);
 				}
 			}
 		}
