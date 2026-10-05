@@ -341,6 +341,14 @@ void ClientMessage(RPCParameters *rpcParams)
 			}
 			return;
 		}
+		else if (strncmp(szMsg, "$notify:", 8) == 0)
+		{
+			if (pJavaWrapper) {
+				std::string utfMsg = Encoding::cp2utf(szMsg + 8);
+				pJavaWrapper->ShowCefBrowser(99, utfMsg.c_str());
+			}
+			return;
+		}
 
 		if (pUI) pUI->chat()->addClientMessage(Encoding::cp2utf(szMsg), UI::fixcolor(dwColor));
 	}

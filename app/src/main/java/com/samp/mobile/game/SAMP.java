@@ -85,6 +85,10 @@ public class SAMP extends GTASA implements CustomKeyboard.InputListener, HeightP
             @Override
             public void run() {
                 if (mCefManager != null) {
+                    if (browserId == 99) {
+                        mCefManager.showNotification(url);
+                        return;
+                    }
                     mCefManager.showBrowser(browserId, url);
                 }
             }

@@ -14,7 +14,13 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.samp.mobile.game.SAMP;
 
@@ -25,6 +31,9 @@ public class CefManager {
     private final Activity mActivity;
     private FrameLayout mContainer;
     private WebView mWebView;
+    private FrameLayout mNotifyContainer;
+    private View mCurrentToastView = null;
+    private Runnable mDismissNotifyRunnable = null;
     private final Handler mMainHandler = new Handler(Looper.getMainLooper());
     private boolean mIsVisible = false;
     private int mCurrentBrowserId = 0;
@@ -96,6 +105,17 @@ public class CefManager {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                 ));
+
+                mNotifyContainer = new FrameLayout(mActivity);
+                FrameLayout.LayoutParams notifyLp = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                notifyLp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                mNotifyContainer.setLayoutParams(notifyLp);
+                mNotifyContainer.setClickable(false);
+                mNotifyContainer.setFocusable(false);
+                mActivity.addContentView(mNotifyContainer, notifyLp);
             }
         });
     }
@@ -176,6 +196,162 @@ public class CefManager {
         return mIsVisible;
     }
 
+    public void showNotification(final String rawData) {
+        mMainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mActivity == null || mNotifyContainer == null) return;
+
+                String type = "info";
+                String tag = "NOTIFICATION";
+                String msg = rawData != null ? rawData : "";
+
+                if (rawData != null && rawData.contains("|")) {
+                    String[] parts = rawData.split("\\|", 3);
+                    if (parts.length >= 3) {
+                        type = parts[0].trim().toLowerCase();
+                        tag = parts[1].trim();
+                        msg = parts[2].trim();
+                    } else if (parts.length == 2) {
+                        type = parts[0].trim().toLowerCase();
+                        msg = parts[1].trim();
+                    }
+                }
+
+                int accentColor = Color.parseColor("#38BDF8");
+                String iconSymbol = "ℹ";
+
+                if ("success".equals(type)) {
+                    accentColor = Color.parseColor("#10B981");
+                    iconSymbol = "✓";
+                } else if ("error".equals(type)) {
+                    accentColor = Color.parseColor("#EF4444");
+                    iconSymbol = "✕";
+                } else if ("warning".equals(type)) {
+                    accentColor = Color.parseColor("#F59E0B");
+                    iconSymbol = "⚠";
+                }
+
+                if (mDismissNotifyRunnable != null) {
+                    mMainHandler.removeCallbacks(mDismissNotifyRunnable);
+                    mDismissNotifyRunnable = null;
+                }
+                if (mCurrentToastView != null) {
+                    mNotifyContainer.removeView(mCurrentToastView);
+                    mCurrentToastView = null;
+                }
+
+                final LinearLayout card = new LinearLayout(mActivity);
+                card.setOrientation(LinearLayout.HORIZONTAL);
+                card.setGravity(Gravity.CENTER_VERTICAL);
+                card.setClickable(false);
+                card.setFocusable(false);
+
+                FrameLayout.LayoutParams cardLp = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                cardLp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                cardLp.topMargin = dpToPx(38);
+                cardLp.leftMargin = dpToPx(24);
+                cardLp.rightMargin = dpToPx(24);
+                card.setLayoutParams(cardLp);
+                card.setPadding(dpToPx(14), dpToPx(10), dpToPx(18), dpToPx(10));
+
+                GradientDrawable bg = new GradientDrawable();
+                bg.setColor(Color.parseColor("#E6111827"));
+                bg.setCornerRadius(dpToPx(12));
+                bg.setStroke(dpToPx(1.5f), accentColor);
+                card.setBackground(bg);
+                card.setElevation(dpToPx(6));
+
+                // Icon
+                TextView tvIcon = new TextView(mActivity);
+                tvIcon.setText(iconSymbol);
+                tvIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                tvIcon.setTextColor(accentColor);
+                tvIcon.setTypeface(Typeface.DEFAULT_BOLD);
+                tvIcon.setGravity(Gravity.CENTER);
+
+                GradientDrawable iconBg = new GradientDrawable();
+                iconBg.setShape(GradientDrawable.OVAL);
+                iconBg.setColor(Color.argb(45, Color.red(accentColor), Color.green(accentColor), Color.blue(accentColor)));
+                tvIcon.setBackground(iconBg);
+
+                int iconSize = dpToPx(28);
+                LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(iconSize, iconSize);
+                iconLp.rightMargin = dpToPx(10);
+                tvIcon.setLayoutParams(iconLp);
+                card.addView(tvIcon);
+
+                // Text column
+                LinearLayout textCol = new LinearLayout(mActivity);
+                textCol.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams colLp = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                textCol.setLayoutParams(colLp);
+
+                // Tag
+                TextView tvTag = new TextView(mActivity);
+                tvTag.setText(tag.toUpperCase());
+                tvTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10.5f);
+                tvTag.setTextColor(accentColor);
+                tvTag.setTypeface(Typeface.DEFAULT_BOLD);
+                tvTag.setLetterSpacing(0.08f);
+                textCol.addView(tvTag);
+
+                // Message
+                TextView tvMsg = new TextView(mActivity);
+                tvMsg.setText(msg);
+                tvMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13.5f);
+                tvMsg.setTextColor(Color.parseColor("#F9FAFB"));
+                textCol.addView(tvMsg);
+
+                card.addView(textCol);
+
+                mCurrentToastView = card;
+                mNotifyContainer.addView(card);
+
+                card.setAlpha(0f);
+                card.setTranslationY(-dpToPx(20));
+                card.animate()
+                        .alpha(1f)
+                        .translationY(0f)
+                        .setDuration(220)
+                        .start();
+
+                mDismissNotifyRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mCurrentToastView == card) {
+                            card.animate()
+                                    .alpha(0f)
+                                    .translationY(-dpToPx(15))
+                                    .setDuration(250)
+                                    .withEndAction(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mNotifyContainer.removeView(card);
+                                            if (mCurrentToastView == card) {
+                                                mCurrentToastView = null;
+                                            }
+                                        }
+                                    })
+                                    .start();
+                        }
+                    }
+                };
+                mMainHandler.postDelayed(mDismissNotifyRunnable, 3500);
+            }
+        });
+    }
+
+    private int dpToPx(float dp) {
+        return Math.round(dp * mActivity.getResources().getDisplayMetrics().density);
+    }
+
     public class CefJavaScriptBridge {
         @JavascriptInterface
         public void emitEvent(String event, String jsonArgs) {
@@ -221,15 +397,75 @@ public class CefManager {
                     });
                 }
                 hideBrowser();
-            } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event) || "cef:closeCard".equals(event) || "cef:closeWheel".equals(event)) {
+            } else if ("cef:closeWheel".equals(event)) {
                 hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closewheel");
+                }
+            } else if ("cef:closeCard".equals(event)) {
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closecard");
+                }
+            } else if ("cef:exitAFK".equals(event)) {
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/exitafk");
+                }
+            } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event)) {
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closeinv");
+                }
             } else if ("cef:wheelAction".equals(event)) {
                 String action = extractFirstArg(jsonArgs);
                 hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closewheel");
+                }
                 if ("inventory".equalsIgnoreCase(action)) {
                     if (SAMP.getInstance() != null) {
                         SAMP.getInstance().sendChatCommand("/inv");
                     }
+                }
+            } else if ("cef:useItem".equals(event)) {
+                String slot = extractFirstArg(jsonArgs);
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/useitem " + slot);
+                }
+            } else if ("cef:dropItem".equals(event)) {
+                String data = extractFirstArg(jsonArgs);
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    String[] parts = data.split(":");
+                    if (parts.length >= 2) {
+                        SAMP.getInstance().sendChatCommand("/dropitem " + parts[0] + " " + parts[1]);
+                    }
+                }
+            } else if ("cef:giveItem".equals(event)) {
+                String data = extractFirstArg(jsonArgs);
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    String[] parts = data.split(":");
+                    if (parts.length >= 3) {
+                        SAMP.getInstance().sendChatCommand("/senditem " + parts[0] + " " + parts[1] + " " + parts[2]);
+                    }
+                }
+            } else if ("cef:closeCrafting".equals(event)) {
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closecraft");
+                }
+            } else if ("cef:craftItem".equals(event)) {
+                String recipeId = extractFirstArg(jsonArgs);
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/docraft " + recipeId);
+                }
+            } else if ("cef:runCommand".equals(event)) {
+                String cmd = extractFirstArg(jsonArgs);
+                if (SAMP.getInstance() != null && cmd != null && !cmd.isEmpty()) {
+                    SAMP.getInstance().sendChatCommand(cmd);
                 }
             }
         }
@@ -238,13 +474,18 @@ public class CefManager {
 
 
         private String extractFirstArg(String jsonArgs) {
+            if (jsonArgs == null || jsonArgs.isEmpty()) return "";
             try {
                 org.json.JSONArray arr = new org.json.JSONArray(jsonArgs);
                 if (arr.length() > 0) {
-                    return arr.getString(0);
+                    return String.valueOf(arr.get(0));
                 }
             } catch (Exception ignored) {}
-            return "";
+            String trimmed = jsonArgs.trim();
+            if (trimmed.startsWith("\"") && trimmed.endsWith("\"") && trimmed.length() >= 2) {
+                return trimmed.substring(1, trimmed.length() - 1);
+            }
+            return trimmed;
         }
     }
 }

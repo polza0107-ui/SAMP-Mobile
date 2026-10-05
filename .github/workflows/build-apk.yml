@@ -54,21 +54,20 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.3.7
-          name: "SAMP Mobile v0.8.3.7 (4KING SOBAD - UI Notification & Mobile Inventory Sync)"
+          tag_name: v0.8.3.8
+          name: "SAMP Mobile v0.8.3.8 (4KING SOBAD - Native Notification Overlay & Mobile Inventory Bridges)"
           body: |
-            ### 4KING SOBAD v0.8.3.7 Update
-            - Completely removed chat message spam in favor of beautiful CEF UI Notifications.
-            - Fixed Key Y Radial Wheel Menu responsiveness with 450ms debounce.
-            - Fixed mobile inventory item display (items serialized and rendered seamlessly on mobile).
-            - **ระบบ CEF WebUI Overlay บนมือถือ (CEF Bridge for Android)**:
-              - เพิ่มโมดูล CefManager (WebView Bridge) ดักจับอีเวนต์ JavaScript `window.cef.emit` และ `window.cef.on`
-              - รองรับการเปิดหน้าต่าง CEF จากโฟลเดอร์ Web GUI (index.html, 4.html, inventory.html ฯลฯ) บนมือถือได้เหมือน PC
-              - สามารถรับคำสั่ง `$cef:open <url>` และ `$cef:close` จากเซิร์ฟเวอร์เพื่อเปิด/ปิดหน้าเว็บได้ทันที
-              - สะพานคำสั่งส่งต่อ `/login <pass>`, `/register <pass>`, `/selectschool <key>` กลับไปประมวลผลบนเซิร์ฟเวอร์
-            - **ระบบแสดงผลเต็มจอสมบูรณ์แบบ & ไอคอนและปุ่ม HUD คมชัด**:
-              - ซ่อนแถบ Status Bar / Navigation Bar อัตโนมัติ
-              - ปรับแต่งหน้าโหลดและปุ่มสัมผัสในเกมครบถ้วน
+            ### 4KING SOBAD v0.8.3.8 Update
+            - **Native Notification Overlay UI (แจ้งเตือนลอยบนจอมือถือ)**:
+              - ระบบแจ้งเตือน Floating Toast/Overlay บน Android แบบ Native (ไม่กินการกดปุ่มบังคับในเกม)
+              - ดักจับโปรโตคอล `$notify:<type>|<tag>|<msg>` แปลงฟอนต์ภาษาไทย UTF-8 คมชัด 100%
+              - แสดงสีและไอคอนตามสถานะ: Success (เขียว), Error (แดง), Warning (ส้ม), Info (ฟ้า)
+            - **Mobile Inventory Action Bridges (ระบบกระเป๋าบนมือถือสมบูรณ์แบบ)**:
+              - รองรับปุ่มกด "ใช้" (Use), "ทิ้ง" (Drop), "ให้" (Give) จากหน้าจอ Inventory บนมือถือ
+              - ส่งคำสั่งกลับเซิร์ฟเวอร์แบบ Native สอดคล้องกับระบบไอเทม
+            - **Crafting Workbench & AFK Zone Bridges**:
+              - ปรับแต่งหน้าต่างโต๊ะคราฟให้กดคราฟต่อเนื่องได้ไม่เด้งปิด
+              - รองรับปุ่มออกจากโซนอ่านหนังสือ AFK บนมือถือ
           files: app/build/outputs/apk/**/*.apk
 
       - name: Push Build Failure Log to Branch
