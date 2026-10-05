@@ -1,4 +1,4 @@
-﻿#include <jni.h>
+#include <jni.h>
 #include <pthread.h>
 #include <syscall.h>
 
@@ -254,7 +254,13 @@ void DoInitStuff()
 	{
 		//ReadSettingFile();
 
-		pNetGame = new CNetGame("94.23.168.153", 2305, pSettings->Get().szNickName, pSettings->Get().szPassword);
+		const char* szHost = (pSettings && strlen(pSettings->Get().szHost) > 0) ? pSettings->Get().szHost : "192.168.1.112";
+		int iPort = (pSettings && pSettings->Get().iPort > 0) ? pSettings->Get().iPort : 7777;
+		const char* szNick = (pSettings && strlen(pSettings->Get().szNickName) > 0) ? pSettings->Get().szNickName : "Tham_Player";
+		const char* szPass = (pSettings) ? pSettings->Get().szPassword : "";
+
+		FLog("Connecting to server: %s:%d (Nick: %s)", szHost, iPort, szNick);
+		pNetGame = new CNetGame(szHost, iPort, szNick, szPass);
 		bNetworkInited = true;
 
         FLog("DoInitStuff end");
