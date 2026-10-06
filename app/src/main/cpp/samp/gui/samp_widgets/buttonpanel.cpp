@@ -8,6 +8,8 @@ extern UI* pUI;
 extern CNetGame* pNetGame;
 extern CGame *pGame;
 
+bool bNeedEnterVehicle = false;
+
 ButtonPanel::ButtonPanel()
 	: Layout(Orientation::HORIZONTAL)
 {
