@@ -126,6 +126,7 @@ void SpeakerList::Render()
                             ImVec2 a = ImVec2(textPos.x, textPos.y);
                             ImVec2 b = ImVec2(textPos.x + pUI->GetFontSize() / 2, textPos.y + pUI->GetFontSize() / 2);
                             // Modern sleek pill badge background for active speaker
+                            sprintf(szText, "%s (ID: %d) ", playerName, playerId);
                             ImVec2 textSize = ImGui::CalcTextSize(szText);
                             float pillWidth = textSize.x + pUI->GetFontSize() * 1.2f;
                             float pillHeight = pUI->GetFontSize() * 0.9f;
