@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         SAMPServerInfo sAMPServerInfo = new SAMPServerInfo();
         sAMPServerInfo.setId(1);
         sAMPServerInfo.setServerName("[TH] 4KING ROLEPLAY");
-        sAMPServerInfo.setAddress("192.168.1.112");
+        sAMPServerInfo.setAddress("188.212.158.39");
         sAMPServerInfo.setPort(7777);
         sAMPServerInfo.setCurrentPlayerCount(0);
         sAMPServerInfo.setMaxPlayerCount(50);

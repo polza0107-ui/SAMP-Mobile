@@ -4,7 +4,7 @@ public class FavoriteServerData {
 
     public int id = 0;
 
-    public String ip = "192.168.1.112";
+    public String ip = "188.212.158.39";
     public int port = 7777;
     public boolean queried;
     public int serverid = 0;

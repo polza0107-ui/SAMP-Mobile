@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
                         targetServer = new SAMPServerInfo();
                         targetServer.setId(1);
                         targetServer.setServerName("[TH] 4KING ROLEPLAY");
-                        targetServer.setAddress("192.168.1.112");
+                        targetServer.setAddress("188.212.158.39");
                         targetServer.setPort(7777);
                         targetServer.setCurrentPlayerCount(0);
                         targetServer.setMaxPlayerCount(50);
