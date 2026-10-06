@@ -477,6 +477,29 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/respawn");
                 }
+            } else if ("cef:closeGarage".equals(event)) {
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closegarage");
+                }
+            } else if ("cef:spawnGarageVehicle".equals(event)) {
+                String vehId = extractFirstArg(jsonArgs);
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/spawnveh " + vehId);
+                }
+            } else if ("cef:storeGarageVehicle".equals(event)) {
+                String vehId = extractFirstArg(jsonArgs);
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/storeveh " + vehId);
+                }
+            } else if ("cef:reclaimGarageVehicle".equals(event)) {
+                String vehId = extractFirstArg(jsonArgs);
+                hideBrowser();
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/reclaimveh " + vehId);
+                }
             }
         }
 
