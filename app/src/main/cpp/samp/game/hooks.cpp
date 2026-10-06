@@ -1696,16 +1696,6 @@ void CGame_Process_hook()
 
     if (pNetGame)
     {
-        if(pGame && pGame->FindPlayerPed() && pUI && pUI->buttonpanel() && pUI->buttonpanel()->m_bH)
-        {
-            if(pGame->FindPlayerPed()->IsInVehicle())
-            {
-                pUI->buttonpanel()->m_bH->setCaption("D/B");
-            }
-            else
-                pUI->buttonpanel()->m_bH->setCaption("H");
-        }
-
         CObjectPool* pObjectPool = pNetGame->GetObjectPool();
         if (pObjectPool) {
             pObjectPool->Process();

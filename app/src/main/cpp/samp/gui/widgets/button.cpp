@@ -27,13 +27,18 @@ void Button::performLayout()
 
 void Button::draw(ImGuiRenderer* renderer)
 {
-	renderer->drawRect(absolutePosition(), absolutePosition() + size(),
-		focused() ? m_colorFocused : m_color, true);
+	ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+	ImVec2 pMin = absolutePosition();
+	ImVec2 pMax = absolutePosition() + size();
+	float radius = 10.0f;
 
-	//Outline
-	renderer->drawRect(absolutePosition() + ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		(absolutePosition() + size()) - ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		ImColor(229, 169, 60, 160), false, UISettings::outlineSize());
+	// Dark semi-transparent background (#111827 style like APK notifications)
+	ImColor fillCol = focused() ? ImColor(229, 169, 60, 220) : ImColor(17, 24, 39, 210);
+	drawList->AddRectFilled(pMin, pMax, fillCol, radius);
+
+	// Sleek gold outline border (1.5dp)
+	ImColor borderCol = focused() ? ImColor(255, 230, 130, 255) : ImColor(229, 169, 60, 175);
+	drawList->AddRect(pMin, pMax, borderCol, radius, 15, 1.5f);
 
 	Widget::draw(renderer);
 }
@@ -68,15 +73,18 @@ void CButton::performLayout()
 
 void CButton::draw(ImGuiRenderer* renderer)
 {
-	if (OpenButton == false) return;
+	ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+	ImVec2 pMin = absolutePosition();
+	ImVec2 pMax = absolutePosition() + size();
+	float radius = 10.0f;
 
-	renderer->drawRect(absolutePosition(), absolutePosition() + size(),
-		focused() ? m_colorFocused : m_color, true);
+	// Notification-style dark glass background
+	ImColor fillCol = focused() ? ImColor(229, 169, 60, 220) : ImColor(17, 24, 39, 210);
+	drawList->AddRectFilled(pMin, pMax, fillCol, radius);
 
-	
-	renderer->drawRect(absolutePosition() + ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		(absolutePosition() + size()) - ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		ImColor(229, 169, 60, 160), false, UISettings::outlineSize());
+	// Gold accent outline
+	ImColor borderCol = focused() ? ImColor(255, 230, 130, 255) : ImColor(229, 169, 60, 175);
+	drawList->AddRect(pMin, pMax, borderCol, radius, 15, 1.5f);
 
 	Widget::draw(renderer);
 }
@@ -107,31 +115,22 @@ void OButton::performLayout()
 	this->setSize(m_label->size() + ImVec2(padding * 2, padding / 2 * 2));
 
 	m_label->setPosition((size() - m_label->size()) / 2);
-	//m_label->setPosition((m_label->size()) / 2);
-
 }
 
 void OButton::draw(ImGuiRenderer* renderer)
 {
-	if (OpenButton == true)
-	{
-		//Set >> to hide position
-		this->setPosition(ImVec2(-150.0f, -150.0f));
-		return;
-	}
+	ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+	ImVec2 pMin = absolutePosition();
+	ImVec2 pMax = absolutePosition() + size();
+	float radius = 10.0f;
 
-	renderer->drawRect(absolutePosition(), absolutePosition() + size(),
-		focused() ? m_colorFocused : m_color, true);
+	ImColor fillCol = focused() ? ImColor(229, 169, 60, 220) : ImColor(17, 24, 39, 210);
+	drawList->AddRectFilled(pMin, pMax, fillCol, radius);
 
-
-	renderer->drawRect(absolutePosition() + ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		(absolutePosition() + size()) - ImVec2(UISettings::outlineSize(), UISettings::outlineSize()),
-		ImColor(229, 169, 60, 160), false, UISettings::outlineSize());
+	ImColor borderCol = focused() ? ImColor(255, 230, 130, 255) : ImColor(229, 169, 60, 175);
+	drawList->AddRect(pMin, pMax, borderCol, radius, 15, 1.5f);
 
 	Widget::draw(renderer);
-
-	//Set >> to position
-	this->setPosition(ImVec2(15.0f, 15.0f));
 }
 
 void OButton::touchPopEvent()
