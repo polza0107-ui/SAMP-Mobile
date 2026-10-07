@@ -132,10 +132,26 @@ public class SAMP extends GTASA implements CustomKeyboard.InputListener, HeightP
     }
 
     public void showDialog(int dialogId, int dialogTypeId, byte[] bArr, byte[] bArr2, byte[] bArr3, byte[] bArr4) {
-        final String caption = new String(bArr, StandardCharsets.UTF_8);
-        final String content = new String(bArr2, StandardCharsets.UTF_8);
-        final String leftBtnText = new String(bArr3, StandardCharsets.UTF_8);
-        final String rightBtnText = new String(bArr4, StandardCharsets.UTF_8);
+        if (dialogId < 0 || dialogId == 65535) {
+            runOnUiThread(() -> {
+                if (this.mDialog != null) {
+                    this.mDialog.Hide();
+                }
+            });
+            return;
+        }
+        final String caption = (bArr != null) ? new String(bArr, StandardCharsets.UTF_8) : "";
+        final String content = (bArr2 != null) ? new String(bArr2, StandardCharsets.UTF_8) : "";
+        final String leftBtnText = (bArr3 != null) ? new String(bArr3, StandardCharsets.UTF_8) : "";
+        final String rightBtnText = (bArr4 != null) ? new String(bArr4, StandardCharsets.UTF_8) : "";
+        if (caption.isEmpty() && content.isEmpty() && leftBtnText.isEmpty() && rightBtnText.isEmpty()) {
+            runOnUiThread(() -> {
+                if (this.mDialog != null) {
+                    this.mDialog.Hide();
+                }
+            });
+            return;
+        }
         runOnUiThread(() -> { this.mDialog.show(dialogId, dialogTypeId, caption, content, leftBtnText, rightBtnText); });
     }
 

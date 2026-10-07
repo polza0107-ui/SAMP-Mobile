@@ -261,6 +261,11 @@ void DialogBox(RPCParameters *rpcParams)
 			//MyLog("lol2 %s", szButton2);
 		}
 		//pUI->dialog()->show(wDialogID, style, Encoding::cp2utf(szTitle), Encoding::cp2utf(szMessage), Encoding::cp2utf(szButton1), Encoding::cp2utf(szButton2));
+		if (wDialogID < 0 || wDialogID == (int16_t)0xFFFF || (strlen(szTitle) == 0 && strlen(szMessage) == 0 && strlen(szButton1) == 0))
+		{
+			pJavaWrapper->ShowDialog(byteDialogStyle, -1, (char*)"", (char*)"", (char*)"", (char*)"");
+			return;
+		}
 		pJavaWrapper->ShowDialog(byteDialogStyle, wDialogID, (char*)Encoding::cp2utf(szTitle).c_str(), (char*) Encoding::cp2utf(szMessage).c_str(), (char*) Encoding::cp2utf(szButton1).c_str(), (char*) Encoding::cp2utf(szButton2).c_str());
 	}
 

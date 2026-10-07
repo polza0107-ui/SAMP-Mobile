@@ -136,6 +136,12 @@ public class DialogManager {
     }
 
     public void show(int i, int i2, String str, String str2, String str3, String str4) {
+        // Standard SA-MP dialog dismissal (-1, 65535, or completely empty dialog fields)
+        if (i < 0 || i == 65535 || ((str == null || str.isEmpty()) && (str2 == null || str2.isEmpty()) && (str3 == null || str3.isEmpty()))) {
+            Hide();
+            return;
+        }
+
         this.mCurrentDialogId = i;
         this.mDialogStyle = i2;
 
@@ -151,7 +157,8 @@ public class DialogManager {
             }
         } else if (i == 1099) {
             String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
-            String url = "http://188.212.158.39/HTMLGUI/4.html?name=" + nick + "&v=" + System.currentTimeMillis();
+            String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
+            String url = "http://" + host + "/HTMLGUI/gui.html?name=" + nick + "&v=" + System.currentTimeMillis();
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
                 return;
@@ -372,20 +379,25 @@ public class DialogManager {
     }
 
     public void loadButtons() {
-        this.mDialogButtonPositive.setVisibility(View.VISIBLE);
-        this.mDialogButtonNegative.setVisibility(View.VISIBLE);
-        this.mDialogButtonPositiveText.setText(this.mButtonPositive);
-        this.mDialogButtonNegativeText.setText(this.mButtonNegative);
-        this.mDialogButtonPositive.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                view.startAnimation(DialogManager.this.mAnimBtn);
-                DialogManager dialogManager = DialogManager.this;
-                dialogManager.SendDialogResponse(1, dialogManager.mCurrentListitem, DialogManager.this.mCurrentInputtext);
-            }
-        });
-        if (this.mButtonNegative.length() == 0) {
+        if (this.mButtonPositive == null || this.mButtonPositive.isEmpty()) {
+            this.mDialogButtonPositive.setVisibility(View.GONE);
+        } else {
+            this.mDialogButtonPositive.setVisibility(View.VISIBLE);
+            this.mDialogButtonPositiveText.setText(this.mButtonPositive);
+            this.mDialogButtonPositive.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    view.startAnimation(DialogManager.this.mAnimBtn);
+                    DialogManager dialogManager = DialogManager.this;
+                    dialogManager.SendDialogResponse(1, dialogManager.mCurrentListitem, DialogManager.this.mCurrentInputtext);
+                }
+            });
+        }
+
+        if (this.mButtonNegative == null || this.mButtonNegative.isEmpty()) {
             this.mDialogButtonNegative.setVisibility(View.GONE);
         } else {
+            this.mDialogButtonNegative.setVisibility(View.VISIBLE);
+            this.mDialogButtonNegativeText.setText(this.mButtonNegative);
             this.mDialogButtonNegative.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     view.startAnimation(DialogManager.this.mAnimBtn);
