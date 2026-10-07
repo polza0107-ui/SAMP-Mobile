@@ -40,6 +40,21 @@ public class SettingsHelper {
         return "Tham_Player";
     }
 
+    public static String getServerHost(Context context) {
+        for (File f : getSettingsFiles(context)) {
+            if (f.exists()) {
+                try {
+                    Wini ini = new Wini(f);
+                    String host = ini.get("client", "host");
+                    if (host != null && !host.trim().isEmpty()) {
+                        return host.trim();
+                    }
+                } catch (Exception ignored) {}
+            }
+        }
+        return "188.212.158.39";
+    }
+
     public static void setNickName(Context context, String name) {
         if (name == null || name.trim().isEmpty()) return;
         setSetting(context, "client", "name", name.trim());

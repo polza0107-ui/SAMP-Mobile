@@ -143,7 +143,8 @@ public class DialogManager {
         if (i == 1100 || i == 1101) {
             String mode = (i == 1100) ? "login" : "register";
             String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
-            String url = "http://188.212.158.39/gui/index.html?mode=" + mode + "&name=" + nick + "&v=" + System.currentTimeMillis();
+            String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
+            String url = "http://" + host + "/gui/index.html?mode=" + mode + "&name=" + nick + "&v=" + System.currentTimeMillis();
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(1, url);
                 return;
