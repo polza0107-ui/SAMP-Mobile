@@ -144,14 +144,14 @@ public class DialogManager {
             String mode = (i == 1100) ? "login" : "register";
             String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
             String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
-            String url = "http://" + host + "/gui/index.html?mode=" + mode + "&name=" + nick + "&v=" + System.currentTimeMillis();
+            String url = "http://" + host + "/HTMLGUI/index.html?mode=" + mode + "&name=" + nick + "&v=" + System.currentTimeMillis();
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(1, url);
                 return;
             }
         } else if (i == 1099) {
             String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
-            String url = "http://188.212.158.39/gui/4.html?name=" + nick + "&v=" + System.currentTimeMillis();
+            String url = "http://188.212.158.39/HTMLGUI/4.html?name=" + nick + "&v=" + System.currentTimeMillis();
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
                 return;
