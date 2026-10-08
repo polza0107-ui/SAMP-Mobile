@@ -38,8 +38,8 @@ import java.util.zip.ZipInputStream;
 public class GameDataDownloadDialog {
     private static final String TAG = "GameDataDownload";
 
-    public static final String DATA_DOWNLOAD_URL = "https://drive.usercontent.google.com/download?id=1LfllY8msaSeXxB4maJiVeUsiHkJBfzo2&export=download";
-    public static final String DATA_DOWNLOAD_FALLBACK_URL = "https://drive.google.com/uc?export=download&id=1LfllY8msaSeXxB4maJiVeUsiHkJBfzo2";
+    public static final String DATA_DOWNLOAD_URL = "https://drive.usercontent.google.com/download?id=1llB3HedW3IawrFapOVPZ3f4hYRP926Il&export=download&confirm=t";
+    public static final String DATA_DOWNLOAD_FALLBACK_URL = "https://drive.google.com/uc?export=download&id=1llB3HedW3IawrFapOVPZ3f4hYRP926Il&confirm=t";
     public static final String TARGET_EXTRACT_DIR = "/storage/emulated/0/";
 
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -289,11 +289,43 @@ public class GameDataDownloadDialog {
                     throw new Exception("HTTP response error: " + responseCode);
                 }
 
+                // Check if Google Drive returned an HTML warning page instead of file stream
+                String contentType = conn.getContentType();
+                if (contentType != null && contentType.toLowerCase().contains("text/html")) {
+                    Log.d(TAG, "Google Drive returned HTML warning page, extracting confirmation token...");
+                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+                    StringBuilder html = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        html.append(line);
+                    }
+                    reader.close();
+
+                    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("name=[\"']confirm[\"']\\s+value=[\"']([^\"']+)[\"']");
+                    java.util.regex.Matcher matcher = pattern.matcher(html);
+                    String confirmToken = "t";
+                    if (matcher.find()) {
+                        confirmToken = matcher.group(1);
+                    }
+
+                    conn.disconnect();
+                    url = new URL("https://drive.usercontent.google.com/download?id=1llB3HedW3IawrFapOVPZ3f4hYRP926Il&export=download&confirm=" + confirmToken);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setInstanceFollowRedirects(true);
+                    conn.setConnectTimeout(30000);
+                    conn.setReadTimeout(60000);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android; Mobile) 4KING-Launcher");
+                    responseCode = conn.getResponseCode();
+                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                        throw new Exception("Google Drive confirmation failed: HTTP " + responseCode);
+                    }
+                }
+
                 long totalBytes = conn.getContentLengthLong();
                 in = new BufferedInputStream(conn.getInputStream());
                 out = new FileOutputStream(outputFile);
 
-                byte[] buffer = new byte[32 * 1024];
+                byte[] buffer = new byte[64 * 1024];
                 long downloadedBytes = 0;
                 int bytesRead;
 
@@ -344,6 +376,18 @@ public class GameDataDownloadDialog {
     }
 
     private static void unzip(File zipFile, File targetDir, ExtractListener listener) throws Exception {
+        if (!zipFile.exists() || zipFile.length() < 1000000) {
+            throw new Exception("ไฟล์ที่ดาวน์โหลดมามีขนาดผิดปกติ (" + (zipFile.exists() ? zipFile.length() : 0) + " bytes)");
+        }
+
+        // Validate ZIP magic header (0x50, 0x4B)
+        try (java.io.FileInputStream fis = new java.io.FileInputStream(zipFile)) {
+            byte[] magic = new byte[4];
+            if (fis.read(magic) < 4 || magic[0] != 0x50 || magic[1] != 0x4B) {
+                throw new Exception("ไฟล์ที่ดาวน์โหลดมาไม่ใช่ไฟล์ ZIP ที่สมบูรณ์");
+            }
+        }
+
         byte[] buffer = new byte[64 * 1024];
         int count = 0;
 
@@ -383,6 +427,10 @@ public class GameDataDownloadDialog {
                     listener.onExtract(destFile.getName(), count);
                 }
             }
+        }
+
+        if (count == 0) {
+            throw new Exception("ไม่พบไฟล์ในไฟล์ ZIP ที่ดาวน์โหลดมา");
         }
     }
 

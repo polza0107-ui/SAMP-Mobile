@@ -54,16 +54,17 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.3
-          name: "SAMP Mobile v0.8.4.3 (4KING SOBAD - Auto Data Downloader & Installer)"
+          tag_name: v0.8.4.4
+          name: "SAMP Mobile v0.8.4.4 (4KING SOBAD - New Icon 123.png & Full Game Data 716MB)"
           body: |
-            ### 4KING SOBAD v0.8.4.3 Update
-            - **Auto Game DATA Downloader & Installer (ระบบดาวน์โหลดและติดตั้งตัวเกมอัตโนมัติ)**:
-              - ดาวน์โหลดไฟล์ `GTA.zip` จาก Google Drive ลงเครื่องผู้เล่นอัตโนมัติ
-              - ระบบขยายและแตกไฟล์ลง `/storage/emulated/0/` โดยตรง
-              - หน้าต่าง UI ดาวน์โหลดสไตล์ Dark Glassmorphic สวยงาม พร้อมเปอร์เซ็นต์และแถบความเร็ว
-              - ตรวจสอบไฟล์ DATA ก่อนเข้าเกมอัตโนมัติ หากยังไม่มีจะแจ้งเตือนให้ดาวน์โหลดทันที
-              - ปุ่ม "อัปเดต" ที่หน้าแรกสามารถกดเพื่อตรวจสอบหรือติดตั้งข้อมูลเกมใหม่ได้ตลอดเวลา
+            ### 4KING SOBAD v0.8.4.4 Update
+            - **New App Icon (อัปเดตไอคอนแอปใหม่ 123.png)**:
+              - อัปเดตไอคอนแอปและไอคอนกลมทุกระดับความละเอียด (Adaptive & Legacy mipmaps)
+            - **Full Game Data Downloader (716MB Google Drive Stream)**:
+              - เชื่อมต่อไฟล์ตัวเกมเต็ม 716MB (Google Drive ID: `1llB3HedW3IawrFapOVPZ3f4hYRP926Il`)
+              - ระบบหลบเลี่ยงหน้าจอเตือนไวรัสสแกนของ Google Drive อัตโนมัติ (`confirm=t` auto token)
+              - ตรวจสอบความถูกต้องของไฟล์ ZIP ป้องกันการโหลดไฟล์ไม่ครบ
+              - แตกไฟล์ลง `/storage/emulated/0/` โดยตรง ครบทุกโมเดล แมพ และเท็กซ์เจอร์เกม
             - **Mobile Downed Incapacitated Screen (หน้าต่างสลบ/บาดเจ็บสาหัสบนมือถือ)**:
               - แสดงผลหน้าต่างสลบพร้อมขอบจอกระพริบสีแดง (Red Pulse Vignette)
               - นับเวลาถอยหลัง 30 วินาที พร้อมแถบหลอดเวลาเรียลไทม์
