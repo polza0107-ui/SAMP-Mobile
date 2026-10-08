@@ -54,10 +54,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.6
-          name: "SAMP Mobile v0.8.4.6 (4KING SOBAD - Chibi Gang Wallpaper, Live Announcement & Server Status)"
+          tag_name: v0.8.4.7
+          name: "SAMP Mobile v0.8.4.7 (4KING SOBAD - Real-time Server Offline Detection & Red Dot)"
           body: |
-            ### 4KING SOBAD v0.8.4.6 Update
+            ### 4KING SOBAD v0.8.4.7 Update
+            - **Real-time Server Offline Detection (ระบบตรวจจับเซิร์ฟเวอร์ปิดอัตโนมัติ)**:
+              - เมื่อเซิร์ฟเวอร์ปิดให้บริการ หรือไม่สามารถเชื่อมต่อได้ ไฟสถานะจะเปลี่ยนเป็นสีแดงสด 🔴 ทันที
+              - ข้อความสถานะเปลี่ยนเป็น `OFFLINE 🔴 เซิร์ฟเวอร์ปิดให้บริการ`
+              - หากผู้เล่นกดปุ่ม "▶ เริ่มเกม" ขณะเซิร์ฟเวอร์ออฟไลน์ ระบบจะมีหน้าต่างเตือนแจ้งว่าเซิร์ฟเวอร์ยังไม่เปิดให้บริการ
+              - สามารถแตะที่การ์ดสถานะเพื่อสั่ง Refresh ตรวจสอบสถานะใหม่ได้ตลอดเวลา
+              - รองรับการสั่งปิดเซิร์ฟเวอร์จากระยะไกลผ่าน `security.json` บน GitHub ทันที
             - **New Launcher Cover Art (ภาพปกแก๊ง 4 หนุ่ม 4KINGS ฝนตกสายฟ้าฟาด)**:
               - อัปเดตภาพพื้นหลังหน้าหลักเป็นลายเส้นจิบิ 4KINGS SOBAD ความละเอียดสูง 16:9 สีสันสดใสตรงอัตลักษณ์เซิร์ฟเวอร์
             - **Live Announcement Marquee Banner (ระบบแถบวิ่งประกาศข่าวสารเรียลไทม์)**:

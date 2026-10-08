@@ -1,5 +1,6 @@
 package com.samp.mobile.launcher.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -51,6 +52,7 @@ public class HomeFragment extends Fragment {
     private TextView mTvServerName;
     private TextView mTvServerPlayers;
     private View mServerStatusDot;
+    private View mServerStatusCard;
     private TextView mTvAnnouncement;
     private View mAnnouncementContainer;
 
@@ -58,6 +60,7 @@ public class HomeFragment extends Fragment {
     private String mServerAddress = "192.168.1.106";
     private int mServerPort = 7777;
     private String mServerName = "[TH] 4KING ROLEPLAY";
+    private boolean mIsServerOnline = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,11 +79,20 @@ public class HomeFragment extends Fragment {
         mTvServerName = view.findViewById(R.id.tv_server_name);
         mTvServerPlayers = view.findViewById(R.id.tv_server_players);
         mServerStatusDot = view.findViewById(R.id.server_status_dot);
+        mServerStatusCard = view.findViewById(R.id.server_status_card);
         mTvAnnouncement = view.findViewById(R.id.tv_announcement);
         mAnnouncementContainer = view.findViewById(R.id.announcement_container);
 
         if (mTvAnnouncement != null) {
             mTvAnnouncement.setSelected(true); // Required for Marquee text scroll
+        }
+
+        // Tap Server Status Card to manually refresh
+        if (mServerStatusCard != null) {
+            mServerStatusCard.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "กำลังรีเฟรชสถานะเซิร์ฟเวอร์...", Toast.LENGTH_SHORT).show();
+                loadRemoteServerAndAnnouncement();
+            });
         }
 
         // Fetch Live Server Config & Announcement from security.json (GitHub / local)
@@ -163,7 +175,7 @@ public class HomeFragment extends Fragment {
                         targetServer.setCurrentPlayerCount(0);
                         targetServer.setMaxPlayerCount(500);
                         targetServer.setHasPassword(false);
-                        targetServer.setServerStatus(SAMPServerInfo.Status.ONLINE);
+                        targetServer.setServerStatus(mIsServerOnline ? SAMPServerInfo.Status.ONLINE : SAMPServerInfo.Status.OFFLINE);
                     } else {
                         targetServer.setServerName(mServerName);
                         targetServer.setAddress(mServerAddress);
@@ -172,18 +184,20 @@ public class HomeFragment extends Fragment {
 
                     final SAMPServerInfo finalTargetServer = targetServer;
 
-                    // 1. Check if game data exists on device
-                    if (!GameDataDownloadDialog.isGameDataInstalled()) {
-                        Toast.makeText(getContext(), "ยังไม่พบข้อมูลตัวเกม กรุณาดาวน์โหลด DATA ก่อนเข้าเล่น", Toast.LENGTH_SHORT).show();
-                        GameDataDownloadDialog.show(getActivity(), new Runnable() {
-                            @Override
-                            public void run() {
-                                startAntiCheatAndLaunch(finalTargetServer);
-                            }
-                        });
-                    } else {
-                        startAntiCheatAndLaunch(finalTargetServer);
+                    // Warn if Server is OFFLINE
+                    if (!mIsServerOnline) {
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle("🔴 เซิร์ฟเวอร์ปิดให้บริการ")
+                                .setMessage("ขณะนี้เซิร์ฟเวอร์ยังไม่เปิดให้บริการ หรือกำลังปิดปรับปรุง\n\nต้องการลองเชื่อมต่อไปยังเซิร์ฟเวอร์หรือไม่?")
+                                .setPositiveButton("ลองเชื่อมต่อ", (dialog, which) -> {
+                                    proceedToLaunchGame(finalTargetServer);
+                                })
+                                .setNegativeButton("ยกเลิก", null)
+                                .show();
+                        return;
                     }
+
+                    proceedToLaunchGame(finalTargetServer);
                 }
             });
         }
@@ -191,7 +205,35 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    private void proceedToLaunchGame(final SAMPServerInfo targetServer) {
+        // Check if game data exists on device
+        if (!GameDataDownloadDialog.isGameDataInstalled()) {
+            Toast.makeText(getContext(), "ยังไม่พบข้อมูลตัวเกม กรุณาดาวน์โหลด DATA ก่อนเข้าเล่น", Toast.LENGTH_SHORT).show();
+            GameDataDownloadDialog.show(getActivity(), new Runnable() {
+                @Override
+                public void run() {
+                    startAntiCheatAndLaunch(targetServer);
+                }
+            });
+        } else {
+            startAntiCheatAndLaunch(targetServer);
+        }
+    }
+
     private void loadRemoteServerAndAnnouncement() {
+        // Show initial checking state
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                if (mServerStatusDot != null) {
+                    mServerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_checking);
+                }
+                if (mTvServerPlayers != null) {
+                    mTvServerPlayers.setText("CHECKING ⏳ กำลังตรวจสอบ...");
+                    mTvServerPlayers.setTextColor(Color.parseColor("#FFD600"));
+                }
+            });
+        }
+
         new Thread(() -> {
             try {
                 if (getContext() == null) return;
@@ -218,59 +260,112 @@ public class HomeFragment extends Fragment {
 
                 // 2. Server Status & Config
                 JSONObject srv = sec.optJSONObject("server");
-                int fallbackPlayers = 128;
-                int fallbackMaxPlayers = 500;
-                int fallbackPing = 18;
+                boolean configOnline = true;
+                String offlineReason = "เซิร์ฟเวอร์ปิดให้บริการ";
 
                 if (srv != null) {
                     mServerName = srv.optString("name", mServerName);
                     mServerAddress = srv.optString("ip", mServerAddress);
                     mServerPort = srv.optInt("port", mServerPort);
-                    fallbackPlayers = srv.optInt("fallback_players", fallbackPlayers);
-                    fallbackMaxPlayers = srv.optInt("fallback_max_players", fallbackMaxPlayers);
-                    fallbackPing = srv.optInt("fallback_ping", fallbackPing);
+                    configOnline = srv.optBoolean("online", true);
+                    offlineReason = srv.optString("offline_message", offlineReason);
                 }
 
-                final int finalPlayers = fallbackPlayers;
-                final int finalMax = fallbackMaxPlayers;
-                final int finalPing = fallbackPing;
-
                 if (getActivity() != null) {
+                    final String sName = mServerName;
                     getActivity().runOnUiThread(() -> {
-                        if (mTvServerName != null) mTvServerName.setText(mServerName);
-                        if (mTvServerPlayers != null) {
-                            mTvServerPlayers.setText("ONLINE 👥 " + finalPlayers + "/" + finalMax + "  📶 " + finalPing + "ms");
-                        }
+                        if (mTvServerName != null) mTvServerName.setText(sName);
                     });
                 }
 
+                // If admin disabled server from GitHub config
+                if (!configOnline) {
+                    mIsServerOnline = false;
+                    final String reason = offlineReason;
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (mServerStatusDot != null) {
+                                mServerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_offline);
+                            }
+                            if (mTvServerPlayers != null) {
+                                mTvServerPlayers.setText("OFFLINE 🔴 " + reason);
+                                mTvServerPlayers.setTextColor(Color.parseColor("#FF5252"));
+                            }
+                        });
+                    }
+                    return;
+                }
+
                 // 3. Live UDP Query via SampQueryAPI
+                boolean isOnline = false;
+                String[] info = null;
+                long ping = 0;
+                SampQueryAPI query = new SampQueryAPI(mServerAddress, mServerPort);
                 try {
                     long startTime = System.currentTimeMillis();
-                    SampQueryAPI query = new SampQueryAPI(mServerAddress, mServerPort);
                     if (query.mo7166d()) {
-                        String[] info = query.mo7164b();
-                        long ping = System.currentTimeMillis() - startTime;
+                        info = query.mo7164b();
+                        ping = System.currentTimeMillis() - startTime;
                         if (info != null && info.length >= 4) {
-                            int currentPlayers = Integer.parseInt(info[1]);
-                            int maxPlayers = Integer.parseInt(info[2]);
-                            String liveName = info[3];
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> {
-                                    if (mTvServerPlayers != null) {
-                                        mTvServerPlayers.setText("ONLINE 👥 " + currentPlayers + "/" + maxPlayers + "  📶 " + ping + "ms");
-                                    }
-                                    if (!liveName.isEmpty() && mTvServerName != null) {
-                                        mTvServerName.setText(liveName);
-                                    }
-                                });
-                            }
+                            isOnline = true;
                         }
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception e) {
+                    isOnline = false;
+                } finally {
+                    query.close();
+                }
+
+                mIsServerOnline = isOnline;
+
+                if (isOnline && info != null) {
+                    final int currentPlayers = Integer.parseInt(info[1]);
+                    final int maxPlayers = Integer.parseInt(info[2]);
+                    final String liveName = (info[3] != null && !info[3].trim().isEmpty()) ? info[3] : mServerName;
+                    final long finalPing = ping;
+
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (mServerStatusDot != null) {
+                                mServerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_online);
+                            }
+                            if (mTvServerName != null) {
+                                mTvServerName.setText(liveName);
+                            }
+                            if (mTvServerPlayers != null) {
+                                mTvServerPlayers.setText("ONLINE 👥 " + currentPlayers + "/" + maxPlayers + "  📶 " + finalPing + "ms");
+                                mTvServerPlayers.setTextColor(Color.parseColor("#00E5FF"));
+                            }
+                        });
+                    }
+                } else {
+                    // SERVER IS OFFLINE / UNREACHABLE
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (mServerStatusDot != null) {
+                                mServerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_offline);
+                            }
+                            if (mTvServerPlayers != null) {
+                                mTvServerPlayers.setText("OFFLINE 🔴 เซิร์ฟเวอร์ปิดให้บริการ");
+                                mTvServerPlayers.setTextColor(Color.parseColor("#FF5252"));
+                            }
+                        });
+                    }
+                }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                mIsServerOnline = false;
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (mServerStatusDot != null) {
+                            mServerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_offline);
+                        }
+                        if (mTvServerPlayers != null) {
+                            mTvServerPlayers.setText("OFFLINE 🔴 ไม่สามารถเชื่อมต่อได้");
+                            mTvServerPlayers.setTextColor(Color.parseColor("#FF5252"));
+                        }
+                    });
+                }
             }
         }).start();
     }
@@ -391,5 +486,7 @@ public class HomeFragment extends Fragment {
         if (mTvAnnouncement != null) {
             mTvAnnouncement.setSelected(true);
         }
+        // Auto-refresh status on return
+        loadRemoteServerAndAnnouncement();
     }
 }

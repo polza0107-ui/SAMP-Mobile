@@ -174,4 +174,12 @@ public final class SampQueryAPI {
         }
         return false;
     }
+
+    public void close() {
+        try {
+            if (this.f7277a != null && !this.f7277a.isClosed()) {
+                this.f7277a.close();
+            }
+        } catch (Exception ignored) {}
+    }
 }

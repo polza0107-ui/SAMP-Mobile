@@ -5,9 +5,8 @@
     "name": "[TH] 4KING ROLEPLAY",
     "ip": "192.168.1.106",
     "port": 7777,
-    "fallback_players": 128,
-    "fallback_max_players": 500,
-    "fallback_ping": 18
+    "online": true,
+    "offline_message": "ปิดปรับปรุงเซิร์ฟเวอร์ชั่วคราว"
   },
   "announcement": {
     "enabled": true,
