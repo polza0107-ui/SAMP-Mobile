@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Fullscreen Landscape Background (User provided 4KING SOBAD wallpaper) -->
+    <!-- Fullscreen Landscape Background (4KING SOBAD 16:9 Wallpaper) -->
     <ImageView
         android:id="@+id/home_bg"
         android:layout_width="0dp"
@@ -17,6 +17,55 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Top Left: Server Status Card -->
+    <LinearLayout
+        android:id="@+id/server_status_card"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@drawable/bg_glass_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/server_status_dot"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/bg_status_dot_online" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_server_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:singleLine="true"
+                android:text="4KING ROLEPLAY"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp" />
+
+            <TextView
+                android:id="@+id/tv_server_players"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:singleLine="true"
+                android:text="ONLINE 👥 128/500  📶 18ms"
+                android:textColor="#00E5FF"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- Top Right Settings Button (Gear Icon) -->
     <ImageView
@@ -32,6 +81,53 @@
         android:src="@drawable/ic_settingsmenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Top Center: Live Announcement Marquee Banner -->
+    <LinearLayout
+        android:id="@+id/announcement_container"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/bg_announcement_bar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_settings_top_right"
+        app:layout_constraintEnd_toStartOf="@+id/btn_settings_top_right"
+        app:layout_constraintStart_toEndOf="@+id/server_status_card"
+        app:layout_constraintTop_toTopOf="@+id/btn_settings_top_right">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/bg_announcement_badge"
+            android:fontFamily="@font/montserrat_bold"
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingEnd="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="📢 ประกาศ"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/tv_announcement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/montserrat_bold"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="ยินดีต้อนรับสู่ 4KING SOBAD ROLEPLAY! 🔥 ห้ามใช้โปรแกรมโกงเด็ดขาด ระบบ Anti-Cheat 4KING ตรวจจับอัตโนมัติ"
+            android:textColor="#E0E7FF"
+            android:textSize="@dimen/_9sdp" />
+    </LinearLayout>
 
     <!-- Bottom Left: Nickname Input Container -->
     <LinearLayout

@@ -221,7 +221,7 @@ public class AntiCheatScanDialog {
         });
     }
 
-    private static JSONObject loadSecurityRules(Context context) {
+    public static JSONObject loadSecurityRules(Context context) {
         // Try Remote GitHub first
         try {
             URL url = new URL(REMOTE_CONFIG_URL);

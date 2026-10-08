@@ -1,6 +1,18 @@
 {
   "version": 1,
   "enable_anticheat": true,
+  "server": {
+    "name": "[TH] 4KING ROLEPLAY",
+    "ip": "192.168.1.106",
+    "port": 7777,
+    "fallback_players": 128,
+    "fallback_max_players": 500,
+    "fallback_ping": 18
+  },
+  "announcement": {
+    "enabled": true,
+    "text": "📢 ยินดีต้อนรับสู่ 4KING SOBAD ROLEPLAY! 🔥 ห้ามใช้โปรแกรมโกงเด็ดขาด ระบบ Anti-Cheat 4KING ตรวจจับอัตโนมัติ 👑 กิจกรรมคูณ 2 EXP ทุกวันเสาร์-อาทิตย์!"
+  },
   "blacklist_extensions": [
     ".csa",
     ".csi"

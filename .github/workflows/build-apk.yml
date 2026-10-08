@@ -54,10 +54,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.5
-          name: "SAMP Mobile v0.8.4.5 (4KING SOBAD - One-Click Play & AntiCheat Security Scanner)"
+          tag_name: v0.8.4.6
+          name: "SAMP Mobile v0.8.4.6 (4KING SOBAD - Chibi Gang Wallpaper, Live Announcement & Server Status)"
           body: |
-            ### 4KING SOBAD v0.8.4.5 Update
+            ### 4KING SOBAD v0.8.4.6 Update
+            - **New Launcher Cover Art (ภาพปกแก๊ง 4 หนุ่ม 4KINGS ฝนตกสายฟ้าฟาด)**:
+              - อัปเดตภาพพื้นหลังหน้าหลักเป็นลายเส้นจิบิ 4KINGS SOBAD ความละเอียดสูง 16:9 สีสันสดใสตรงอัตลักษณ์เซิร์ฟเวอร์
+            - **Live Announcement Marquee Banner (ระบบแถบวิ่งประกาศข่าวสารเรียลไทม์)**:
+              - แสดงแถบวิ่งข่าวสาร/กิจกรรมที่ดึงข้อมูลจาก `security.json` บน GitHub แบบสดๆ
+              - แอดมินสามารถแก้ไขข้อความประกาศได้ทันทีผ่าน GitHub โดยไม่ต้องอัปเดตตัวแอป APK
+            - **Server Status & Online Counter (กล่องแสดงสถานะเซิร์ฟเวอร์ & จำนวนผู้เล่น)**:
+              - แสดงสถานะเซิร์ฟเวอร์ออนไลน์ (Online Dot) ชื่อเซิร์ฟเวอร์ จำนวนผู้เล่น และค่า Ping
+              - เชื่อมต่อและดึงข้อมูลเซิร์ฟเวอร์ผ่านระบบคลาวด์จาก `security.json` พร้อมกันในจุดเดียว
             - **One-Click Play (ระบบกดเริ่มเกมชั้นเดียว)**:
               - ตัดหน้าต่างยืนยันซ้ำซ้อนออก กดปุ่ม "▶ เริ่มเกม" แล้วเข้าสู่ขั้นตอนตรวจสอบและเริ่มเล่นได้ทันที
             - **4KING Security Anti-Cheat Scanner (ระบบสแกนไฟล์และกันโปรเต็มรูปแบบ)**:

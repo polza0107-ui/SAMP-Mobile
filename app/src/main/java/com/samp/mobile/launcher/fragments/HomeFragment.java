@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -29,8 +30,11 @@ import com.samp.mobile.launcher.util.AntiCheatScanDialog;
 import com.samp.mobile.launcher.util.ButtonAnimator;
 import com.samp.mobile.launcher.util.GameDataDownloadDialog;
 import com.samp.mobile.launcher.util.SAMPServerInfo;
+import com.samp.mobile.launcher.util.SampQueryAPI;
 import com.samp.mobile.launcher.util.SettingsHelper;
 import com.samp.mobile.launcher.util.SharedPreferenceCore;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -42,6 +46,18 @@ public class HomeFragment extends Fragment {
     private Button mBtnUpdate;
     private Button mBtnStartGame;
     private ImageView mBtnSettings;
+
+    // Server Status & Live Announcement Views
+    private TextView mTvServerName;
+    private TextView mTvServerPlayers;
+    private View mServerStatusDot;
+    private TextView mTvAnnouncement;
+    private View mAnnouncementContainer;
+
+    // Config defaults (updated remotely from security.json)
+    private String mServerAddress = "192.168.1.106";
+    private int mServerPort = 7777;
+    private String mServerName = "[TH] 4KING ROLEPLAY";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +71,20 @@ public class HomeFragment extends Fragment {
         mBtnUpdate = view.findViewById(R.id.btn_update);
         mBtnStartGame = view.findViewById(R.id.btn_start_game);
         mBtnSettings = view.findViewById(R.id.btn_settings_top_right);
+
+        // Server Status and Announcement Views
+        mTvServerName = view.findViewById(R.id.tv_server_name);
+        mTvServerPlayers = view.findViewById(R.id.tv_server_players);
+        mServerStatusDot = view.findViewById(R.id.server_status_dot);
+        mTvAnnouncement = view.findViewById(R.id.tv_announcement);
+        mAnnouncementContainer = view.findViewById(R.id.announcement_container);
+
+        if (mTvAnnouncement != null) {
+            mTvAnnouncement.setSelected(true); // Required for Marquee text scroll
+        }
+
+        // Fetch Live Server Config & Announcement from security.json (GitHub / local)
+        loadRemoteServerAndAnnouncement();
 
         // Load Nickname (Bottom-Left)
         String currentNick = SettingsHelper.getNickName(getContext());
@@ -127,13 +157,17 @@ public class HomeFragment extends Fragment {
                     if (targetServer == null) {
                         targetServer = new SAMPServerInfo();
                         targetServer.setId(1);
-                        targetServer.setServerName("[TH] 4KING ROLEPLAY");
-                        targetServer.setAddress("192.168.1.106");
-                        targetServer.setPort(7777);
+                        targetServer.setServerName(mServerName);
+                        targetServer.setAddress(mServerAddress);
+                        targetServer.setPort(mServerPort);
                         targetServer.setCurrentPlayerCount(0);
-                        targetServer.setMaxPlayerCount(50);
+                        targetServer.setMaxPlayerCount(500);
                         targetServer.setHasPassword(false);
                         targetServer.setServerStatus(SAMPServerInfo.Status.ONLINE);
+                    } else {
+                        targetServer.setServerName(mServerName);
+                        targetServer.setAddress(mServerAddress);
+                        targetServer.setPort(mServerPort);
                     }
 
                     final SAMPServerInfo finalTargetServer = targetServer;
@@ -155,6 +189,90 @@ public class HomeFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private void loadRemoteServerAndAnnouncement() {
+        new Thread(() -> {
+            try {
+                if (getContext() == null) return;
+                JSONObject sec = AntiCheatScanDialog.loadSecurityRules(getContext());
+                if (sec == null) return;
+
+                // 1. Live Announcement
+                JSONObject ann = sec.optJSONObject("announcement");
+                if (ann != null) {
+                    boolean enabled = ann.optBoolean("enabled", true);
+                    String text = ann.optString("text", "");
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (enabled && !text.isEmpty() && mTvAnnouncement != null) {
+                                mTvAnnouncement.setText(text);
+                                mTvAnnouncement.setSelected(true);
+                                if (mAnnouncementContainer != null) mAnnouncementContainer.setVisibility(View.VISIBLE);
+                            } else if (!enabled && mAnnouncementContainer != null) {
+                                mAnnouncementContainer.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }
+
+                // 2. Server Status & Config
+                JSONObject srv = sec.optJSONObject("server");
+                int fallbackPlayers = 128;
+                int fallbackMaxPlayers = 500;
+                int fallbackPing = 18;
+
+                if (srv != null) {
+                    mServerName = srv.optString("name", mServerName);
+                    mServerAddress = srv.optString("ip", mServerAddress);
+                    mServerPort = srv.optInt("port", mServerPort);
+                    fallbackPlayers = srv.optInt("fallback_players", fallbackPlayers);
+                    fallbackMaxPlayers = srv.optInt("fallback_max_players", fallbackMaxPlayers);
+                    fallbackPing = srv.optInt("fallback_ping", fallbackPing);
+                }
+
+                final int finalPlayers = fallbackPlayers;
+                final int finalMax = fallbackMaxPlayers;
+                final int finalPing = fallbackPing;
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (mTvServerName != null) mTvServerName.setText(mServerName);
+                        if (mTvServerPlayers != null) {
+                            mTvServerPlayers.setText("ONLINE 👥 " + finalPlayers + "/" + finalMax + "  📶 " + finalPing + "ms");
+                        }
+                    });
+                }
+
+                // 3. Live UDP Query via SampQueryAPI
+                try {
+                    long startTime = System.currentTimeMillis();
+                    SampQueryAPI query = new SampQueryAPI(mServerAddress, mServerPort);
+                    if (query.mo7166d()) {
+                        String[] info = query.mo7164b();
+                        long ping = System.currentTimeMillis() - startTime;
+                        if (info != null && info.length >= 4) {
+                            int currentPlayers = Integer.parseInt(info[1]);
+                            int maxPlayers = Integer.parseInt(info[2]);
+                            String liveName = info[3];
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> {
+                                    if (mTvServerPlayers != null) {
+                                        mTvServerPlayers.setText("ONLINE 👥 " + currentPlayers + "/" + maxPlayers + "  📶 " + ping + "ms");
+                                    }
+                                    if (!liveName.isEmpty() && mTvServerName != null) {
+                                        mTvServerName.setText(liveName);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {}
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void startAntiCheatAndLaunch(final SAMPServerInfo serverInfo) {
@@ -269,6 +387,9 @@ public class HomeFragment extends Fragment {
         super.onResume();
         if (mNicknameEdit != null && getContext() != null) {
             mNicknameEdit.setText(SettingsHelper.getNickName(getContext()));
+        }
+        if (mTvAnnouncement != null) {
+            mTvAnnouncement.setSelected(true);
         }
     }
 }
