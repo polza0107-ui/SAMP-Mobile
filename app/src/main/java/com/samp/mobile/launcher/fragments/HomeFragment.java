@@ -25,6 +25,7 @@ import com.samp.mobile.R;
 import com.samp.mobile.launcher.MainActivity;
 import com.samp.mobile.launcher.adapters.ServerInformationFragment;
 import com.samp.mobile.launcher.util.ButtonAnimator;
+import com.samp.mobile.launcher.util.GameDataDownloadDialog;
 import com.samp.mobile.launcher.util.SAMPServerInfo;
 import com.samp.mobile.launcher.util.SettingsHelper;
 import com.samp.mobile.launcher.util.SharedPreferenceCore;
@@ -82,21 +83,18 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Bottom-Right: Update Button (Check for updates / Discord link)
+        // Bottom-Right: Update Button (Open Game Data Download & Verify Dialog)
         if (mBtnUpdate != null) {
             mBtnUpdate.setOnTouchListener(new ButtonAnimator(getContext(), mBtnUpdate));
             mBtnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "ตัวเกมเป็นเวอร์ชันล่าสุดแล้ว (v0.8.3.0)", Toast.LENGTH_SHORT).show();
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/jvKM7HR3Dc")));
-                    } catch (Exception ignored) {}
+                    GameDataDownloadDialog.show(getActivity(), null);
                 }
             });
         }
 
-        // Bottom-Right: Start Game Button -> Open Connect Dialog
+        // Bottom-Right: Start Game Button -> Check DATA before Launch
         if (mBtnStartGame != null) {
             mBtnStartGame.setOnTouchListener(new ButtonAnimator(getContext(), mBtnStartGame));
             mBtnStartGame.setOnClickListener(new View.OnClickListener() {
@@ -133,13 +131,32 @@ public class HomeFragment extends Fragment {
                         targetServer.setServerStatus(SAMPServerInfo.Status.ONLINE);
                     }
 
-                    ServerInformationFragment dialog = new ServerInformationFragment(getActivity(), targetServer);
-                    dialog.show();
+                    final SAMPServerInfo finalTargetServer = targetServer;
+
+                    // Check if game data exists on device
+                    if (!GameDataDownloadDialog.isGameDataInstalled()) {
+                        Toast.makeText(getContext(), "ยังไม่พบข้อมูลตัวเกม กรุณาดาวน์โหลด DATA ก่อนเข้าเล่น", Toast.LENGTH_SHORT).show();
+                        GameDataDownloadDialog.show(getActivity(), new Runnable() {
+                            @Override
+                            public void run() {
+                                openConnectDialog(finalTargetServer);
+                            }
+                        });
+                    } else {
+                        openConnectDialog(finalTargetServer);
+                    }
                 }
             });
         }
 
         return view;
+    }
+
+    private void openConnectDialog(SAMPServerInfo serverInfo) {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            ServerInformationFragment dialog = new ServerInformationFragment(getActivity(), serverInfo);
+            dialog.show();
+        }
     }
 
     private void showFpsSettingsDialog() {

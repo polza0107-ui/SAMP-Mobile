@@ -54,10 +54,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.2
-          name: "SAMP Mobile v0.8.4.2 (4KING SOBAD - Universal WebUI Bridge & ID Card)"
+          tag_name: v0.8.4.3
+          name: "SAMP Mobile v0.8.4.3 (4KING SOBAD - Auto Data Downloader & Installer)"
           body: |
-            ### 4KING SOBAD v0.8.4.0 Update
+            ### 4KING SOBAD v0.8.4.3 Update
+            - **Auto Game DATA Downloader & Installer (ระบบดาวน์โหลดและติดตั้งตัวเกมอัตโนมัติ)**:
+              - ดาวน์โหลดไฟล์ `GTA.zip` จาก Google Drive ลงเครื่องผู้เล่นอัตโนมัติ
+              - ระบบขยายและแตกไฟล์ลง `/storage/emulated/0/` โดยตรง
+              - หน้าต่าง UI ดาวน์โหลดสไตล์ Dark Glassmorphic สวยงาม พร้อมเปอร์เซ็นต์และแถบความเร็ว
+              - ตรวจสอบไฟล์ DATA ก่อนเข้าเกมอัตโนมัติ หากยังไม่มีจะแจ้งเตือนให้ดาวน์โหลดทันที
+              - ปุ่ม "อัปเดต" ที่หน้าแรกสามารถกดเพื่อตรวจสอบหรือติดตั้งข้อมูลเกมใหม่ได้ตลอดเวลา
             - **Mobile Downed Incapacitated Screen (หน้าต่างสลบ/บาดเจ็บสาหัสบนมือถือ)**:
               - แสดงผลหน้าต่างสลบพร้อมขอบจอกระพริบสีแดง (Red Pulse Vignette)
               - นับเวลาถอยหลัง 30 วินาที พร้อมแถบหลอดเวลาเรียลไทม์

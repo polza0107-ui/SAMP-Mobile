@@ -1,0 +1,403 @@
+package com.samp.mobile.launcher.util;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.samp.mobile.R;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+public class GameDataDownloadDialog {
+    private static final String TAG = "GameDataDownload";
+
+    public static final String DATA_DOWNLOAD_URL = "https://drive.usercontent.google.com/download?id=1LfllY8msaSeXxB4maJiVeUsiHkJBfzo2&export=download";
+    public static final String DATA_DOWNLOAD_FALLBACK_URL = "https://drive.google.com/uc?export=download&id=1LfllY8msaSeXxB4maJiVeUsiHkJBfzo2";
+    public static final String TARGET_EXTRACT_DIR = "/storage/emulated/0/";
+
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    public static boolean isGameDataInstalled() {
+        File gtaDir = new File(TARGET_EXTRACT_DIR, "GTA");
+        File dataDir = new File(gtaDir, "data");
+        File animDir = new File(gtaDir, "anim");
+        File modelsDir = new File(gtaDir, "models");
+
+        return (dataDir.exists() && dataDir.isDirectory() && dataDir.list() != null && dataDir.list().length > 0)
+                || (animDir.exists() && animDir.isDirectory())
+                || (modelsDir.exists() && modelsDir.isDirectory());
+    }
+
+    public static boolean checkStoragePermissions(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            return activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    public static void requestStoragePermissions(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                activity.startActivity(intent);
+                Toast.makeText(activity, "กรุณาเปิดสิทธิ์ 'อนุญาตให้เข้าถึงไฟล์ทั้งหมด' เพื่อติดตั้งตัวเกม", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                activity.startActivity(intent);
+            }
+        } else {
+            activity.requestPermissions(new String[]{
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, 101);
+        }
+    }
+
+    public static void show(Activity activity, Runnable onComplete) {
+        if (activity == null || activity.isFinishing()) return;
+
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_game_download);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        dialog.setCancelable(false);
+
+        TextView tvStatusTitle = dialog.findViewById(R.id.tv_status_title);
+        TextView tvStatusDetail = dialog.findViewById(R.id.tv_status_detail);
+        ProgressBar progressBar = dialog.findViewById(R.id.progress_bar_download);
+        TextView tvPercent = dialog.findViewById(R.id.tv_progress_percent);
+        TextView tvSpeed = dialog.findViewById(R.id.tv_progress_speed);
+        Button btnCancel = dialog.findViewById(R.id.btn_download_cancel);
+        Button btnAction = dialog.findViewById(R.id.btn_download_action);
+
+        boolean alreadyInstalled = isGameDataInstalled();
+        if (alreadyInstalled) {
+            tvStatusTitle.setText("ตรวจพบข้อมูลตัวเกมในเครื่องแล้ว");
+            tvStatusDetail.setText("จุดติดตั้ง: /storage/emulated/0/GTA (พร้อมเล่น หรือกดเพื่อดาวน์โหลดใหม่)");
+            btnAction.setText("🔄 ดาวน์โหลดใหม่");
+        } else {
+            tvStatusTitle.setText("ยังไม่ได้ติดตั้งข้อมูลตัวเกม (DATA)");
+            tvStatusDetail.setText("จำเป็นต้องดาวน์โหลดไฟล์ GTA.zip ลงที่ /storage/emulated/0/");
+            btnAction.setText("⚡ เริ่มดาวน์โหลด");
+        }
+
+        final boolean[] isRunning = {false};
+
+        btnCancel.setOnClickListener(v -> {
+            isRunning[0] = false;
+            dialog.dismiss();
+        });
+
+        btnAction.setOnClickListener(v -> {
+            if (btnAction.getText().toString().contains("เริ่มเกม")) {
+                dialog.dismiss();
+                if (onComplete != null) {
+                    onComplete.run();
+                }
+                return;
+            }
+
+            if (!checkStoragePermissions(activity)) {
+                requestStoragePermissions(activity);
+                Toast.makeText(activity, "กรุณาเปิดสิทธิ์เข้าถึงไฟล์ก่อนเริ่มดาวน์โหลด", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (isRunning[0]) return;
+            isRunning[0] = true;
+
+            btnAction.setEnabled(false);
+            btnAction.setText("⏳ กำลังดำเนินการ...");
+            btnCancel.setEnabled(false);
+
+            startDownloadAndExtract(activity, dialog, tvStatusTitle, tvStatusDetail, progressBar, tvPercent, tvSpeed, btnAction, btnCancel, onComplete);
+        });
+
+        dialog.show();
+    }
+
+    private static void startDownloadAndExtract(Activity activity, Dialog dialog,
+                                               TextView tvStatusTitle, TextView tvStatusDetail,
+                                               ProgressBar progressBar, TextView tvPercent, TextView tvSpeed,
+                                               Button btnAction, Button btnCancel, Runnable onComplete) {
+
+        executor.execute(() -> {
+            File cacheDir = activity.getExternalCacheDir();
+            if (cacheDir == null) {
+                cacheDir = activity.getCacheDir();
+            }
+            File tempZip = new File(cacheDir, "GTA_download.zip");
+
+            try {
+                // 1. Download Phase
+                updateUI(tvStatusTitle, "กำลังเชื่อมต่อเพื่อดาวน์โหลด...");
+                updateUI(tvStatusDetail, "กำลังดาวน์โหลดไฟล์ข้อมูลตัวเกม (GTA.zip)...");
+
+                boolean downloaded = downloadFile(DATA_DOWNLOAD_URL, DATA_DOWNLOAD_FALLBACK_URL, tempZip, (downloadedBytes, totalBytes, speedBytesPerSec) -> {
+                    int percent = (totalBytes > 0) ? (int) ((downloadedBytes * 100) / totalBytes) : 0;
+                    String downloadedMb = String.format(Locale.US, "%.1f MB", downloadedBytes / (1024.0 * 1024.0));
+                    String totalMb = (totalBytes > 0) ? String.format(Locale.US, "%.1f MB", totalBytes / (1024.0 * 1024.0)) : "กำลังคำนวณ";
+                    String speedStr = formatSpeed(speedBytesPerSec);
+
+                    mainHandler.post(() -> {
+                        progressBar.setProgress(percent);
+                        tvPercent.setText(percent + "%");
+                        tvSpeed.setText(downloadedMb + " / " + totalMb + " (" + speedStr + ")");
+                    });
+                });
+
+                if (!downloaded || !tempZip.exists() || tempZip.length() == 0) {
+                    throw new Exception("ดาวน์โหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+                }
+
+                // 2. Extraction Phase
+                updateUI(tvStatusTitle, "กำลังแตกไฟล์ข้อมูลตัวเกม...");
+                updateUI(tvStatusDetail, "กำลังติดตั้งลงโฟลเดอร์ /storage/emulated/0/ กรุณารอสักครู่");
+                mainHandler.post(() -> {
+                    progressBar.setIndeterminate(true);
+                    tvPercent.setText("Unzipping...");
+                    tvSpeed.setText("กำลังขยายไฟล์ข้อมูล...");
+                });
+
+                File targetDir = new File(TARGET_EXTRACT_DIR);
+                if (!targetDir.exists()) {
+                    targetDir.mkdirs();
+                }
+
+                unzip(tempZip, targetDir, (currentFile, extractedCount) -> {
+                    mainHandler.post(() -> {
+                        tvStatusDetail.setText("กำลังติดตั้ง: " + currentFile);
+                    });
+                });
+
+                // Clean up temp file
+                if (tempZip.exists()) {
+                    tempZip.delete();
+                }
+
+                // Sync fonts and settings.ini
+                ConfigValidator.validateConfigFiles(activity);
+
+                // 3. Success Phase
+                mainHandler.post(() -> {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setProgress(100);
+                    tvPercent.setText("100%");
+                    tvSpeed.setText("สมบูรณ์แบบ");
+                    tvStatusTitle.setText("✅ ติดตั้งข้อมูลตัวเกมเสร็จสิ้นแล้ว!");
+                    tvStatusDetail.setText("พร้อมเข้าเล่น 4KING ROLEPLAY ทันที");
+
+                    btnCancel.setEnabled(true);
+                    btnCancel.setText("ปิด");
+                    btnAction.setEnabled(true);
+                    btnAction.setText("▶ เริ่มเกมทันที");
+                    Toast.makeText(activity, "ติดตั้งข้อมูลตัวเกมเรียบร้อยแล้ว!", Toast.LENGTH_SHORT).show();
+                });
+
+            } catch (Exception e) {
+                Log.e(TAG, "Download/Extract error", e);
+                mainHandler.post(() -> {
+                    progressBar.setIndeterminate(false);
+                    tvStatusTitle.setText("❌ เกิดข้อผิดพลาดในการติดตั้ง");
+                    tvStatusDetail.setText(e.getMessage() != null ? e.getMessage() : "ไม่สามารถดาวน์โหลดหรือแตกไฟล์ได้");
+                    btnCancel.setEnabled(true);
+                    btnAction.setEnabled(true);
+                    btnAction.setText("🔄 ลองอีกครั้ง");
+                    Toast.makeText(activity, "เกิดข้อผิดพลาด: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+    }
+
+    private interface ProgressListener {
+        void onProgress(long downloadedBytes, long totalBytes, long speedBytesPerSec);
+    }
+
+    private interface ExtractListener {
+        void onExtract(String currentFile, int count);
+    }
+
+    private static boolean downloadFile(String primaryUrl, String fallbackUrl, File outputFile, ProgressListener listener) throws Exception {
+        String[] urls = {primaryUrl, fallbackUrl};
+        Exception lastException = null;
+
+        for (String urlStr : urls) {
+            HttpURLConnection conn = null;
+            InputStream in = null;
+            FileOutputStream out = null;
+            try {
+                URL url = new URL(urlStr);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setInstanceFollowRedirects(true);
+                conn.setConnectTimeout(30000);
+                conn.setReadTimeout(60000);
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android; Mobile) 4KING-Launcher");
+
+                int responseCode = conn.getResponseCode();
+                // Follow manual redirects if needed (HTTP 301, 302, 303, 307)
+                int redirects = 0;
+                while ((responseCode == HttpURLConnection.HTTP_MOVED_PERM
+                        || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+                        || responseCode == HttpURLConnection.HTTP_SEE_OTHER
+                        || responseCode == 307) && redirects < 5) {
+                    String newUrl = conn.getHeaderField("Location");
+                    conn.disconnect();
+                    url = new URL(newUrl);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setInstanceFollowRedirects(true);
+                    conn.setConnectTimeout(30000);
+                    conn.setReadTimeout(60000);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android; Mobile) 4KING-Launcher");
+                    responseCode = conn.getResponseCode();
+                    redirects++;
+                }
+
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    throw new Exception("HTTP response error: " + responseCode);
+                }
+
+                long totalBytes = conn.getContentLengthLong();
+                in = new BufferedInputStream(conn.getInputStream());
+                out = new FileOutputStream(outputFile);
+
+                byte[] buffer = new byte[32 * 1024];
+                long downloadedBytes = 0;
+                int bytesRead;
+
+                long lastTime = System.currentTimeMillis();
+                long bytesSinceLastTime = 0;
+                long speed = 0;
+
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                    downloadedBytes += bytesRead;
+                    bytesSinceLastTime += bytesRead;
+
+                    long now = System.currentTimeMillis();
+                    if (now - lastTime >= 500) {
+                        speed = (bytesSinceLastTime * 1000) / (now - lastTime);
+                        lastTime = now;
+                        bytesSinceLastTime = 0;
+                        if (listener != null) {
+                            listener.onProgress(downloadedBytes, totalBytes, speed);
+                        }
+                    }
+                }
+
+                out.flush();
+                if (listener != null) {
+                    listener.onProgress(downloadedBytes, totalBytes, speed);
+                }
+                return true;
+
+            } catch (Exception e) {
+                lastException = e;
+                Log.w(TAG, "Failed downloading from " + urlStr + ", trying fallback...", e);
+            } finally {
+                if (out != null) {
+                    try { out.close(); } catch (Exception ignored) {}
+                }
+                if (in != null) {
+                    try { in.close(); } catch (Exception ignored) {}
+                }
+                if (conn != null) {
+                    conn.disconnect();
+                }
+            }
+        }
+
+        if (lastException != null) throw lastException;
+        return false;
+    }
+
+    private static void unzip(File zipFile, File targetDir, ExtractListener listener) throws Exception {
+        byte[] buffer = new byte[64 * 1024];
+        int count = 0;
+
+        try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new java.io.FileInputStream(zipFile)))) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                String entryName = entry.getName();
+                File destFile = new File(targetDir, entryName);
+
+                // Prevent zip slip vulnerability
+                String canonicalDestPath = destFile.getCanonicalPath();
+                String canonicalTargetDir = targetDir.getCanonicalPath();
+                if (!canonicalDestPath.startsWith(canonicalTargetDir + File.separator) && !canonicalDestPath.equals(canonicalTargetDir)) {
+                    throw new SecurityException("Zip entry is outside target dir: " + entryName);
+                }
+
+                if (entry.isDirectory()) {
+                    destFile.mkdirs();
+                } else {
+                    File parent = destFile.getParentFile();
+                    if (parent != null && !parent.exists()) {
+                        parent.mkdirs();
+                    }
+
+                    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(destFile))) {
+                        int read;
+                        while ((read = zis.read(buffer)) != -1) {
+                            bos.write(buffer, 0, read);
+                        }
+                        bos.flush();
+                    }
+                }
+
+                zis.closeEntry();
+                count++;
+                if (listener != null && count % 5 == 0) {
+                    listener.onExtract(destFile.getName(), count);
+                }
+            }
+        }
+    }
+
+    private static void updateUI(TextView textView, String text) {
+        mainHandler.post(() -> {
+            if (textView != null) textView.setText(text);
+        });
+    }
+
+    private static String formatSpeed(long bytesPerSec) {
+        if (bytesPerSec <= 0) return "0 KB/s";
+        if (bytesPerSec < 1024 * 1024) {
+            return String.format(Locale.US, "%.0f KB/s", bytesPerSec / 1024.0);
+        } else {
+            return String.format(Locale.US, "%.1f MB/s", bytesPerSec / (1024.0 * 1024.0));
+        }
+    }
+}
