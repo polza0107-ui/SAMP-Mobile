@@ -441,7 +441,7 @@ public class HomeFragment extends Fragment {
         }
 
         int currentFps = new SharedPreferenceCore().getInt(requireContext().getApplicationContext(), "FPS_LIMIT");
-        if (currentFps == 0) currentFps = 60;
+        if (currentFps == 0) currentFps = 90;
 
         RadioGroup group = dialog.findViewById(R.id.dialog_fps_group);
         RadioButton r30 = dialog.findViewById(R.id.fps_30);

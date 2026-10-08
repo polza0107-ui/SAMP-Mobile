@@ -105,9 +105,35 @@ public class GTASA extends WarMedia {
         }
         ConfigValidator.validateConfigFiles(this);
         //  gtasaSelf = this;
-        //  wantsAccelerometer = true;
-
         super.onCreate(bundle);
+
+        // Unlock High Display Refresh Rate (90Hz / 120Hz / 144Hz) for Game Window
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                android.view.Display display = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                    display = getDisplay();
+                } else {
+                    display = getWindowManager().getDefaultDisplay();
+                }
+                if (display != null) {
+                    android.view.Display.Mode[] modes = display.getSupportedModes();
+                    android.view.Display.Mode bestMode = null;
+                    float maxRate = 60.0f;
+                    for (android.view.Display.Mode mode : modes) {
+                        if (mode.getRefreshRate() > maxRate) {
+                            maxRate = mode.getRefreshRate();
+                            bestMode = mode;
+                        }
+                    }
+                    if (bestMode != null) {
+                        android.view.WindowManager.LayoutParams params = getWindow().getAttributes();
+                        params.preferredDisplayModeId = bestMode.getModeId();
+                        getWindow().setAttributes(params);
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
 
         if (new SharedPreferenceCore().getBoolean(this, "MLOADER")) {
             try {

@@ -54,10 +54,14 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.7
-          name: "SAMP Mobile v0.8.4.7 (4KING SOBAD - Real-time Server Offline Detection & Red Dot)"
+          tag_name: v0.8.4.8
+          name: "SAMP Mobile v0.8.4.8 (4KING SOBAD - High FPS Unlock 90FPS/120FPS & High Refresh Rate)"
           body: |
-            ### 4KING SOBAD v0.8.4.7 Update
+            ### 4KING SOBAD v0.8.4.8 Update
+            - **FPS Limit Unlock (ปลดล็อก FPS ทะลุ 60FPS สูงสุด 120FPS)**:
+              - แก้ไขโค้ด C++ (ARM64 & 32-bit) ที่เดิมมีการ Hardcode คำสั่ง Assembly ล็อกไว้ที่ 60 FPS
+              - แปลงคำสั่ง Assembly เป็นแบบไดนามิก รองรับการปรับ 90 FPS และ 120 FPS ตามที่ผู้เล่นเลือกจริง
+              - ปลดล็อก Android Display Refresh Rate Mode ในระบบ ให้หน้าต่างเกมรันตาม Refresh Rate สูงสุดของหน้าจอมือถือ (90Hz / 120Hz / 144Hz)
             - **Real-time Server Offline Detection (ระบบตรวจจับเซิร์ฟเวอร์ปิดอัตโนมัติ)**:
               - เมื่อเซิร์ฟเวอร์ปิดให้บริการ หรือไม่สามารถเชื่อมต่อได้ ไฟสถานะจะเปลี่ยนเป็นสีแดงสด 🔴 ทันที
               - ข้อความสถานะเปลี่ยนเป็น `OFFLINE 🔴 เซิร์ฟเวอร์ปิดให้บริการ`

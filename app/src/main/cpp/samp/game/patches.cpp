@@ -73,16 +73,23 @@ void readVehiclesAudioSettings()
 
 void ApplyFPSPatch(uint8_t fps)
 {
+    if (fps <= 0) fps = 90;
+
 #if VER_x32
-    CHook::WriteMemory(g_libGTASA + 0x005E49E0, (uintptr_t)& fps, 1);
-	CHook::WriteMemory(g_libGTASA + 0x005E492E, (uintptr_t)& fps, 1);
+    CHook::WriteMemory(g_libGTASA + 0x005E49E0, (uintptr_t)&fps, 1);
+    CHook::WriteMemory(g_libGTASA + 0x005E492E, (uintptr_t)&fps, 1);
 #else
-    CHook::WriteMemory(g_libGTASA + 0x70A38C, "\xE9\x0F\x1E\x32", 4);
-    CHook::WriteMemory(g_libGTASA + 0x70A43C, "\xE8\x0F\x1E\x32", 4);
-    CHook::WriteMemory(g_libGTASA + 0x70A458, "\xE9\x0F\x1E\x32", 4);
+    // Dynamic ARM64 instruction encoding: MOVZ Wd, #imm16, LSL #0
+    // Opcode format: 0x52800000 | (imm16 << 5) | Rd
+    uint32_t mov_w9 = 0x52800009 | (((uint32_t)fps & 0xFFFF) << 5);
+    uint32_t mov_w8 = 0x52800008 | (((uint32_t)fps & 0xFFFF) << 5);
+
+    CHook::WriteMemory(g_libGTASA + 0x70A38C, &mov_w9, 4);
+    CHook::WriteMemory(g_libGTASA + 0x70A43C, &mov_w8, 4);
+    CHook::WriteMemory(g_libGTASA + 0x70A458, &mov_w9, 4);
 #endif
 
-    FLog("New fps limit = %d", fps);
+    FLog("New fps limit applied = %d", fps);
 }
 
 void DisableAutoAim()
