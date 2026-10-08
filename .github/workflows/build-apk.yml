@@ -54,8 +54,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.1
-          name: "SAMP Mobile v0.8.4.1 (4KING SOBAD - Fix Ghost Empty Dialog & Clean UI)"
+          tag_name: v0.8.4.2
+          name: "SAMP Mobile v0.8.4.2 (4KING SOBAD - Universal WebUI Bridge & ID Card)"
           body: |
             ### 4KING SOBAD v0.8.4.0 Update
             - **Mobile Downed Incapacitated Screen (หน้าต่างสลบ/บาดเจ็บสาหัสบนมือถือ)**:

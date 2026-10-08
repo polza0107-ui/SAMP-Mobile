@@ -139,13 +139,27 @@ public class DialogManager {
         // Standard SA-MP dialog dismissal (-1, 65535, or completely empty dialog fields)
         if (i < 0 || i == 65535 || ((str == null || str.isEmpty()) && (str2 == null || str2.isEmpty()) && (str3 == null || str3.isEmpty()))) {
             Hide();
+            if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
+                com.samp.mobile.game.SAMP.getInstance().getCefManager().hideBrowser();
+            }
             return;
         }
 
         this.mCurrentDialogId = i;
         this.mDialogStyle = i2;
 
-        // Intercept 4KING Dialogs (1100=LOGIN, 1101=REGISTER, 1099=SELECT_SCHOOL) and open WebUI CEF instead!
+        // =========================================================================
+        // UNIVERSAL WEBUI BRIDGE: Intercept any dialog containing an HTTP/HTTPS URL
+        // =========================================================================
+        String cleanStr2 = (str2 != null) ? str2.replaceAll("\\{[A-Fa-f0-9]{6}\\}", "").trim() : "";
+        if (cleanStr2.startsWith("http://") || cleanStr2.startsWith("https://")) {
+            if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
+                com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, cleanStr2);
+                return;
+            }
+        }
+
+        // Specific 4KING Dialog Interceptions (Fallback / Direct Dialog IDs)
         if (i == 1100 || i == 1101) {
             String mode = (i == 1100) ? "login" : "register";
             String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
@@ -163,8 +177,10 @@ public class DialogManager {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
                 return;
             }
-        } else if (i == 1098 || (str2 != null && str2.startsWith("http://") && str2.contains("/HTMLGUI/"))) {
-            String url = (str2 != null && str2.startsWith("http://")) ? str2 : ("http://" + com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity) + "/HTMLGUI/gui.html?view=inventory&show=1&name=" + com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity) + "&v=" + System.currentTimeMillis());
+        } else if (i == 1098) {
+            String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
+            String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
+            String url = "http://" + host + "/HTMLGUI/gui.html?view=inventory&show=1&name=" + nick + "&v=" + System.currentTimeMillis();
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
                 return;

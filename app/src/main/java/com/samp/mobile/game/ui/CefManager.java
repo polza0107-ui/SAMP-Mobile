@@ -402,6 +402,8 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/closewheel");
                 }
+            } else if ("cef:closeBrowser".equals(event) || "cef:hideUI".equals(event)) {
+                hideBrowser();
             } else if ("cef:closeCard".equals(event)) {
                 hideBrowser();
                 if (SAMP.getInstance() != null) {
