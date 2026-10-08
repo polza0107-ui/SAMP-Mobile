@@ -517,6 +517,10 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/storeveh " + vehId);
                 }
+            } else if ("cef:sortInventory".equals(event)) {
+                if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/sortinv");
+                }
             } else if ("cef:reclaimGarageVehicle".equals(event)) {
                 String vehId = extractFirstArg(jsonArgs);
                 hideBrowser();
