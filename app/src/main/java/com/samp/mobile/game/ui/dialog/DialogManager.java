@@ -178,11 +178,14 @@ public class DialogManager {
                 return;
             }
         } else if (i == 1098 || i == 1105) {
-            String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
-            String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
-            String url = "http://" + host + "/HTMLGUI/inventory.html?name=" + nick + "&v=" + System.currentTimeMillis();
+            String targetUrl = cleanStr2;
+            if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
+                String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
+                String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
+                targetUrl = "http://" + host + "/HTMLGUI/inventory.html?name=" + nick + "&v=" + System.currentTimeMillis();
+            }
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
-                com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
+                com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, targetUrl);
                 return;
             }
         }

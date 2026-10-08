@@ -517,6 +517,18 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/storeveh " + vehId);
                 }
+                        } else if ("cef:moveItem".equals(event)) {
+                String data = extractFirstArg(jsonArgs);
+                if (SAMP.getInstance() != null && data != null && !data.isEmpty()) {
+                    String[] parts = data.split("[,:]");
+                    if (parts.length >= 2) {
+                        try {
+                            int from = Integer.parseInt(parts[0].trim()) + 1;
+                            int to = Integer.parseInt(parts[1].trim()) + 1;
+                            SAMP.getInstance().sendChatCommand("/moveitem " + from + " " + to);
+                        } catch (Exception ignored) {}
+                    }
+                }
             } else if ("cef:sortInventory".equals(event)) {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/sortinv");
