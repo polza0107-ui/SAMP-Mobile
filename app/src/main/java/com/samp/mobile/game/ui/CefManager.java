@@ -417,7 +417,7 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/exitafk");
                 }
-            } else if ("cef:closeUI".equals(event) || "cef:onCloseUI".equals(event) || "cef:closeInventory".equals(event)) {
+            } else if ("cef:closeSchool".equals(event) || "cef:closeUI".equals(event) || "cef:onCloseUI".equals(event) || "cef:closeInventory".equals(event)) {
                 if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
                     mMainHandler.post(new Runnable() {
                         @Override
@@ -428,6 +428,7 @@ public class CefManager {
                 }
                 hideBrowser();
                 if (SAMP.getInstance() != null) {
+                    SAMP.getInstance().sendChatCommand("/closeschool");
                     SAMP.getInstance().sendChatCommand("/closeinv");
                 }
             } else if ("cef:wheelAction".equals(event)) {
