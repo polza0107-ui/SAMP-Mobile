@@ -52,7 +52,7 @@ public class SettingsHelper {
                 } catch (Exception ignored) {}
             }
         }
-        return "188.212.158.39";
+        return "192.168.1.106";
     }
 
     public static void setNickName(Context context, String name) {

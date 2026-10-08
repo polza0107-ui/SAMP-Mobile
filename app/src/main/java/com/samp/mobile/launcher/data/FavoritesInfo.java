@@ -23,7 +23,7 @@ public class FavoritesInfo {
         File file = new File(mContext.getExternalFilesDir(null), "SAMP/favorites.json");
         if (!file.exists()) {
             ClearFavorites();
-            serverList.add(new FavoriteServerData(0, 0, "188.212.158.39", 7777));
+            serverList.add(new FavoriteServerData(0, 0, "192.168.1.106", 7777));
             bLoaded = true;
             Save(mContext);
             return;
@@ -32,7 +32,7 @@ public class FavoritesInfo {
             String InputStreamToString = Util.InputStreamToString(new FileInputStream(file));
             if (InputStreamToString.isEmpty()) {
                 ClearFavorites();
-                serverList.add(new FavoriteServerData(0, 0, "188.212.158.39", 7777));
+                serverList.add(new FavoriteServerData(0, 0, "192.168.1.106", 7777));
                 bLoaded = true;
                 Save(mContext);
                 return;
@@ -56,7 +56,7 @@ public class FavoritesInfo {
         } catch (Exception e) {
             e.printStackTrace();
             ClearFavorites();
-            serverList.add(new FavoriteServerData(0, 0, "188.212.158.39", 7777));
+            serverList.add(new FavoriteServerData(0, 0, "192.168.1.106", 7777));
             bLoaded = true;
             Save(mContext);
         }

@@ -254,7 +254,7 @@ void DoInitStuff()
 	{
 		//ReadSettingFile();
 
-		const char* szHost = (pSettings && strlen(pSettings->Get().szHost) > 0) ? pSettings->Get().szHost : "188.212.158.39";
+		const char* szHost = (pSettings && strlen(pSettings->Get().szHost) > 0) ? pSettings->Get().szHost : "192.168.1.106";
 		int iPort = (pSettings && pSettings->Get().iPort > 0) ? pSettings->Get().iPort : 7777;
 		const char* szNick = (pSettings && strlen(pSettings->Get().szNickName) > 0) ? pSettings->Get().szNickName : "Tham_Player";
 		const char* szPass = (pSettings) ? pSettings->Get().szPassword : "";
