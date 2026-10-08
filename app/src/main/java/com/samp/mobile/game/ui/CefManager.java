@@ -380,12 +380,12 @@ public class CefManager {
                     });
                 }
                 hideBrowser();
-            } else if ("cef:selectSchool".equals(event)) {
+            } else if ("cef:selectSchool".equals(event) || "cef:onSelectSchool".equals(event)) {
                 final String school = extractFirstArg(jsonArgs);
                 int item = 0;
-                if ("itr".equalsIgnoreCase(school) || "inthar".equalsIgnoreCase(school)) item = 1;
-                else if ("pcc".equalsIgnoreCase(school) || "prachachuen".equalsIgnoreCase(school)) item = 2;
-                else if ("brp".equalsIgnoreCase(school) || "buranapon".equalsIgnoreCase(school)) item = 3;
+                if ("2".equals(school) || "itr".equalsIgnoreCase(school) || "inthar".equalsIgnoreCase(school)) item = 1;
+                else if ("3".equals(school) || "pcc".equalsIgnoreCase(school) || "prachachuen".equalsIgnoreCase(school)) item = 2;
+                else if ("4".equals(school) || "brp".equalsIgnoreCase(school) || "buranapon".equalsIgnoreCase(school)) item = 3;
                 final int listitem = item;
 
                 if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
@@ -417,7 +417,15 @@ public class CefManager {
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/exitafk");
                 }
-            } else if ("cef:closeUI".equals(event) || "cef:closeInventory".equals(event)) {
+            } else if ("cef:closeUI".equals(event) || "cef:onCloseUI".equals(event) || "cef:closeInventory".equals(event)) {
+                if (SAMP.getInstance() != null && SAMP.getInstance().getDialogManager() != null) {
+                    mMainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            SAMP.getInstance().getDialogManager().SendDialogResponseWithId(0, 1099, 0, "");
+                        }
+                    });
+                }
                 hideBrowser();
                 if (SAMP.getInstance() != null) {
                     SAMP.getInstance().sendChatCommand("/closeinv");
