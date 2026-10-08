@@ -457,27 +457,56 @@ public class CefManager {
                     }
                 }
             } else if ("cef:useItem".equals(event)) {
-                String slot = extractFirstArg(jsonArgs);
+                String slotStr = extractFirstArg(jsonArgs);
                 hideBrowser();
-                if (SAMP.getInstance() != null) {
-                    SAMP.getInstance().sendChatCommand("/useitem " + slot);
+                if (SAMP.getInstance() != null && slotStr != null && !slotStr.isEmpty()) {
+                    try {
+                        int slot = Integer.parseInt(slotStr.trim());
+                        // If 0-indexed (0 to 29), convert to 1-indexed (1 to 30) for /useitem
+                        if (slot >= 0 && slot < 30) slot += 1;
+                        SAMP.getInstance().sendChatCommand("/useitem " + slot);
+                    } catch (Exception e) {
+                        SAMP.getInstance().sendChatCommand("/useitem " + slotStr);
+                    }
                 }
             } else if ("cef:dropItem".equals(event)) {
                 String data = extractFirstArg(jsonArgs);
                 hideBrowser();
-                if (SAMP.getInstance() != null) {
-                    String[] parts = data.split(":");
+                if (SAMP.getInstance() != null && data != null && !data.isEmpty()) {
+                    // Accepts either comma or colon: "slot,count" or "slot:count"
+                    String[] parts = data.split("[,:]");
                     if (parts.length >= 2) {
-                        SAMP.getInstance().sendChatCommand("/dropitem " + parts[0] + " " + parts[1]);
+                        try {
+                            int slot = Integer.parseInt(parts[0].trim());
+                            int count = Integer.parseInt(parts[1].trim());
+                            if (slot >= 0 && slot < 30) slot += 1;
+                            SAMP.getInstance().sendChatCommand("/dropitem " + slot + " " + count);
+                        } catch (Exception e) {
+                            SAMP.getInstance().sendChatCommand("/dropitem " + parts[0] + " " + parts[1]);
+                        }
                     }
                 }
             } else if ("cef:giveItem".equals(event)) {
                 String data = extractFirstArg(jsonArgs);
                 hideBrowser();
-                if (SAMP.getInstance() != null) {
-                    String[] parts = data.split(":");
+                if (SAMP.getInstance() != null && data != null && !data.isEmpty()) {
+                    // Accepts either "slot,count,targetId" or "targetId:slot:count"
+                    String[] parts = data.split("[,:]");
                     if (parts.length >= 3) {
-                        SAMP.getInstance().sendChatCommand("/senditem " + parts[0] + " " + parts[1] + " " + parts[2]);
+                        try {
+                            int p0 = Integer.parseInt(parts[0].trim());
+                            int p1 = Integer.parseInt(parts[1].trim());
+                            int p2 = Integer.parseInt(parts[2].trim());
+                            // In Web UI format: p0 = slot, p1 = count, p2 = targetId
+                            // /give syntax: /give [targetId] [slot 1-30] [count]
+                            int slot = p0;
+                            int count = p1;
+                            int targetId = p2;
+                            if (slot >= 0 && slot < 30) slot += 1;
+                            SAMP.getInstance().sendChatCommand("/give " + targetId + " " + slot + " " + count);
+                        } catch (Exception e) {
+                            SAMP.getInstance().sendChatCommand("/give " + parts[2] + " " + parts[0] + " " + parts[1]);
+                        }
                     }
                 }
             } else if ("cef:closeCrafting".equals(event)) {
