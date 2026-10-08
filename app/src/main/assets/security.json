@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "enable_anticheat": true,
+  "blacklist_extensions": [
+    ".csa",
+    ".csi"
+  ],
+  "blacklist_keywords": [
+    "airbreak",
+    "ultrafuck",
+    "aimbot",
+    "speedhack",
+    "cheat",
+    "sobit",
+    "damager",
+    "autocb",
+    "flyhack"
+  ],
+  "whitelist_lua": [
+    "4king_bridge.lua"
+  ],
+  "protected_hashes": {
+    "data/handling.cfg": "1309562B6CC6FB0C9983190383E62DED03D033F42EB1BF8F6B858CB93073E22F",
+    "data/weapon.dat": "3AF1D40AA8EFA67223A8160FADB0749DC9E920DBC94579C55F9F1826A47B27CE"
+  }
+}

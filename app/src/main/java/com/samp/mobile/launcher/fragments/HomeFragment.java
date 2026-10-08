@@ -24,11 +24,16 @@ import com.joom.paranoid.Obfuscate;
 import com.samp.mobile.R;
 import com.samp.mobile.launcher.MainActivity;
 import com.samp.mobile.launcher.adapters.ServerInformationFragment;
+import com.samp.mobile.game.SAMP;
+import com.samp.mobile.launcher.util.AntiCheatScanDialog;
 import com.samp.mobile.launcher.util.ButtonAnimator;
 import com.samp.mobile.launcher.util.GameDataDownloadDialog;
 import com.samp.mobile.launcher.util.SAMPServerInfo;
 import com.samp.mobile.launcher.util.SettingsHelper;
 import com.samp.mobile.launcher.util.SharedPreferenceCore;
+
+import java.io.File;
+import java.io.FileWriter;
 
 @Obfuscate
 public class HomeFragment extends Fragment {
@@ -94,7 +99,7 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Bottom-Right: Start Game Button -> Check DATA before Launch
+        // Bottom-Right: Start Game Button -> One-Click Play with Anti-Cheat
         if (mBtnStartGame != null) {
             mBtnStartGame.setOnTouchListener(new ButtonAnimator(getContext(), mBtnStartGame));
             mBtnStartGame.setOnClickListener(new View.OnClickListener() {
@@ -133,17 +138,17 @@ public class HomeFragment extends Fragment {
 
                     final SAMPServerInfo finalTargetServer = targetServer;
 
-                    // Check if game data exists on device
+                    // 1. Check if game data exists on device
                     if (!GameDataDownloadDialog.isGameDataInstalled()) {
                         Toast.makeText(getContext(), "ยังไม่พบข้อมูลตัวเกม กรุณาดาวน์โหลด DATA ก่อนเข้าเล่น", Toast.LENGTH_SHORT).show();
                         GameDataDownloadDialog.show(getActivity(), new Runnable() {
                             @Override
                             public void run() {
-                                openConnectDialog(finalTargetServer);
+                                startAntiCheatAndLaunch(finalTargetServer);
                             }
                         });
                     } else {
-                        openConnectDialog(finalTargetServer);
+                        startAntiCheatAndLaunch(finalTargetServer);
                     }
                 }
             });
@@ -152,10 +157,64 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void openConnectDialog(SAMPServerInfo serverInfo) {
+    private void startAntiCheatAndLaunch(final SAMPServerInfo serverInfo) {
+        if (getActivity() == null || getActivity().isFinishing()) return;
+
+        // Save Server IP, Port and Password to settings.ini immediately
+        SettingsHelper.setSetting(getContext(), "client", "host", serverInfo.getAddress());
+        SettingsHelper.setSetting(getContext(), "client", "port", serverInfo.getPort());
+        SettingsHelper.setSetting(getContext(), "client", "password", "");
+
+        // Setup MonetLoader profile if enabled
+        setupMonetLoaderProfile();
+
+        // 2. Run Anti-Cheat Scanning Modal (One-click flow)
+        AntiCheatScanDialog.startScan(getActivity(), new Runnable() {
+            @Override
+            public void run() {
+                launchGameDirectly();
+            }
+        });
+    }
+
+    private void setupMonetLoaderProfile() {
+        try {
+            if (getContext() != null && new SharedPreferenceCore().getBoolean(getContext(), "MLOADER") && getActivity() != null) {
+                File[] mediaDirs = getActivity().getExternalMediaDirs();
+                if (mediaDirs != null && mediaDirs.length > 0 && mediaDirs[0] != null) {
+                    File compatDir = new File(mediaDirs[0], "monetloader/compat");
+                    File profileFile = new File(compatDir, "profile.json");
+                    if (!compatDir.exists()) {
+                        compatDir.mkdirs();
+                    }
+                    if (!profileFile.exists()) {
+                        FileWriter writer = new FileWriter(profileFile);
+                        writer.append("{\n" +
+                                "  \"gtasa_name\": \"libGTASA.so\",\n" +
+                                "  \"profile_name\": \"SA-MP 0.3.7\",\n" +
+                                "  \"compat_scripts\": [],\n" +
+                                "  \"samp_name\": \"libsamp.so\",\n" +
+                                "  \"receiveignorerpc_pattern\": \"F0B503AF2DE900????B004460068C16A20468847\",\n" +
+                                "  \"cnetgame_ctor_pattern\": \"F0B503AF2DE9000788B00D46????9146????0446002079447A44\",\n" +
+                                "  \"rakclientinterface_netgame_offset\": 528,\n" +
+                                "  \"use_samp_touch_workaround\": true,\n" +
+                                "  \"nveventinsertnewest_offset\": 2606320\n" +
+                                "}");
+                        writer.flush();
+                        writer.close();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void launchGameDirectly() {
         if (getActivity() != null && !getActivity().isFinishing()) {
-            ServerInformationFragment dialog = new ServerInformationFragment(getActivity(), serverInfo);
-            dialog.show();
+            Intent intent = new Intent(getActivity(), SAMP.class);
+            startActivity(intent);
+            getActivity().finish();
         }
     }
 

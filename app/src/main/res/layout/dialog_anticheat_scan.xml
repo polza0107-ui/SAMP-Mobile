@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_340sdp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_download_bg"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/_18sdp"
+    android:paddingTop="@dimen/_12sdp"
+    android:paddingEnd="@dimen/_18sdp"
+    android:paddingBottom="@dimen/_12sdp">
+
+    <!-- Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:src="@drawable/logo" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/anticheat_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="4KING SECURITY • ตรวจสอบความปลอดภัย"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/anticheat_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="ระบบกำลังสแกนไฟล์ตัวเกมและโปรแกรมช่วยเล่นก่อนเข้าสู่เซิร์ฟเวอร์"
+                android:textColor="#B0BEC5"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Accent Divider Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="#60FB8500" />
+
+    <!-- Checklist Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/attach_black_round_rect"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_8sdp">
+
+        <!-- Item 1: Cleo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item1_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="🛡️ ตรวจสอบไฟล์ Cleo ดัดแปลง (.csa, .csi)"
+                android:textColor="#E0E0E0"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_item1_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="รอสแกน..."
+                android:textColor="#80FFFFFF"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <!-- Item 2: MonetLoader Lua -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item2_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="📜 ตรวจสอบ MonetLoader (Lua Whitelist)"
+                android:textColor="#E0E0E0"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_item2_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="รอสแกน..."
+                android:textColor="#80FFFFFF"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <!-- Item 3: Data Integrity -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item3_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="⚙️ ตรวจสอบไฟล์ระบบ (handling.cfg, weapon.dat)"
+                android:textColor="#E0E0E0"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_item3_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="รอสแกน..."
+                android:textColor="#80FFFFFF"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <!-- Item 4: Memory Hacks -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item4_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="🔍 ตรวจสอบแอปโกงความจำและโปรแกรมช่วยเล่น"
+                android:textColor="#E0E0E0"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_item4_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="รอสแกน..."
+                android:textColor="#80FFFFFF"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progress_bar_scan"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_game_download" />
+
+        <!-- Status Summary & Percentage -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_scan_summary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="กำลังเตรียมความพร้อมของระบบ..."
+                android:textColor="#FFB703"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_scan_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="0%"
+                android:textColor="#00E5FF"
+                android:textSize="@dimen/_9sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Cancel Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_scan_cancel"
+            android:layout_width="@dimen/_75sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:background="@drawable/button_br_red_unfilled"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="ยกเลิก"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_8sdp" />
+    </LinearLayout>
+
+</LinearLayout>

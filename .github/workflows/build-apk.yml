@@ -54,10 +54,17 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.4.4
-          name: "SAMP Mobile v0.8.4.4 (4KING SOBAD - New Icon 123.png & Full Game Data 716MB)"
+          tag_name: v0.8.4.5
+          name: "SAMP Mobile v0.8.4.5 (4KING SOBAD - One-Click Play & AntiCheat Security Scanner)"
           body: |
-            ### 4KING SOBAD v0.8.4.4 Update
+            ### 4KING SOBAD v0.8.4.5 Update
+            - **One-Click Play (ระบบกดเริ่มเกมชั้นเดียว)**:
+              - ตัดหน้าต่างยืนยันซ้ำซ้อนออก กดปุ่ม "▶ เริ่มเกม" แล้วเข้าสู่ขั้นตอนตรวจสอบและเริ่มเล่นได้ทันที
+            - **4KING Security Anti-Cheat Scanner (ระบบสแกนไฟล์และกันโปรเต็มรูปแบบ)**:
+              - หน้าต่าง UI สแกนไฟล์ความปลอดภัยสไตล์ Dark Glassmorphism พร้อมอนิเมชันสถานะเรียลไทม์
+              - ดึงกฎความปลอดภัยและ Hash จาก GitHub (`security.json`) แบบไดนามิก ปรับแต่งได้ตลอดเวลา
+              - ตรวจจับ Cleo Mod (`.csa`, `.csi`), สคริปต์ MonetLoader แปลกปลอม (Whitelist: `4king_bridge.lua`), และไฟล์ Data ดัดแปลง (`handling.cfg`, `weapon.dat`)
+              - หากตรวจพบการดัดแปลงไฟล์ ระบบจะบังคับลบข้อมูลตัวเกมเดิมออกและให้ดาวน์โหลดข้อมูลใหม่เพื่อความเท่าเทียม
             - **New App Icon (อัปเดตไอคอนแอปใหม่ 123.png)**:
               - อัปเดตไอคอนแอปและไอคอนกลมทุกระดับความละเอียด (Adaptive & Legacy mipmaps)
             - **Full Game Data Downloader (716MB Google Drive Stream)**:
