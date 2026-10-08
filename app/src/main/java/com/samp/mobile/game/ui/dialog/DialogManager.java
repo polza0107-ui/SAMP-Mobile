@@ -163,6 +163,12 @@ public class DialogManager {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
                 return;
             }
+        } else if (i == 1098 || (str2 != null && str2.startsWith("http://") && str2.contains("/HTMLGUI/"))) {
+            String url = (str2 != null && str2.startsWith("http://")) ? str2 : ("http://" + com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity) + "/HTMLGUI/gui.html?view=inventory&show=1&name=" + com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity) + "&v=" + System.currentTimeMillis());
+            if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
+                com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
+                return;
+            }
         }
 
         isShow = true;
