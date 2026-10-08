@@ -158,7 +158,7 @@ public class DialogManager {
         } else if (i == 1099) {
             String nick = com.samp.mobile.launcher.util.SettingsHelper.getNickName(this.activity);
             String host = com.samp.mobile.launcher.util.SettingsHelper.getServerHost(this.activity);
-            String url = "http://" + host + "/HTMLGUI/gui.html?name=" + nick + "&v=" + System.currentTimeMillis();
+            String url = "http://" + host + "/HTMLGUI/gui.html?view=school&show=1&name=" + nick + "&v=" + System.currentTimeMillis();
             if (com.samp.mobile.game.SAMP.getInstance() != null && com.samp.mobile.game.SAMP.getInstance().getCefManager() != null) {
                 com.samp.mobile.game.SAMP.getInstance().getCefManager().showBrowser(3, url);
                 return;
