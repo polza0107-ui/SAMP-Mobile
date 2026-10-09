@@ -1,3 +1,4 @@
+#include <malloc.h>
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 #include "../main.h"
@@ -1665,51 +1666,71 @@ size_t OS_FileRead_hook(OSFile a1, void *buffer, size_t numBytes)
 void (*RLEDecompress)(uint8_t* pDest, size_t uiDestSize, uint8_t const* pSrc, size_t uiSegSize, uint32_t uiEscape);
 void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, size_t uiSegSize, uint32_t uiEscape) {
     if (!pDest || !pSrc || uiDestSize == 0 || uiSegSize == 0) {
-        FLog("RLEDecompress_hook: null/zero arg, skipping (pDest=%p pSrc=%p sz=%zu seg=%zu)", pDest, pSrc, uiDestSize, uiSegSize);
-        return;
-    }
-    // Guard against obviously bad (non-mapped) source pointers
-    if ((uintptr_t)pSrc < 0x1000 || (uintptr_t)pSrc > 0x7FFFFFFFFFFF) {
-        FLog("RLEDecompress_hook: bad pSrc=0x%lx, skipping", (unsigned long)pSrc);
-        return;
-    }
-
-    // Call the original game decompressor first if available
-    if (RLEDecompress) {
-        RLEDecompress(pDest, uiDestSize, pSrc, uiSegSize, uiEscape);
         dwRLEDecompressSourceSize = 0;
         return;
     }
 
+    size_t srcLimit = dwRLEDecompressSourceSize;
+    size_t usable = malloc_usable_size((void*)pSrc);
+#if defined(__aarch64__)
+    if (usable == 0) {
+        void* untaggedSrc = (void*)((uintptr_t)pSrc & 0x00FFFFFFFFFFFFFFULL);
+        usable = malloc_usable_size(untaggedSrc);
+    }
+#endif
+    if (usable > 0) {
+        if (srcLimit == 0 || srcLimit > usable) {
+            srcLimit = usable;
+        }
+    }
+    if (srcLimit == 0) {
+        srcLimit = uiDestSize * 4;
+    }
+
     const uint8_t* pTempSrc = pSrc;
-    const uint8_t* const pEndOfDest = pDest + uiDestSize;
-    const uint8_t* const pEndOfSrc = (dwRLEDecompressSourceSize > 0) ? (pSrc + dwRLEDecompressSourceSize) : (pSrc + uiDestSize * 2);
+    const uint8_t* const pEndOfSrc = pSrc + srcLimit;
+    uint8_t* pCurDest = pDest;
+    uint8_t* const pEndOfDest = pDest + uiDestSize;
+    const uint8_t esc = (uint8_t)uiEscape;
 
-    while (pDest < pEndOfDest && pTempSrc < pEndOfSrc) {
-        if (*pTempSrc == uiEscape) {
-            if (pTempSrc + 1 >= pEndOfSrc || pTempSrc[1] == 0 || pTempSrc + 2 + uiSegSize > pEndOfSrc) {
+    while (pCurDest < pEndOfDest && pTempSrc < pEndOfSrc) {
+        if (*pTempSrc == esc) {
+            if (pTempSrc + 2 > pEndOfSrc) {
                 break;
             }
 
-            uint8_t ucCurSeg = pTempSrc[1];
-            while (ucCurSeg--) {
-                size_t toCopy = (pDest + uiSegSize <= pEndOfDest) ? uiSegSize : (pEndOfDest - pDest);
-                if (toCopy > 0) {
-                    memcpy(pDest, pTempSrc + 2, toCopy);
-                    pDest += toCopy;
-                }
-                if (pDest >= pEndOfDest) break;
+            uint8_t count = pTempSrc[1];
+            if (pTempSrc + 2 + uiSegSize > pEndOfSrc) {
+                break;
             }
+
+            const uint8_t* pPattern = pTempSrc + 2;
             pTempSrc += 2 + uiSegSize;
+
+            for (uint32_t i = 0; i < count && pCurDest < pEndOfDest; ++i) {
+                size_t toCopy = (pCurDest + uiSegSize <= pEndOfDest) ? uiSegSize : (size_t)(pEndOfDest - pCurDest);
+                if (toCopy > 0) {
+                    memcpy(pCurDest, pPattern, toCopy);
+                    pCurDest += toCopy;
+                }
+            }
         } else {
-            size_t toCopy = (pDest + uiSegSize <= pEndOfDest) ? uiSegSize : (pEndOfDest - pDest);
-            if (pTempSrc + toCopy <= pEndOfSrc && toCopy > 0) {
-                memcpy(pDest, pTempSrc, toCopy);
-                pDest += toCopy;
-                pTempSrc += toCopy;
-            } else {
+            if (pTempSrc + uiSegSize > pEndOfSrc) {
+                size_t remSrc = (size_t)(pEndOfSrc - pTempSrc);
+                size_t toCopy = (pCurDest + remSrc <= pEndOfDest) ? remSrc : (size_t)(pEndOfDest - pCurDest);
+                if (toCopy > 0) {
+                    memcpy(pCurDest, pTempSrc, toCopy);
+                    pCurDest += toCopy;
+                }
                 break;
             }
+
+            size_t toCopy = (pCurDest + uiSegSize <= pEndOfDest) ? uiSegSize : (size_t)(pEndOfDest - pCurDest);
+            if (toCopy > 0) {
+                memcpy(pCurDest, pTempSrc, toCopy);
+                pCurDest += toCopy;
+            }
+            pTempSrc += uiSegSize;
         }
     }
 
