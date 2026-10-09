@@ -86,32 +86,20 @@ public class HomeFragment extends Fragment {
         mTvServerPlayers = view.findViewById(R.id.tv_server_players);
         mServerStatusDot = view.findViewById(R.id.server_status_dot);
         mServerStatusCard = view.findViewById(R.id.server_status_card);
-        mTvAnnouncement = view.findViewById(R.id.tv_announcement_text);
-        mAnnouncementContainer = view.findViewById(R.id.card_announcement_bar);
+        mTvAnnouncement = view.findViewById(R.id.tv_announcement);
+        mAnnouncementContainer = view.findViewById(R.id.announcement_container);
 
         if (mTvAnnouncement != null) {
             mTvAnnouncement.setSelected(true); // Enable marquee scrolling
         }
 
-        // Tap Server Card -> Open Server Details Dialog
+        // Tap Server Status Card to manually refresh
         if (mServerStatusCard != null) {
             mServerStatusCard.setOnClickListener(v -> {
-                try {
-                    SAMPServerInfo serverInfo = new SAMPServerInfo();
-                    serverInfo.setId(1);
-                    serverInfo.setServerName(mServerName);
-                    serverInfo.setAddress(mServerAddress);
-                    serverInfo.setPort(mServerPort);
-                    serverInfo.setCurrentPlayerCount(0);
-                    serverInfo.setMaxPlayerCount(500);
-                    serverInfo.setHasPassword(false);
-                    serverInfo.setServerStatus(mIsServerOnline ? SAMPServerInfo.Status.ONLINE : SAMPServerInfo.Status.OFFLINE);
-
-                    ServerInformationFragment dialog = ServerInformationFragment.newInstance(serverInfo);
-                    dialog.show(getParentFragmentManager(), "ServerInformationFragment");
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "กำลังรีเฟรชสถานะเซิร์ฟเวอร์...", Toast.LENGTH_SHORT).show();
                 }
+                loadRemoteServerAndAnnouncement();
             });
         }
 
