@@ -1665,6 +1665,12 @@ size_t OS_FileRead_hook(OSFile a1, void *buffer, size_t numBytes)
 void (*RLEDecompress)(uint8_t* pDest, size_t uiDestSize, uint8_t const* pSrc, size_t uiSegSize, uint32_t uiEscape);
 void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, size_t uiSegSize, uint32_t uiEscape) {
     if (!pDest || !pSrc || uiDestSize == 0 || uiSegSize == 0) {
+        FLog("RLEDecompress_hook: null/zero arg, skipping (pDest=%p pSrc=%p sz=%zu seg=%zu)", pDest, pSrc, uiDestSize, uiSegSize);
+        return;
+    }
+    // Guard against obviously bad (non-mapped) source pointers
+    if ((uintptr_t)pSrc < 0x1000 || (uintptr_t)pSrc > 0x7FFFFFFFFFFF) {
+        FLog("RLEDecompress_hook: bad pSrc=0x%lx, skipping", (unsigned long)pSrc);
         return;
     }
 
@@ -1908,7 +1914,8 @@ void InstallSpecialHooks()
 
     CHook::RET("_ZN4CPed31RemoveWeaponWhenEnteringVehicleEi"); // CPed::RemoveWeaponWhenEnteringVehicle
 
-    CHook::InstallPLT(g_libGTASA + (VER_x32 ? 0x6701D4 : 0x840708), &RLEDecompress_hook, &RLEDecompress);
+    // Use InlineHook so internal calls from LoadFullTexture are also intercepted (not just PLT)
+    CHook::InlineHook("_Z13RLEDecompressPhjPKhjj", &RLEDecompress_hook, &RLEDecompress);
 
     CHook::InlineHook("_Z11OS_FileReadPvS_i", &OS_FileRead_hook, &OS_FileRead);
 
