@@ -38,8 +38,8 @@ import java.util.zip.ZipInputStream;
 public class GameDataDownloadDialog {
     private static final String TAG = "GameDataDownload";
 
-    public static final String DATA_DOWNLOAD_URL = "https://drive.usercontent.google.com/download?id=1llB3HedW3IawrFapOVPZ3f4hYRP926Il&export=download&confirm=t";
-    public static final String DATA_DOWNLOAD_FALLBACK_URL = "https://drive.google.com/uc?export=download&id=1llB3HedW3IawrFapOVPZ3f4hYRP926Il&confirm=t";
+    public static final String DATA_DOWNLOAD_URL = "https://github.com/4KINGSOBAD-Tham/SAMP-Mobile/releases/download/v1.0.0/GTA.zip";
+    public static final String DATA_DOWNLOAD_FALLBACK_URL = "https://github.com/4KINGSOBAD-Tham/SAMP-Mobile/releases/latest/download/GTA.zip";
     public static final String TARGET_EXTRACT_DIR = "/storage/emulated/0/";
 
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
