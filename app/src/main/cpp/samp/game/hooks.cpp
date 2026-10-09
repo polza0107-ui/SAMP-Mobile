@@ -967,6 +967,7 @@ int CTextureDatabaseRuntime__GetEntry_hook(uintptr_t thiz, const char* a2, bool*
 uintptr_t (*CTxdStore__TxdStoreFindCB)(const char *a1);
 uintptr_t CTxdStore__TxdStoreFindCB_hook(const char *a1)
 {
+#if VER_x32
 	static char* texdbs[] = { "samp", "gta_int", "gta3" };
 	for(auto &texdb : texdbs)
 	{
@@ -1020,6 +1021,22 @@ uintptr_t CTxdStore__TxdStoreFindCB_hook(const char *a1)
 	}
 
 	return 0;
+#else
+    if (!a1 || !a1[0]) return 0;
+    static const char* texdbs[] = { "samp", "gta_int", "gta3" };
+    for(auto &texdb : texdbs)
+    {
+        TextureDatabaseRuntime* db_handle = TextureDatabaseRuntime::GetDatabase(texdb);
+        if(!db_handle) continue;
+
+        TextureDatabaseRuntime::Register(db_handle);
+        RwTexture* tex = TextureDatabaseRuntime::GetTexture(a1);
+        TextureDatabaseRuntime::Unregister(db_handle);
+
+        if(tex) return reinterpret_cast<uintptr_t>(tex);
+    }
+    return 0;
+#endif
 }
 
 int (*CCustomRoadsignMgr_RenderRoadsignAtomic)(int a1, int a2);
@@ -1208,13 +1225,16 @@ void CRadar_ClearBlip_hook(uint32_t a2)
 
 void InstallHuaweiCrashFixHooks()
 {
+#if VER_x32
 	CHook::InstallPLT(g_libGTASA + 0x677498, (uintptr_t)rqVertexBufferSelect_hook, (uintptr_t*)&rqVertexBufferSelect);
 	CHook::InstallPLT(g_libGTASA + 0x679B14, (uintptr_t)rqVertexBufferDelete_hook, (uintptr_t*)&rqVertexBufferDelete);
 	//CHook::InstallPLT(g_libGTASA + 0x677B6C, (uintptr_t)rqSetAlphaTest_hook, (uintptr_t*)&rqSetAlphaTest);
+#endif
 }
 
 void InstallCrashFixHooks()
 {
+#if VER_x32
 	// some crashfixes
 	CHook::InstallPLT(g_libGTASA + 0x66F5AC, (uintptr_t)CCustomRoadsignMgr_RenderRoadsignAtomic_hook, (uintptr_t*)&CCustomRoadsignMgr_RenderRoadsignAtomic);
 	CHook::InstallPLT(g_libGTASA + 0x67332C, (uintptr_t)_RwTextureDestroy_hook, (uintptr_t*)&_RwTextureDestroy);
@@ -1228,6 +1248,7 @@ void InstallCrashFixHooks()
 	//CHook::InstallPLT(g_libGTASA + 0x66F9E8, (uintptr_t)EmuShader_Select_hook, (uintptr_t*)&EmuShader_Select);
 	CHook::InstallPLT(g_libGTASA + 0x6750D4, (uintptr_t)CAnimManager_UncompressAnimation_hook, (uintptr_t*)&CAnimManager_UncompressAnimation);
 	//CHook::InstallPLT(g_libGTASA + 0x670E1C, (uintptr_t)CStreaming__MakeSpaceFor_hook, (uintptr_t*)&CStreaming__MakeSpaceFor);
+#endif
 }
 
 void InstallWeaponFireHooks()
@@ -1240,6 +1261,7 @@ void InstallWeaponFireHooks()
 
 void InstallSAMPHooks()
 {
+#if VER_x32
 	//CHook::InstallPLT(g_libGTASA + 0x677EA0, (uintptr_t)MainMenuScreen__OnExit_hook, (uintptr_t*)&MainMenuScreen__OnExit);
 	// samp main loop
 	//CHook::InstallPLT(g_libGTASA + 0x67589C, (uintptr_t)Render2dStuff_hook, (uintptr_t*)&Render2dStuff);
@@ -1305,6 +1327,7 @@ void InstallSAMPHooks()
 	InstallCrashFixHooks();
 	InstallWeaponFireHooks();
 	HookCPad();
+#endif
 }
 
 void ReadSettingFile();

@@ -49,6 +49,7 @@ RwTexture* CUtil::LoadTextureFromDB(const char* dbname, const char* texture)
 
 RwTexture* CUtil::GetTexture(const char* name)
 {
+    if (!name || !name[0]) return nullptr;
     auto tex = TextureDatabaseRuntime::GetTexture(name);
     if (!tex)
     {
