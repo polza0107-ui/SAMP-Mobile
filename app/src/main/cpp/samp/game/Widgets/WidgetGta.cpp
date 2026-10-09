@@ -30,6 +30,7 @@ WidgetIDs GetWidgetTypeFromWidget(CWidgetGta* pWidget)
         if(m_pWidgets[WidgetIDs::WIDGET_ACCELERATE] && pWidget == m_pWidgets[WidgetIDs::WIDGET_ACCELERATE]) return WidgetIDs::WIDGET_ACCELERATE;
         if(m_pWidgets[WidgetIDs::WIDGET_ENTER_CAR] && pWidget == m_pWidgets[WidgetIDs::WIDGET_ENTER_CAR]) return WidgetIDs::WIDGET_ENTER_CAR;
         if(m_pWidgets[WidgetIDs::WIDGET_BRAKE] && pWidget == m_pWidgets[WidgetIDs::WIDGET_BRAKE]) return WidgetIDs::WIDGET_BRAKE;
+        if(m_pWidgets[WidgetIDs::WIDGET_HANDBRAKE] && pWidget == m_pWidgets[WidgetIDs::WIDGET_HANDBRAKE]) return WidgetIDs::WIDGET_HANDBRAKE;
     }
 
     return static_cast<WidgetIDs>(-1);
@@ -45,6 +46,8 @@ void SetWidgetFromName(const char* name, CWidgetGta* pWidget)
     if(!strcmp("accelerate", name)) SetWidgetFromId(WidgetIDs::WIDGET_ACCELERATE, pWidget);
     if(!strcmp("hud_car", name)) SetWidgetFromId(WidgetIDs::WIDGET_ENTER_CAR, pWidget);
     if(!strcmp("brake", name)) SetWidgetFromId(WidgetIDs::WIDGET_BRAKE, pWidget);
+    if(!strcmp("handbrake", name)) SetWidgetFromId(WidgetIDs::WIDGET_HANDBRAKE, pWidget);
+    if(!strcmp("punch", name)) SetWidgetFromId(WidgetIDs::WIDGET_ATTACK, pWidget);
 }
 
 eWidgetState ProcessFixedWidget(CWidgetGta* pWidget)
@@ -66,6 +69,7 @@ eWidgetState ProcessFixedWidget(CWidgetGta* pWidget)
             break;
         case WidgetIDs::WIDGET_ACCELERATE:
         case WidgetIDs::WIDGET_BRAKE:
+        case WidgetIDs::WIDGET_HANDBRAKE:
             if(!pPlayerPed->IsInVehicle() &&
                !pPlayerPed->IsInJetpackMode())
             {
@@ -119,13 +123,13 @@ bool CWidget__IsTouched_hook(uintptr_t *thiz, CVector2D *pVecOut) {
     return CWidget__IsTouched(thiz, pVecOut);
 }
 
-uintptr_t (*CWidget)(CWidgetButton* thiz, const char* name, uintptr_t* a3, int a4, uintptr_t* a5);
-uintptr_t CWidget_hook(CWidgetButton* thiz, const char* name, uintptr_t*  a3, int a4, uintptr_t* a5)
+void (*CWidget)(CWidgetButton* thiz, const char* name, const void* pos, uint32_t a3, uint32_t a4, uint32_t mapping);
+void CWidget_hook(CWidgetButton* thiz, const char* name, const void* pos, uint32_t a3, uint32_t a4, uint32_t mapping)
 {
     FLog("New Widget: \"%s\" 0x%X", name, thiz-g_libGTASA);
 
     SetWidgetFromName(name, thiz);
-    return CWidget(thiz, name, a3, a4, a5);
+    CWidget(thiz, name, pos, a3, a4, mapping);
 }
 
 void (*CWidget__SetEnabled)(CWidgetGta* pWidget, bool bEnabled);

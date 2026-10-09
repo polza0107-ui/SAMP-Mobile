@@ -1652,60 +1652,32 @@ bool RwResourcesFreeResEntry_hook(void* entry)
     return result;
 }
 
-static uint32_t dwRLEDecompressSourceSize = 0;
-
-size_t (*OS_FileRead)(OSFile a1, void *buffer, size_t numBytes);
-size_t OS_FileRead_hook(OSFile a1, void *buffer, size_t numBytes)
-{
-    if (!a1) return 0;
-    dwRLEDecompressSourceSize = numBytes;
-
-    return OS_FileRead(a1, buffer, numBytes);
-}
-
 void (*RLEDecompress)(uint8_t* pDest, size_t uiDestSize, uint8_t const* pSrc, size_t uiSegSize, uint32_t uiEscape);
 void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, size_t uiSegSize, uint32_t uiEscape) {
     if (!pDest || !pSrc || uiDestSize == 0 || uiSegSize == 0) {
-        dwRLEDecompressSourceSize = 0;
         return;
     }
 
-    size_t srcLimit = dwRLEDecompressSourceSize;
-    size_t usable = malloc_usable_size((void*)pSrc);
-#if defined(__aarch64__)
-    if (usable == 0) {
-        void* untaggedSrc = (void*)((uintptr_t)pSrc & 0x00FFFFFFFFFFFFFFULL);
-        usable = malloc_usable_size(untaggedSrc);
-    }
-#endif
-    if (usable > 0) {
-        if (srcLimit == 0 || srcLimit > usable) {
-            srcLimit = usable;
-        }
-    }
-    if (srcLimit == 0) {
-        srcLimit = uiDestSize * 4;
-    }
-
-    const uint8_t* pTempSrc = pSrc;
-    const uint8_t* const pEndOfSrc = pSrc + srcLimit;
+    const uint8_t* pCurSrc = pSrc;
+    // Set a safe generous bound on source buffer to prevent unbounded reads on malformed streams
+    const uint8_t* const pEndOfSrc = pSrc + (uiDestSize * 4);
     uint8_t* pCurDest = pDest;
     uint8_t* const pEndOfDest = pDest + uiDestSize;
     const uint8_t esc = (uint8_t)uiEscape;
 
-    while (pCurDest < pEndOfDest && pTempSrc < pEndOfSrc) {
-        if (*pTempSrc == esc) {
-            if (pTempSrc + 2 > pEndOfSrc) {
+    while (pCurDest < pEndOfDest && pCurSrc < pEndOfSrc) {
+        if (*pCurSrc == esc) {
+            if (pCurSrc + 2 > pEndOfSrc) {
                 break;
             }
 
-            uint8_t count = pTempSrc[1];
-            if (pTempSrc + 2 + uiSegSize > pEndOfSrc) {
+            uint8_t count = pCurSrc[1];
+            if (pCurSrc + 2 + uiSegSize > pEndOfSrc) {
                 break;
             }
 
-            const uint8_t* pPattern = pTempSrc + 2;
-            pTempSrc += 2 + uiSegSize;
+            const uint8_t* pPattern = pCurSrc + 2;
+            pCurSrc += 2 + uiSegSize;
 
             for (uint32_t i = 0; i < count && pCurDest < pEndOfDest; ++i) {
                 size_t toCopy = (pCurDest + uiSegSize <= pEndOfDest) ? uiSegSize : (size_t)(pEndOfDest - pCurDest);
@@ -1715,11 +1687,11 @@ void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, 
                 }
             }
         } else {
-            if (pTempSrc + uiSegSize > pEndOfSrc) {
-                size_t remSrc = (size_t)(pEndOfSrc - pTempSrc);
+            if (pCurSrc + uiSegSize > pEndOfSrc) {
+                size_t remSrc = (size_t)(pEndOfSrc - pCurSrc);
                 size_t toCopy = (pCurDest + remSrc <= pEndOfDest) ? remSrc : (size_t)(pEndOfDest - pCurDest);
                 if (toCopy > 0) {
-                    memcpy(pCurDest, pTempSrc, toCopy);
+                    memcpy(pCurDest, pCurSrc, toCopy);
                     pCurDest += toCopy;
                 }
                 break;
@@ -1727,14 +1699,12 @@ void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, 
 
             size_t toCopy = (pCurDest + uiSegSize <= pEndOfDest) ? uiSegSize : (size_t)(pEndOfDest - pCurDest);
             if (toCopy > 0) {
-                memcpy(pCurDest, pTempSrc, toCopy);
+                memcpy(pCurDest, pCurSrc, toCopy);
                 pCurDest += toCopy;
             }
-            pTempSrc += uiSegSize;
+            pCurSrc += uiSegSize;
         }
     }
-
-    dwRLEDecompressSourceSize = 0;
 }
 
 void (*CGame_Process)();
@@ -1938,7 +1908,6 @@ void InstallSpecialHooks()
     // Use InlineHook so internal calls from LoadFullTexture are also intercepted (not just PLT)
     CHook::InlineHook("_Z13RLEDecompressPhjPKhjj", &RLEDecompress_hook, &RLEDecompress);
 
-    CHook::InlineHook("_Z11OS_FileReadPvS_i", &OS_FileRead_hook, &OS_FileRead);
 
 	CHook::InlineHook("_Z32_rxOpenGLDefaultAllInOneRenderCBP10RwResEntryPvhj", &rxOpenGLDefaultAllInOneRenderCB_hook, &rxOpenGLDefaultAllInOneRenderCB);
 	CHook::InlineHook("_ZN25CCustomBuildingDNPipeline18CustomPipeRenderCBEP10RwResEntryPvhj", &CCustomBuildingDNPipeline__CustomPipeRenderCB_hook, &CCustomBuildingDNPipeline__CustomPipeRenderCB);
