@@ -54,8 +54,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.5.0
-          name: "SAMP Mobile v0.8.5.0 (4KING SOBAD - Merged Game Download & Mod Patch Updater)"
+          tag_name: v0.8.5.1
+          name: "SAMP Mobile v0.8.5.1 (4KING SOBAD - ARM64 Native Crash Fix & Safe Texture Resolution)"
           body: |
             ### 4KING SOBAD v0.8.4.8 Update
             - **FPS Limit Unlock (ปลดล็อก FPS ทะลุ 60FPS สูงสุด 120FPS)**:
