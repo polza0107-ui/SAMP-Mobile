@@ -33,5 +33,12 @@
   "protected_hashes": {
     "data/handling.cfg": "1309562B6CC6FB0C9983190383E62DED03D033F42EB1BF8F6B858CB93073E22F",
     "data/weapon.dat": "3AF1D40AA8EFA67223A8160FADB0749DC9E920DBC94579C55F9F1826A47B27CE"
+  },
+  "mod_patch": {
+    "version": 1,
+    "required": true,
+    "url": "https://github.com/4KINGSOBAD-Tham/SAMP-Mobile/releases/download/v1.0.0/patch.zip",
+    "fallback_url": "https://github.com/4KINGSOBAD-Tham/SAMP-Mobile/releases/latest/download/patch.zip",
+    "description": "อัปเดตสกินและม็อดเซิร์ฟเวอร์ 4KING"
   }
 }
