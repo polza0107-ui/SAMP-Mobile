@@ -22,7 +22,6 @@ uintptr_t GetModelInfoByID(int iModelID);
 bool IsExistInfoForModel(int iModelID);
 bool IsValidModel(int iModelID);
 int GetModelRefCounts(int iModel);
-uint MapCustomSkin(uint modelID);
 bool IsValidPedModel(uint modelID);
 uintptr_t GetModelRWObject(uint modelID);
 

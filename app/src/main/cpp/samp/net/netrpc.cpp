@@ -386,7 +386,6 @@ void RequestClass(RPCParameters *rpcParams)
 	Log::addParameter("SpawnInfo.vecPos.z", SpawnInfo.vecPos.z);
 
 	if (byteRequestOutcome) {
-		SpawnInfo.iSkin = MapCustomSkin(SpawnInfo.iSkin);
 		pLocalPlayer->SetSpawnInfo(&SpawnInfo);
 		pLocalPlayer->HandleClassSelectionOutcome(true);
 	}
@@ -625,7 +624,6 @@ void WorldPlayerAdd(RPCParameters *rpcParams)
 	bsData.Read(playerId);
 	bsData.Read(byteTeam);
 	bsData.Read(iSkin);
-	iSkin = MapCustomSkin(iSkin);
 	bsData.Read(vecPos.x);
 	bsData.Read(vecPos.y);
 	bsData.Read(vecPos.z);

@@ -1958,17 +1958,9 @@ int GetModelRefCounts(int iModel)
 	uint16_t* p = (uint16_t*)(GetModelInfoByID(iModel) + (VER_x32 ? 30:30*2));
 	return *p;
 }
-uint MapCustomSkin(uint modelID)
-{
-    if (modelID == 10001) return 290;
-    if (modelID == 10002) return 291;
-    return modelID;
-}
-
 // 0.3.7
 bool IsValidPedModel(uint modelID)
 {
-    modelID = MapCustomSkin(modelID);
     if(modelID < 0 || modelID > 20000) return false;
     auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
 

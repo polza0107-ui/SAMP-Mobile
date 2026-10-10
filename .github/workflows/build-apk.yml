@@ -54,8 +54,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: v0.8.5.4
-          name: "SAMP Mobile v0.8.5.4 (4KING SOBAD - Custom 4KING Skins 10001 and 10002 Dual Slot Bridge)"
+          tag_name: v0.8.5.3
+          name: "SAMP Mobile v0.8.5.3 (4KING SOBAD - Model 290 Texture Bounds & Full Button Fix)"
           body: |
             ### 4KING SOBAD v0.8.4.8 Update
             - **FPS Limit Unlock (ปลดล็อก FPS ทะลุ 60FPS สูงสุด 120FPS)**:
