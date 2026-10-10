@@ -1652,15 +1652,46 @@ bool RwResourcesFreeResEntry_hook(void* entry)
     return result;
 }
 
+static void* s_LastReadFileBuffer = nullptr;
+static size_t s_LastReadFileSize = 0;
+
+size_t (*OS_FileRead)(OSFile a1, void *buffer, size_t numBytes);
+size_t OS_FileRead_hook(OSFile a1, void *buffer, size_t numBytes)
+{
+    if (!a1) return 0;
+    s_LastReadFileBuffer = buffer;
+    s_LastReadFileSize = numBytes;
+
+    return OS_FileRead(a1, buffer, numBytes);
+}
+
 void (*RLEDecompress)(uint8_t* pDest, size_t uiDestSize, uint8_t const* pSrc, size_t uiSegSize, uint32_t uiEscape);
 void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, size_t uiSegSize, uint32_t uiEscape) {
     if (!pDest || !pSrc || uiDestSize == 0 || uiSegSize == 0) {
         return;
     }
 
+    size_t srcLimit = 0;
+    // If this source buffer was directly read by OS_FileRead (LoadFullTexture disk streaming), bound it strictly by the read bytes
+    if (pSrc == s_LastReadFileBuffer && s_LastReadFileSize > 0) {
+        srcLimit = s_LastReadFileSize;
+    } else {
+        size_t usable = malloc_usable_size((void*)pSrc);
+#if defined(__aarch64__)
+        if (usable == 0) {
+            void* untaggedSrc = (void*)((uintptr_t)pSrc & 0x00FFFFFFFFFFFFFFULL);
+            usable = malloc_usable_size(untaggedSrc);
+        }
+#endif
+        if (usable > 0) {
+            srcLimit = usable;
+        } else {
+            srcLimit = uiDestSize * 4;
+        }
+    }
+
     const uint8_t* pCurSrc = pSrc;
-    // Set a safe generous bound on source buffer to prevent unbounded reads on malformed streams
-    const uint8_t* const pEndOfSrc = pSrc + (uiDestSize * 4);
+    const uint8_t* const pEndOfSrc = pSrc + srcLimit;
     uint8_t* pCurDest = pDest;
     uint8_t* const pEndOfDest = pDest + uiDestSize;
     const uint8_t esc = (uint8_t)uiEscape;
@@ -1704,6 +1735,11 @@ void RLEDecompress_hook(uint8_t* pDest, size_t uiDestSize, const uint8_t* pSrc, 
             }
             pCurSrc += uiSegSize;
         }
+    }
+
+    if (pSrc == s_LastReadFileBuffer) {
+        s_LastReadFileBuffer = nullptr;
+        s_LastReadFileSize = 0;
     }
 }
 
@@ -1907,6 +1943,7 @@ void InstallSpecialHooks()
 
     // Use InlineHook so internal calls from LoadFullTexture are also intercepted (not just PLT)
     CHook::InlineHook("_Z13RLEDecompressPhjPKhjj", &RLEDecompress_hook, &RLEDecompress);
+    CHook::InlineHook("_Z11OS_FileReadPvS_i", &OS_FileRead_hook, &OS_FileRead);
 
 
 	CHook::InlineHook("_Z32_rxOpenGLDefaultAllInOneRenderCBP10RwResEntryPvhj", &rxOpenGLDefaultAllInOneRenderCB_hook, &rxOpenGLDefaultAllInOneRenderCB);
