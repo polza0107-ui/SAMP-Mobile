@@ -461,6 +461,7 @@ void ScrSetPlayerSkin(RPCParameters* rpcParams)
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
 	bsData.Read(iPlayerID);
 	bsData.Read(iModel);
+	iModel = MapCustomSkin(iModel);
 
 	if (IsValidPedModel(iModel))
 	{

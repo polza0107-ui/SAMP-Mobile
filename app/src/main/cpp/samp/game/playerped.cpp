@@ -509,6 +509,7 @@ void CPlayerPed::RestartIfWastedAt(CVector *vecRestart, float fRotation)
 
 bool IsPedModel(unsigned int iModelID)
 {
+    iModelID = MapCustomSkin(iModelID);
     if(iModelID < 0 || iModelID > 20000) return false;
     auto dwModelArray = CModelInfo::ms_modelInfoPtrs;
 
@@ -521,6 +522,7 @@ bool IsPedModel(unsigned int iModelID)
 // 0.3.7
 void CPlayerPed::SetModelIndex(uint uiModel)
 {
+    uiModel = MapCustomSkin(uiModel);
     if(!GamePool_Ped_GetAt(m_dwGTAId)) return;
     if(!IsPedModel(uiModel))
         uiModel = 0;
