@@ -1,0 +1,999 @@
+
+Welcome to Gradle 8.9!
+
+Here are the highlights of this release:
+ - Enhanced Error and Warning Messages
+ - IDE Integration Improvements
+ - Daemon JVM Information
+
+For more details see https://docs.gradle.org/8.9/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:configureCMakeDebug[arm64-v8a]
+
+> Task :app:buildCMakeDebug[arm64-v8a]
+C/C++: ninja: Entering directory `/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a'
+C/C++: /usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DVER_x32=false -Dsamp_EXPORTS -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/opus/include -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/util -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/armhook -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/imgui -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/Core -isystem /home/runner/.gradle/caches/8.9/transforms/37a142a3621b95862e6db4f3da09a3c2/transformed/shadowhook-1.0.9/prefab/modules/shadowhook/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -w -fvisibility=hidden -pthread -O3 -fexceptions -fno-limit-debug-info  -fPIC -w -O3 -fexceptions -std=gnu++20 -MD -MT samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -MF samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o.d -o samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -c /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp
+C/C++: /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp:6:10: fatal error: 'game.h' file not found
+C/C++: #include "game.h"
+C/C++:          ^~~~~~~~
+C/C++: 1 error generated.
+
+> Task :app:buildCMakeDebug[arm64-v8a] FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:buildCMakeDebug[arm64-v8a]'.
+> com.android.ide.common.process.ProcessException: ninja: Entering directory `/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a'
+  [1/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_quant_pred.c.o
+  [2/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream.c.o
+  [3/440] Building C object opus/CMakeFiles/opus.dir/src/opus.c.o
+  [4/440] Building C object opus/CMakeFiles/opus.dir/src/opus_projection_encoder.c.o
+  [5/440] Building C object opus/CMakeFiles/opus.dir/src/repacketizer.c.o
+  [6/440] Building C object opus/CMakeFiles/opus.dir/src/opus_projection_decoder.c.o
+  [7/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream_decoder.c.o
+  [8/440] Building C object opus/CMakeFiles/opus.dir/src/mapping_matrix.c.o
+  [9/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream_encoder.c.o
+  [10/440] Building C object opus/CMakeFiles/opus.dir/src/opus_decoder.c.o
+  [11/440] Building C object opus/CMakeFiles/opus.dir/silk/code_signs.c.o
+  [12/440] Building C object opus/CMakeFiles/opus.dir/src/mlp.c.o
+  [13/440] Building C object opus/CMakeFiles/opus.dir/src/mlp_data.c.o
+  [14/440] Building C object opus/CMakeFiles/opus.dir/silk/init_decoder.c.o
+  [15/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_frame.c.o
+  [16/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_indices.c.o
+  [17/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_parameters.c.o
+  [18/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_pulses.c.o
+  [19/440] Building C object opus/CMakeFiles/opus.dir/silk/CNG.c.o
+  [20/440] Building C object opus/CMakeFiles/opus.dir/silk/encode_indices.c.o
+  [21/440] Building C object opus/CMakeFiles/opus.dir/src/opus_encoder.c.o
+  [22/440] Building C object opus/CMakeFiles/opus.dir/silk/decoder_set_fs.c.o
+  [23/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_core.c.o
+  [24/440] Building C object opus/CMakeFiles/opus.dir/silk/interpolate.c.o
+  [25/440] Building C object opus/CMakeFiles/opus.dir/silk/gain_quant.c.o
+  [26/440] Building C object opus/CMakeFiles/opus.dir/silk/dec_API.c.o
+  [27/440] Building C object opus/CMakeFiles/opus.dir/src/analysis.c.o
+  [28/440] Building C object opus/CMakeFiles/opus.dir/silk/encode_pulses.c.o
+  [29/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_decode.c.o
+  [30/440] Building C object opus/CMakeFiles/opus.dir/silk/LP_variable_cutoff.c.o
+  [31/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_gain.c.o
+  [32/440] Building C object opus/CMakeFiles/opus.dir/silk/enc_API.c.o
+  [33/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_LTP.c.o
+  [34/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_NLSF_CB_WB.c.o
+  [35/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_NLSF_CB_NB_MB.c.o
+  [36/440] Building C object opus/CMakeFiles/opus.dir/silk/shell_coder.c.o
+  [37/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_other.c.o
+  [38/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_pitch_lag.c.o
+  [39/440] Building C object opus/CMakeFiles/opus.dir/silk/PLC.c.o
+  [40/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_pulses_per_block.c.o
+  [41/440] Building C object opus/CMakeFiles/opus.dir/silk/quant_LTP_gains.c.o
+  [42/440] Building C object opus/CMakeFiles/opus.dir/silk/control_audio_bandwidth.c.o
+  [43/440] Building C object opus/CMakeFiles/opus.dir/silk/NSQ.c.o
+  [44/440] Building C object opus/CMakeFiles/opus.dir/silk/HP_variable_cutoff.c.o
+  [45/440] Building C object opus/CMakeFiles/opus.dir/silk/NSQ_del_dec.c.o
+  [46/440] Building C object opus/CMakeFiles/opus.dir/silk/VQ_WMat_EC.c.o
+  [47/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_unpack.c.o
+  [48/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_VQ.c.o
+  [49/440] Building C object opus/CMakeFiles/opus.dir/silk/VAD.c.o
+  [50/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_encode.c.o
+  [51/440] Building C object opus/CMakeFiles/opus.dir/silk/control_SNR.c.o
+  [52/440] Building C object opus/CMakeFiles/opus.dir/silk/process_NLSFs.c.o
+  [53/440] Building C object opus/CMakeFiles/opus.dir/silk/check_control_input.c.o
+  [54/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_del_dec_quant.c.o
+  [55/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_MS_to_LR.c.o
+  [56/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_LR_to_MS.c.o
+  [57/440] Building C object opus/CMakeFiles/opus.dir/silk/init_encoder.c.o
+  [58/440] Building C object opus/CMakeFiles/opus.dir/silk/bwexpander_32.c.o
+  [59/440] Building C object opus/CMakeFiles/opus.dir/silk/ana_filt_bank_1.c.o
+  [60/440] Building C object opus/CMakeFiles/opus.dir/silk/biquad_alt.c.o
+  [61/440] Building C object opus/CMakeFiles/opus.dir/silk/control_codec.c.o
+  [62/440] Building C object opus/CMakeFiles/opus.dir/silk/debug.c.o
+  [63/440] Building C object opus/CMakeFiles/opus.dir/silk/bwexpander.c.o
+  [64/440] Building C object opus/CMakeFiles/opus.dir/silk/inner_prod_aligned.c.o
+  [65/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_pitch.c.o
+  [66/440] Building C object opus/CMakeFiles/opus.dir/silk/A2NLSF.c.o
+  [67/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_analysis_filter.c.o
+  [68/440] Building C object opus/CMakeFiles/opus.dir/silk/table_LSF_cos.c.o
+  [69/440] Building C object opus/CMakeFiles/opus.dir/silk/log2lin.c.o
+  [70/440] Building C object opus/CMakeFiles/opus.dir/silk/lin2log.c.o
+  [71/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_VQ_weights_laroia.c.o
+  [72/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_inv_pred_gain.c.o
+  [73/440] Building C object opus/CMakeFiles/opus.dir/silk/pitch_est_tables.c.o
+  [74/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_AR2.c.o
+  [75/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_down2_3.c.o
+  [76/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_stabilize.c.o
+  [77/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_down2.c.o
+  [78/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler.c.o
+  [79/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF2A.c.o
+  [80/440] Building C object opus/CMakeFiles/opus.dir/silk/sigm_Q15.c.o
+  [81/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_rom.c.o
+  [82/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_IIR_FIR.c.o
+  [83/440] Building C object opus/CMakeFiles/opus.dir/silk/sum_sqr_shift.c.o
+  [84/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_up2_HQ.c.o
+  [85/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_encode_pred.c.o
+  [86/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_decode_pred.c.o
+  [87/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_down_FIR.c.o
+  [88/440] Building C object opus/CMakeFiles/opus.dir/silk/sort.c.o
+  [89/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_find_predictor.c.o
+  [90/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_fit.c.o
+  [91/440] Building C object opus/CMakeFiles/opus.dir/celt/celt.c.o
+  [92/440] Building C object opus/CMakeFiles/opus.dir/celt/cwrs.c.o
+  [93/440] Building C object opus/CMakeFiles/opus.dir/celt/entcode.c.o
+  [94/440] Building C object opus/CMakeFiles/opus.dir/celt/quant_bands.c.o
+  [95/440] Building C object opus/CMakeFiles/opus.dir/celt/entdec.c.o
+  [96/440] Building C object opus/CMakeFiles/opus.dir/celt/bands.c.o
+  [97/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_decoder.c.o
+  [98/440] Building C object opus/CMakeFiles/opus.dir/celt/entenc.c.o
+  [99/440] Building C object opus/CMakeFiles/opus.dir/celt/laplace.c.o
+  [100/440] Building C object opus/CMakeFiles/opus.dir/celt/mathops.c.o
+  [101/440] Building C object opus/CMakeFiles/opus.dir/celt/modes.c.o
+  [102/440] Building C object opus/CMakeFiles/opus.dir/celt/kiss_fft.c.o
+  [103/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Sphere.cpp.o
+  [104/440] Building C object opus/CMakeFiles/opus.dir/celt/mdct.c.o
+  [105/440] Building C object opus/CMakeFiles/opus.dir/silk/float/apply_sine_window_FLP.c.o
+  [106/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_encoder.c.o
+  [107/440] Building C object opus/CMakeFiles/opus.dir/celt/pitch.c.o
+  [108/440] Building C object opus/CMakeFiles/opus.dir/silk/float/corrMatrix_FLP.c.o
+  [109/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_LPC_FLP.c.o
+  [110/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_lpc.c.o
+  [111/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_LTP_FLP.c.o
+  [112/440] Building CXX object samp/CMakeFiles/samp.dir/game/PedIK.cpp.o
+  [113/440] Building C object opus/CMakeFiles/opus.dir/silk/float/encode_frame_FLP.c.o
+  [114/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_pitch_lags_FLP.c.o
+  [115/440] Building C object opus/CMakeFiles/opus.dir/celt/vq.c.o
+  [116/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_pred_coefs_FLP.c.o
+  [117/440] Building C object opus/CMakeFiles/opus.dir/celt/rate.c.o
+  [118/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LTP_scale_ctrl_FLP.c.o
+  [119/440] Building C object opus/CMakeFiles/opus.dir/silk/float/process_gains_FLP.c.o
+  [120/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LTP_analysis_filter_FLP.c.o
+  [121/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LPC_analysis_filter_FLP.c.o
+  [122/440] Building C object opus/CMakeFiles/opus.dir/silk/float/regularize_correlations_FLP.c.o
+  [123/440] Building C object opus/CMakeFiles/opus.dir/silk/float/residual_energy_FLP.c.o
+  [124/440] Building C object opus/CMakeFiles/opus.dir/silk/float/warped_autocorrelation_FLP.c.o
+  [125/440] Building C object opus/CMakeFiles/opus.dir/silk/float/wrappers_FLP.c.o
+  [126/440] Building C object opus/CMakeFiles/opus.dir/silk/float/autocorrelation_FLP.c.o
+  [127/440] Building C object opus/CMakeFiles/opus.dir/silk/float/noise_shape_analysis_FLP.c.o
+  [128/440] Building C object opus/CMakeFiles/opus.dir/silk/float/bwexpander_FLP.c.o
+  [129/440] Building C object opus/CMakeFiles/opus.dir/silk/float/k2a_FLP.c.o
+  [130/440] Building C object opus/CMakeFiles/opus.dir/silk/float/energy_FLP.c.o
+  [131/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LPC_inv_pred_gain_FLP.c.o
+  [132/440] Building C object opus/CMakeFiles/opus.dir/silk/float/inner_product_FLP.c.o
+  [133/440] Building C object opus/CMakeFiles/opus.dir/silk/float/burg_modified_FLP.c.o
+  [134/440] Building C object opus/CMakeFiles/opus.dir/silk/float/scale_vector_FLP.c.o
+  [135/440] Building C object opus/CMakeFiles/opus.dir/silk/float/scale_copy_vector_FLP.c.o
+  [136/440] Building C object opus/CMakeFiles/opus.dir/silk/float/schur_FLP.c.o
+  [137/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/armcpu.c.o
+  [138/440] Building C object opus/CMakeFiles/opus.dir/silk/float/sort_FLP.c.o
+  [139/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/arm_silk_map.c.o
+  [140/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/arm_celt_map.c.o
+  [141/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/biquad_alt_neon_intr.c.o
+  [142/440] Building C object opus/CMakeFiles/opus.dir/silk/float/pitch_analysis_core_FLP.c.o
+  [143/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/pitch_neon_intr.c.o
+  [144/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/celt_neon_intr.c.o
+  [145/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/LPC_inv_pred_gain_neon_intr.c.o
+  [146/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/NSQ_neon.c.o
+  [147/440] Building CXX object samp/CMakeFiles/samp.dir/game/PedIntelligence.cpp.o
+  [148/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimAssocDescriptions.cpp.o
+  [149/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/NSQ_del_dec_neon_intr.c.o
+  [150/440] Linking C static library opus/libopus.a
+  [151/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendAssociation.cpp.o
+  [152/440] Building CXX object samp/CMakeFiles/samp.dir/audiostream.cpp.o
+  [153/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendAssocGroup.cpp.o
+  [154/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendClumpData.cpp.o
+  [155/440] Building CXX object samp/CMakeFiles/samp.dir/CFPSFix.cpp.o
+  [156/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendNode.cpp.o
+  [157/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendSequence.cpp.o
+  [158/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendStaticAssociation.cpp.o
+  [159/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendHierarchy.cpp.o
+  [160/440] Building CXX object samp/CMakeFiles/samp.dir/game/COccluder.cpp.o
+  [161/440] Building CXX object samp/CMakeFiles/samp.dir/game/CFileMgr.cpp.o
+  [162/440] Building CXX object samp/CMakeFiles/samp.dir/game/CdStreamInfo.cpp.o
+  [163/440] Building CXX object samp/CMakeFiles/samp.dir/game/COcclusion.cpp.o
+  [164/440] Building CXX object samp/CMakeFiles/samp.dir/game/Cam.cpp.o
+  [165/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimManager.cpp.o
+  [166/440] Building CXX object samp/CMakeFiles/samp.dir/game/CRenderTarget.cpp.o
+  [167/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/BoundingBox.cpp.o
+  [168/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColBox.cpp.o
+  [169/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColDisk.cpp.o
+  [170/440] Building CXX object samp/CMakeFiles/samp.dir/game/Camera.cpp.o
+  [171/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Box.cpp.o
+  [172/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColLine.cpp.o
+  [173/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColPoint.cpp.o
+  [174/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColSphere.cpp.o
+  [175/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColTrianglePlane.cpp.o
+  [176/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Quaternion.cpp.o
+  [177/440] Building CXX object samp/CMakeFiles/samp.dir/vendor/quaternion/quaternion.cpp.o
+  [178/440] Building CXX object samp/CMakeFiles/samp.dir/vendor/raknet/AsynchronousFileIO.cpp.o
+  [179/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColTriangle.cpp.o
+  [180/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColModel.cpp.o
+  [181/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Collision.cpp.o
+  [182/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColStore.cpp.o
+  [183/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/CollisionData.cpp.o
+  [184/440] Building CXX object samp/CMakeFiles/samp.dir/game/ColourSet.cpp.o
+  [185/440] Building CXX object samp/CMakeFiles/samp.dir/game/CompressedVector.cpp.o
+  [186/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/KeyGen.cpp.o
+  [187/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/EntryInfoList.cpp.o
+  [188/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/EntryInfoNode.cpp.o
+  [189/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/List_c.cpp.o
+  [190/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Matrix.cpp.o
+  [191/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrList.cpp.o
+  [192/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrListSingleLink.cpp.o
+  [193/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Pool.cpp.o
+  [194/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrListDoubleLink.cpp.o
+  [195/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/RQVector.cpp.o
+  [196/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/MatrixLink.cpp.o
+  [197/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/MatrixLinkList.cpp.o
+  [198/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrNodeDoubleLink.cpp.o
+  [199/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Rect.cpp.o
+  [200/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrNodeSingleLink.cpp.o
+  [201/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Quaternion.cpp.o
+  [202/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Vector2D.cpp.o
+  [203/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Vector.cpp.o
+  [204/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Building.cpp.o
+  [205/440] Building CXX object samp/CMakeFiles/samp.dir/game/CrossHair.cpp.o
+  [206/440] Building CXX object samp/CMakeFiles/samp.dir/game/Coronas.cpp.o
+  [207/440] Building CXX object samp/CMakeFiles/samp.dir/game/ES2VertexBuffer.cpp.o
+  [208/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CPhysical.cpp.o
+  [209/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CPedGTA.cpp.o
+  [210/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CEntityGTA.cpp.o
+  [211/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Dummy.cpp.o
+  [212/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Object.cpp.o
+  [213/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CVehicleGTA.cpp.o
+  [214/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventGroup.cpp.o
+  [215/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/Event.cpp.o
+  [216/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Placeable.cpp.o
+  [217/440] Building CXX object samp/CMakeFiles/samp.dir/game/FileLoader.cpp.o
+  [218/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventHandlerHistory.cpp.o
+  [219/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/PlayerPedGta.cpp.o
+  [220/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventHandler.cpp.o
+  [221/440] Building CXX object samp/CMakeFiles/samp.dir/game/General.cpp.o
+  [222/440] Building CXX object samp/CMakeFiles/samp.dir/game/IplStore.cpp.o
+  [223/440] Building CXX object samp/CMakeFiles/samp.dir/game/MemoryMgr.cpp.o
+  [224/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/ModelInfo.cpp.o
+  [225/440] Building CXX object samp/CMakeFiles/samp.dir/game/Lines.cpp.o
+  [226/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/BaseModelInfo.cpp.o
+  [227/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/AtomicModelInfo.cpp.o
+  [228/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/VehicleModelInfo.cpp.o
+  [229/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/ClumpModelInfo.cpp.o
+  [230/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomBuilding/CustomBuildingDNPipeline.cpp.o
+  [231/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pickup.cpp.o
+  [232/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pickups.cpp.o
+  [233/440] Building CXX object samp/CMakeFiles/samp.dir/game/PlayerPedData.cpp.o
+  [234/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/RxPipeline.cpp.o
+  [235/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomBuilding/CustomBuildingRenderer.cpp.o
+  [236/440] Building CXX object samp/CMakeFiles/samp.dir/game/RGB.cpp.o
+  [237/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomCar/CustomCarEnvMapPipeline.cpp.o
+  [238/440] Building CXX object samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o
+  FAILED: samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o 
+  /usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DVER_x32=false -Dsamp_EXPORTS -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/opus/include -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/util -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/armhook -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/imgui -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/Core -isystem /home/runner/.gradle/caches/8.9/transforms/37a142a3621b95862e6db4f3da09a3c2/transformed/shadowhook-1.0.9/prefab/modules/shadowhook/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -w -fvisibility=hidden -pthread -O3 -fexceptions -fno-limit-debug-info  -fPIC -w -O3 -fexceptions -std=gnu++20 -MD -MT samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -MF samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o.d -o samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -c /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp
+  /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp:6:10: fatal error: 'game.h' file not found
+  #include "game.h"
+           ^~~~~~~~
+  1 error generated.
+  [239/440] Building CXX object samp/CMakeFiles/samp.dir/game/RQ_Commands.cpp.o
+  [240/440] Building CXX object samp/CMakeFiles/samp.dir/game/Plugins/NodeNamePlugin/NodeName.cpp.o
+  [241/440] Building CXX object samp/CMakeFiles/samp.dir/game/Plugins/RpAnimBlendPlugin/RpAnimBlend.cpp.o
+  [242/440] Building CXX object samp/CMakeFiles/samp.dir/game/RW/RenderWare.cpp.o
+  [243/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pools.cpp.o
+  ninja: build stopped: subcommand failed.
+  
+  C++ build system [build] failed while executing:
+      /usr/local/lib/android/sdk/cmake/3.22.1/bin/ninja \
+        -C \
+        /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a \
+        samp
+    from /home/runner/work/SAMP-Mobile/SAMP-Mobile/app
+
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:buildCMakeDebug[arm64-v8a]'.
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+Caused by: org.gradle.internal.UncheckedException: com.android.ide.common.process.ProcessException: ninja: Entering directory `/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a'
+[1/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_quant_pred.c.o
+[2/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream.c.o
+[3/440] Building C object opus/CMakeFiles/opus.dir/src/opus.c.o
+[4/440] Building C object opus/CMakeFiles/opus.dir/src/opus_projection_encoder.c.o
+[5/440] Building C object opus/CMakeFiles/opus.dir/src/repacketizer.c.o
+[6/440] Building C object opus/CMakeFiles/opus.dir/src/opus_projection_decoder.c.o
+[7/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream_decoder.c.o
+[8/440] Building C object opus/CMakeFiles/opus.dir/src/mapping_matrix.c.o
+[9/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream_encoder.c.o
+[10/440] Building C object opus/CMakeFiles/opus.dir/src/opus_decoder.c.o
+[11/440] Building C object opus/CMakeFiles/opus.dir/silk/code_signs.c.o
+[12/440] Building C object opus/CMakeFiles/opus.dir/src/mlp.c.o
+[13/440] Building C object opus/CMakeFiles/opus.dir/src/mlp_data.c.o
+[14/440] Building C object opus/CMakeFiles/opus.dir/silk/init_decoder.c.o
+[15/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_frame.c.o
+[16/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_indices.c.o
+[17/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_parameters.c.o
+[18/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_pulses.c.o
+[19/440] Building C object opus/CMakeFiles/opus.dir/silk/CNG.c.o
+[20/440] Building C object opus/CMakeFiles/opus.dir/silk/encode_indices.c.o
+[21/440] Building C object opus/CMakeFiles/opus.dir/src/opus_encoder.c.o
+[22/440] Building C object opus/CMakeFiles/opus.dir/silk/decoder_set_fs.c.o
+[23/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_core.c.o
+[24/440] Building C object opus/CMakeFiles/opus.dir/silk/interpolate.c.o
+[25/440] Building C object opus/CMakeFiles/opus.dir/silk/gain_quant.c.o
+[26/440] Building C object opus/CMakeFiles/opus.dir/silk/dec_API.c.o
+[27/440] Building C object opus/CMakeFiles/opus.dir/src/analysis.c.o
+[28/440] Building C object opus/CMakeFiles/opus.dir/silk/encode_pulses.c.o
+[29/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_decode.c.o
+[30/440] Building C object opus/CMakeFiles/opus.dir/silk/LP_variable_cutoff.c.o
+[31/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_gain.c.o
+[32/440] Building C object opus/CMakeFiles/opus.dir/silk/enc_API.c.o
+[33/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_LTP.c.o
+[34/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_NLSF_CB_WB.c.o
+[35/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_NLSF_CB_NB_MB.c.o
+[36/440] Building C object opus/CMakeFiles/opus.dir/silk/shell_coder.c.o
+[37/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_other.c.o
+[38/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_pitch_lag.c.o
+[39/440] Building C object opus/CMakeFiles/opus.dir/silk/PLC.c.o
+[40/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_pulses_per_block.c.o
+[41/440] Building C object opus/CMakeFiles/opus.dir/silk/quant_LTP_gains.c.o
+[42/440] Building C object opus/CMakeFiles/opus.dir/silk/control_audio_bandwidth.c.o
+[43/440] Building C object opus/CMakeFiles/opus.dir/silk/NSQ.c.o
+[44/440] Building C object opus/CMakeFiles/opus.dir/silk/HP_variable_cutoff.c.o
+[45/440] Building C object opus/CMakeFiles/opus.dir/silk/NSQ_del_dec.c.o
+[46/440] Building C object opus/CMakeFiles/opus.dir/silk/VQ_WMat_EC.c.o
+[47/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_unpack.c.o
+[48/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_VQ.c.o
+[49/440] Building C object opus/CMakeFiles/opus.dir/silk/VAD.c.o
+[50/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_encode.c.o
+[51/440] Building C object opus/CMakeFiles/opus.dir/silk/control_SNR.c.o
+[52/440] Building C object opus/CMakeFiles/opus.dir/silk/process_NLSFs.c.o
+[53/440] Building C object opus/CMakeFiles/opus.dir/silk/check_control_input.c.o
+[54/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_del_dec_quant.c.o
+[55/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_MS_to_LR.c.o
+[56/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_LR_to_MS.c.o
+[57/440] Building C object opus/CMakeFiles/opus.dir/silk/init_encoder.c.o
+[58/440] Building C object opus/CMakeFiles/opus.dir/silk/bwexpander_32.c.o
+[59/440] Building C object opus/CMakeFiles/opus.dir/silk/ana_filt_bank_1.c.o
+[60/440] Building C object opus/CMakeFiles/opus.dir/silk/biquad_alt.c.o
+[61/440] Building C object opus/CMakeFiles/opus.dir/silk/control_codec.c.o
+[62/440] Building C object opus/CMakeFiles/opus.dir/silk/debug.c.o
+[63/440] Building C object opus/CMakeFiles/opus.dir/silk/bwexpander.c.o
+[64/440] Building C object opus/CMakeFiles/opus.dir/silk/inner_prod_aligned.c.o
+[65/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_pitch.c.o
+[66/440] Building C object opus/CMakeFiles/opus.dir/silk/A2NLSF.c.o
+[67/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_analysis_filter.c.o
+[68/440] Building C object opus/CMakeFiles/opus.dir/silk/table_LSF_cos.c.o
+[69/440] Building C object opus/CMakeFiles/opus.dir/silk/log2lin.c.o
+[70/440] Building C object opus/CMakeFiles/opus.dir/silk/lin2log.c.o
+[71/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_VQ_weights_laroia.c.o
+[72/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_inv_pred_gain.c.o
+[73/440] Building C object opus/CMakeFiles/opus.dir/silk/pitch_est_tables.c.o
+[74/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_AR2.c.o
+[75/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_down2_3.c.o
+[76/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_stabilize.c.o
+[77/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_down2.c.o
+[78/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler.c.o
+[79/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF2A.c.o
+[80/440] Building C object opus/CMakeFiles/opus.dir/silk/sigm_Q15.c.o
+[81/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_rom.c.o
+[82/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_IIR_FIR.c.o
+[83/440] Building C object opus/CMakeFiles/opus.dir/silk/sum_sqr_shift.c.o
+[84/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_up2_HQ.c.o
+[85/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_encode_pred.c.o
+[86/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_decode_pred.c.o
+[87/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_down_FIR.c.o
+[88/440] Building C object opus/CMakeFiles/opus.dir/silk/sort.c.o
+[89/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_find_predictor.c.o
+[90/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_fit.c.o
+[91/440] Building C object opus/CMakeFiles/opus.dir/celt/celt.c.o
+[92/440] Building C object opus/CMakeFiles/opus.dir/celt/cwrs.c.o
+[93/440] Building C object opus/CMakeFiles/opus.dir/celt/entcode.c.o
+[94/440] Building C object opus/CMakeFiles/opus.dir/celt/quant_bands.c.o
+[95/440] Building C object opus/CMakeFiles/opus.dir/celt/entdec.c.o
+[96/440] Building C object opus/CMakeFiles/opus.dir/celt/bands.c.o
+[97/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_decoder.c.o
+[98/440] Building C object opus/CMakeFiles/opus.dir/celt/entenc.c.o
+[99/440] Building C object opus/CMakeFiles/opus.dir/celt/laplace.c.o
+[100/440] Building C object opus/CMakeFiles/opus.dir/celt/mathops.c.o
+[101/440] Building C object opus/CMakeFiles/opus.dir/celt/modes.c.o
+[102/440] Building C object opus/CMakeFiles/opus.dir/celt/kiss_fft.c.o
+[103/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Sphere.cpp.o
+[104/440] Building C object opus/CMakeFiles/opus.dir/celt/mdct.c.o
+[105/440] Building C object opus/CMakeFiles/opus.dir/silk/float/apply_sine_window_FLP.c.o
+[106/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_encoder.c.o
+[107/440] Building C object opus/CMakeFiles/opus.dir/celt/pitch.c.o
+[108/440] Building C object opus/CMakeFiles/opus.dir/silk/float/corrMatrix_FLP.c.o
+[109/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_LPC_FLP.c.o
+[110/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_lpc.c.o
+[111/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_LTP_FLP.c.o
+[112/440] Building CXX object samp/CMakeFiles/samp.dir/game/PedIK.cpp.o
+[113/440] Building C object opus/CMakeFiles/opus.dir/silk/float/encode_frame_FLP.c.o
+[114/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_pitch_lags_FLP.c.o
+[115/440] Building C object opus/CMakeFiles/opus.dir/celt/vq.c.o
+[116/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_pred_coefs_FLP.c.o
+[117/440] Building C object opus/CMakeFiles/opus.dir/celt/rate.c.o
+[118/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LTP_scale_ctrl_FLP.c.o
+[119/440] Building C object opus/CMakeFiles/opus.dir/silk/float/process_gains_FLP.c.o
+[120/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LTP_analysis_filter_FLP.c.o
+[121/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LPC_analysis_filter_FLP.c.o
+[122/440] Building C object opus/CMakeFiles/opus.dir/silk/float/regularize_correlations_FLP.c.o
+[123/440] Building C object opus/CMakeFiles/opus.dir/silk/float/residual_energy_FLP.c.o
+[124/440] Building C object opus/CMakeFiles/opus.dir/silk/float/warped_autocorrelation_FLP.c.o
+[125/440] Building C object opus/CMakeFiles/opus.dir/silk/float/wrappers_FLP.c.o
+[126/440] Building C object opus/CMakeFiles/opus.dir/silk/float/autocorrelation_FLP.c.o
+[127/440] Building C object opus/CMakeFiles/opus.dir/silk/float/noise_shape_analysis_FLP.c.o
+[128/440] Building C object opus/CMakeFiles/opus.dir/silk/float/bwexpander_FLP.c.o
+[129/440] Building C object opus/CMakeFiles/opus.dir/silk/float/k2a_FLP.c.o
+[130/440] Building C object opus/CMakeFiles/opus.dir/silk/float/energy_FLP.c.o
+[131/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LPC_inv_pred_gain_FLP.c.o
+[132/440] Building C object opus/CMakeFiles/opus.dir/silk/float/inner_product_FLP.c.o
+[133/440] Building C object opus/CMakeFiles/opus.dir/silk/float/burg_modified_FLP.c.o
+[134/440] Building C object opus/CMakeFiles/opus.dir/silk/float/scale_vector_FLP.c.o
+[135/440] Building C object opus/CMakeFiles/opus.dir/silk/float/scale_copy_vector_FLP.c.o
+[136/440] Building C object opus/CMakeFiles/opus.dir/silk/float/schur_FLP.c.o
+[137/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/armcpu.c.o
+[138/440] Building C object opus/CMakeFiles/opus.dir/silk/float/sort_FLP.c.o
+[139/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/arm_silk_map.c.o
+[140/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/arm_celt_map.c.o
+[141/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/biquad_alt_neon_intr.c.o
+[142/440] Building C object opus/CMakeFiles/opus.dir/silk/float/pitch_analysis_core_FLP.c.o
+[143/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/pitch_neon_intr.c.o
+[144/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/celt_neon_intr.c.o
+[145/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/LPC_inv_pred_gain_neon_intr.c.o
+[146/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/NSQ_neon.c.o
+[147/440] Building CXX object samp/CMakeFiles/samp.dir/game/PedIntelligence.cpp.o
+[148/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimAssocDescriptions.cpp.o
+[149/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/NSQ_del_dec_neon_intr.c.o
+[150/440] Linking C static library opus/libopus.a
+[151/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendAssociation.cpp.o
+[152/440] Building CXX object samp/CMakeFiles/samp.dir/audiostream.cpp.o
+[153/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendAssocGroup.cpp.o
+[154/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendClumpData.cpp.o
+[155/440] Building CXX object samp/CMakeFiles/samp.dir/CFPSFix.cpp.o
+[156/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendNode.cpp.o
+[157/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendSequence.cpp.o
+[158/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendStaticAssociation.cpp.o
+[159/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendHierarchy.cpp.o
+[160/440] Building CXX object samp/CMakeFiles/samp.dir/game/COccluder.cpp.o
+[161/440] Building CXX object samp/CMakeFiles/samp.dir/game/CFileMgr.cpp.o
+[162/440] Building CXX object samp/CMakeFiles/samp.dir/game/CdStreamInfo.cpp.o
+[163/440] Building CXX object samp/CMakeFiles/samp.dir/game/COcclusion.cpp.o
+[164/440] Building CXX object samp/CMakeFiles/samp.dir/game/Cam.cpp.o
+[165/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimManager.cpp.o
+[166/440] Building CXX object samp/CMakeFiles/samp.dir/game/CRenderTarget.cpp.o
+[167/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/BoundingBox.cpp.o
+[168/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColBox.cpp.o
+[169/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColDisk.cpp.o
+[170/440] Building CXX object samp/CMakeFiles/samp.dir/game/Camera.cpp.o
+[171/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Box.cpp.o
+[172/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColLine.cpp.o
+[173/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColPoint.cpp.o
+[174/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColSphere.cpp.o
+[175/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColTrianglePlane.cpp.o
+[176/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Quaternion.cpp.o
+[177/440] Building CXX object samp/CMakeFiles/samp.dir/vendor/quaternion/quaternion.cpp.o
+[178/440] Building CXX object samp/CMakeFiles/samp.dir/vendor/raknet/AsynchronousFileIO.cpp.o
+[179/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColTriangle.cpp.o
+[180/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColModel.cpp.o
+[181/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Collision.cpp.o
+[182/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColStore.cpp.o
+[183/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/CollisionData.cpp.o
+[184/440] Building CXX object samp/CMakeFiles/samp.dir/game/ColourSet.cpp.o
+[185/440] Building CXX object samp/CMakeFiles/samp.dir/game/CompressedVector.cpp.o
+[186/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/KeyGen.cpp.o
+[187/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/EntryInfoList.cpp.o
+[188/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/EntryInfoNode.cpp.o
+[189/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/List_c.cpp.o
+[190/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Matrix.cpp.o
+[191/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrList.cpp.o
+[192/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrListSingleLink.cpp.o
+[193/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Pool.cpp.o
+[194/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrListDoubleLink.cpp.o
+[195/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/RQVector.cpp.o
+[196/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/MatrixLink.cpp.o
+[197/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/MatrixLinkList.cpp.o
+[198/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrNodeDoubleLink.cpp.o
+[199/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Rect.cpp.o
+[200/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrNodeSingleLink.cpp.o
+[201/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Quaternion.cpp.o
+[202/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Vector2D.cpp.o
+[203/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Vector.cpp.o
+[204/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Building.cpp.o
+[205/440] Building CXX object samp/CMakeFiles/samp.dir/game/CrossHair.cpp.o
+[206/440] Building CXX object samp/CMakeFiles/samp.dir/game/Coronas.cpp.o
+[207/440] Building CXX object samp/CMakeFiles/samp.dir/game/ES2VertexBuffer.cpp.o
+[208/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CPhysical.cpp.o
+[209/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CPedGTA.cpp.o
+[210/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CEntityGTA.cpp.o
+[211/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Dummy.cpp.o
+[212/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Object.cpp.o
+[213/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CVehicleGTA.cpp.o
+[214/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventGroup.cpp.o
+[215/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/Event.cpp.o
+[216/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Placeable.cpp.o
+[217/440] Building CXX object samp/CMakeFiles/samp.dir/game/FileLoader.cpp.o
+[218/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventHandlerHistory.cpp.o
+[219/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/PlayerPedGta.cpp.o
+[220/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventHandler.cpp.o
+[221/440] Building CXX object samp/CMakeFiles/samp.dir/game/General.cpp.o
+[222/440] Building CXX object samp/CMakeFiles/samp.dir/game/IplStore.cpp.o
+[223/440] Building CXX object samp/CMakeFiles/samp.dir/game/MemoryMgr.cpp.o
+[224/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/ModelInfo.cpp.o
+[225/440] Building CXX object samp/CMakeFiles/samp.dir/game/Lines.cpp.o
+[226/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/BaseModelInfo.cpp.o
+[227/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/AtomicModelInfo.cpp.o
+[228/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/VehicleModelInfo.cpp.o
+[229/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/ClumpModelInfo.cpp.o
+[230/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomBuilding/CustomBuildingDNPipeline.cpp.o
+[231/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pickup.cpp.o
+[232/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pickups.cpp.o
+[233/440] Building CXX object samp/CMakeFiles/samp.dir/game/PlayerPedData.cpp.o
+[234/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/RxPipeline.cpp.o
+[235/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomBuilding/CustomBuildingRenderer.cpp.o
+[236/440] Building CXX object samp/CMakeFiles/samp.dir/game/RGB.cpp.o
+[237/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomCar/CustomCarEnvMapPipeline.cpp.o
+[238/440] Building CXX object samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o
+FAILED: samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o 
+/usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DVER_x32=false -Dsamp_EXPORTS -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/opus/include -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/util -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/armhook -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/imgui -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/Core -isystem /home/runner/.gradle/caches/8.9/transforms/37a142a3621b95862e6db4f3da09a3c2/transformed/shadowhook-1.0.9/prefab/modules/shadowhook/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -w -fvisibility=hidden -pthread -O3 -fexceptions -fno-limit-debug-info  -fPIC -w -O3 -fexceptions -std=gnu++20 -MD -MT samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -MF samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o.d -o samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -c /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp
+/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp:6:10: fatal error: 'game.h' file not found
+#include "game.h"
+         ^~~~~~~~
+1 error generated.
+[239/440] Building CXX object samp/CMakeFiles/samp.dir/game/RQ_Commands.cpp.o
+[240/440] Building CXX object samp/CMakeFiles/samp.dir/game/Plugins/NodeNamePlugin/NodeName.cpp.o
+[241/440] Building CXX object samp/CMakeFiles/samp.dir/game/Plugins/RpAnimBlendPlugin/RpAnimBlend.cpp.o
+[242/440] Building CXX object samp/CMakeFiles/samp.dir/game/RW/RenderWare.cpp.o
+[243/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pools.cpp.o
+ninja: build stopped: subcommand failed.
+
+C++ build system [build] failed while executing:
+    /usr/local/lib/android/sdk/cmake/3.22.1/bin/ninja \
+      -C \
+      /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a \
+      samp
+  from /home/runner/work/SAMP-Mobile/SAMP-Mobile/app
+	at org.gradle.internal.UncheckedException.throwAsUncheckedException(UncheckedException.java:69)
+	at org.gradle.internal.UncheckedException.throwAsUncheckedException(UncheckedException.java:42)
+	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:128)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.doExecute(StandardTaskAction.java:58)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:244)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+	at org.gradle.internal.Either$Right.fold(Either.java:175)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:49)
+	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:27)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:105)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:54)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:289)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:127)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+Caused by: com.android.ide.common.process.ProcessException: ninja: Entering directory `/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a'
+[1/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_quant_pred.c.o
+[2/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream.c.o
+[3/440] Building C object opus/CMakeFiles/opus.dir/src/opus.c.o
+[4/440] Building C object opus/CMakeFiles/opus.dir/src/opus_projection_encoder.c.o
+[5/440] Building C object opus/CMakeFiles/opus.dir/src/repacketizer.c.o
+[6/440] Building C object opus/CMakeFiles/opus.dir/src/opus_projection_decoder.c.o
+[7/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream_decoder.c.o
+[8/440] Building C object opus/CMakeFiles/opus.dir/src/mapping_matrix.c.o
+[9/440] Building C object opus/CMakeFiles/opus.dir/src/opus_multistream_encoder.c.o
+[10/440] Building C object opus/CMakeFiles/opus.dir/src/opus_decoder.c.o
+[11/440] Building C object opus/CMakeFiles/opus.dir/silk/code_signs.c.o
+[12/440] Building C object opus/CMakeFiles/opus.dir/src/mlp.c.o
+[13/440] Building C object opus/CMakeFiles/opus.dir/src/mlp_data.c.o
+[14/440] Building C object opus/CMakeFiles/opus.dir/silk/init_decoder.c.o
+[15/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_frame.c.o
+[16/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_indices.c.o
+[17/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_parameters.c.o
+[18/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_pulses.c.o
+[19/440] Building C object opus/CMakeFiles/opus.dir/silk/CNG.c.o
+[20/440] Building C object opus/CMakeFiles/opus.dir/silk/encode_indices.c.o
+[21/440] Building C object opus/CMakeFiles/opus.dir/src/opus_encoder.c.o
+[22/440] Building C object opus/CMakeFiles/opus.dir/silk/decoder_set_fs.c.o
+[23/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_core.c.o
+[24/440] Building C object opus/CMakeFiles/opus.dir/silk/interpolate.c.o
+[25/440] Building C object opus/CMakeFiles/opus.dir/silk/gain_quant.c.o
+[26/440] Building C object opus/CMakeFiles/opus.dir/silk/dec_API.c.o
+[27/440] Building C object opus/CMakeFiles/opus.dir/src/analysis.c.o
+[28/440] Building C object opus/CMakeFiles/opus.dir/silk/encode_pulses.c.o
+[29/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_decode.c.o
+[30/440] Building C object opus/CMakeFiles/opus.dir/silk/LP_variable_cutoff.c.o
+[31/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_gain.c.o
+[32/440] Building C object opus/CMakeFiles/opus.dir/silk/enc_API.c.o
+[33/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_LTP.c.o
+[34/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_NLSF_CB_WB.c.o
+[35/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_NLSF_CB_NB_MB.c.o
+[36/440] Building C object opus/CMakeFiles/opus.dir/silk/shell_coder.c.o
+[37/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_other.c.o
+[38/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_pitch_lag.c.o
+[39/440] Building C object opus/CMakeFiles/opus.dir/silk/PLC.c.o
+[40/440] Building C object opus/CMakeFiles/opus.dir/silk/tables_pulses_per_block.c.o
+[41/440] Building C object opus/CMakeFiles/opus.dir/silk/quant_LTP_gains.c.o
+[42/440] Building C object opus/CMakeFiles/opus.dir/silk/control_audio_bandwidth.c.o
+[43/440] Building C object opus/CMakeFiles/opus.dir/silk/NSQ.c.o
+[44/440] Building C object opus/CMakeFiles/opus.dir/silk/HP_variable_cutoff.c.o
+[45/440] Building C object opus/CMakeFiles/opus.dir/silk/NSQ_del_dec.c.o
+[46/440] Building C object opus/CMakeFiles/opus.dir/silk/VQ_WMat_EC.c.o
+[47/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_unpack.c.o
+[48/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_VQ.c.o
+[49/440] Building C object opus/CMakeFiles/opus.dir/silk/VAD.c.o
+[50/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_encode.c.o
+[51/440] Building C object opus/CMakeFiles/opus.dir/silk/control_SNR.c.o
+[52/440] Building C object opus/CMakeFiles/opus.dir/silk/process_NLSFs.c.o
+[53/440] Building C object opus/CMakeFiles/opus.dir/silk/check_control_input.c.o
+[54/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_del_dec_quant.c.o
+[55/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_MS_to_LR.c.o
+[56/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_LR_to_MS.c.o
+[57/440] Building C object opus/CMakeFiles/opus.dir/silk/init_encoder.c.o
+[58/440] Building C object opus/CMakeFiles/opus.dir/silk/bwexpander_32.c.o
+[59/440] Building C object opus/CMakeFiles/opus.dir/silk/ana_filt_bank_1.c.o
+[60/440] Building C object opus/CMakeFiles/opus.dir/silk/biquad_alt.c.o
+[61/440] Building C object opus/CMakeFiles/opus.dir/silk/control_codec.c.o
+[62/440] Building C object opus/CMakeFiles/opus.dir/silk/debug.c.o
+[63/440] Building C object opus/CMakeFiles/opus.dir/silk/bwexpander.c.o
+[64/440] Building C object opus/CMakeFiles/opus.dir/silk/inner_prod_aligned.c.o
+[65/440] Building C object opus/CMakeFiles/opus.dir/silk/decode_pitch.c.o
+[66/440] Building C object opus/CMakeFiles/opus.dir/silk/A2NLSF.c.o
+[67/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_analysis_filter.c.o
+[68/440] Building C object opus/CMakeFiles/opus.dir/silk/table_LSF_cos.c.o
+[69/440] Building C object opus/CMakeFiles/opus.dir/silk/log2lin.c.o
+[70/440] Building C object opus/CMakeFiles/opus.dir/silk/lin2log.c.o
+[71/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_VQ_weights_laroia.c.o
+[72/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_inv_pred_gain.c.o
+[73/440] Building C object opus/CMakeFiles/opus.dir/silk/pitch_est_tables.c.o
+[74/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_AR2.c.o
+[75/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_down2_3.c.o
+[76/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF_stabilize.c.o
+[77/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_down2.c.o
+[78/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler.c.o
+[79/440] Building C object opus/CMakeFiles/opus.dir/silk/NLSF2A.c.o
+[80/440] Building C object opus/CMakeFiles/opus.dir/silk/sigm_Q15.c.o
+[81/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_rom.c.o
+[82/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_IIR_FIR.c.o
+[83/440] Building C object opus/CMakeFiles/opus.dir/silk/sum_sqr_shift.c.o
+[84/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_up2_HQ.c.o
+[85/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_encode_pred.c.o
+[86/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_decode_pred.c.o
+[87/440] Building C object opus/CMakeFiles/opus.dir/silk/resampler_private_down_FIR.c.o
+[88/440] Building C object opus/CMakeFiles/opus.dir/silk/sort.c.o
+[89/440] Building C object opus/CMakeFiles/opus.dir/silk/stereo_find_predictor.c.o
+[90/440] Building C object opus/CMakeFiles/opus.dir/silk/LPC_fit.c.o
+[91/440] Building C object opus/CMakeFiles/opus.dir/celt/celt.c.o
+[92/440] Building C object opus/CMakeFiles/opus.dir/celt/cwrs.c.o
+[93/440] Building C object opus/CMakeFiles/opus.dir/celt/entcode.c.o
+[94/440] Building C object opus/CMakeFiles/opus.dir/celt/quant_bands.c.o
+[95/440] Building C object opus/CMakeFiles/opus.dir/celt/entdec.c.o
+[96/440] Building C object opus/CMakeFiles/opus.dir/celt/bands.c.o
+[97/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_decoder.c.o
+[98/440] Building C object opus/CMakeFiles/opus.dir/celt/entenc.c.o
+[99/440] Building C object opus/CMakeFiles/opus.dir/celt/laplace.c.o
+[100/440] Building C object opus/CMakeFiles/opus.dir/celt/mathops.c.o
+[101/440] Building C object opus/CMakeFiles/opus.dir/celt/modes.c.o
+[102/440] Building C object opus/CMakeFiles/opus.dir/celt/kiss_fft.c.o
+[103/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Sphere.cpp.o
+[104/440] Building C object opus/CMakeFiles/opus.dir/celt/mdct.c.o
+[105/440] Building C object opus/CMakeFiles/opus.dir/silk/float/apply_sine_window_FLP.c.o
+[106/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_encoder.c.o
+[107/440] Building C object opus/CMakeFiles/opus.dir/celt/pitch.c.o
+[108/440] Building C object opus/CMakeFiles/opus.dir/silk/float/corrMatrix_FLP.c.o
+[109/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_LPC_FLP.c.o
+[110/440] Building C object opus/CMakeFiles/opus.dir/celt/celt_lpc.c.o
+[111/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_LTP_FLP.c.o
+[112/440] Building CXX object samp/CMakeFiles/samp.dir/game/PedIK.cpp.o
+[113/440] Building C object opus/CMakeFiles/opus.dir/silk/float/encode_frame_FLP.c.o
+[114/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_pitch_lags_FLP.c.o
+[115/440] Building C object opus/CMakeFiles/opus.dir/celt/vq.c.o
+[116/440] Building C object opus/CMakeFiles/opus.dir/silk/float/find_pred_coefs_FLP.c.o
+[117/440] Building C object opus/CMakeFiles/opus.dir/celt/rate.c.o
+[118/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LTP_scale_ctrl_FLP.c.o
+[119/440] Building C object opus/CMakeFiles/opus.dir/silk/float/process_gains_FLP.c.o
+[120/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LTP_analysis_filter_FLP.c.o
+[121/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LPC_analysis_filter_FLP.c.o
+[122/440] Building C object opus/CMakeFiles/opus.dir/silk/float/regularize_correlations_FLP.c.o
+[123/440] Building C object opus/CMakeFiles/opus.dir/silk/float/residual_energy_FLP.c.o
+[124/440] Building C object opus/CMakeFiles/opus.dir/silk/float/warped_autocorrelation_FLP.c.o
+[125/440] Building C object opus/CMakeFiles/opus.dir/silk/float/wrappers_FLP.c.o
+[126/440] Building C object opus/CMakeFiles/opus.dir/silk/float/autocorrelation_FLP.c.o
+[127/440] Building C object opus/CMakeFiles/opus.dir/silk/float/noise_shape_analysis_FLP.c.o
+[128/440] Building C object opus/CMakeFiles/opus.dir/silk/float/bwexpander_FLP.c.o
+[129/440] Building C object opus/CMakeFiles/opus.dir/silk/float/k2a_FLP.c.o
+[130/440] Building C object opus/CMakeFiles/opus.dir/silk/float/energy_FLP.c.o
+[131/440] Building C object opus/CMakeFiles/opus.dir/silk/float/LPC_inv_pred_gain_FLP.c.o
+[132/440] Building C object opus/CMakeFiles/opus.dir/silk/float/inner_product_FLP.c.o
+[133/440] Building C object opus/CMakeFiles/opus.dir/silk/float/burg_modified_FLP.c.o
+[134/440] Building C object opus/CMakeFiles/opus.dir/silk/float/scale_vector_FLP.c.o
+[135/440] Building C object opus/CMakeFiles/opus.dir/silk/float/scale_copy_vector_FLP.c.o
+[136/440] Building C object opus/CMakeFiles/opus.dir/silk/float/schur_FLP.c.o
+[137/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/armcpu.c.o
+[138/440] Building C object opus/CMakeFiles/opus.dir/silk/float/sort_FLP.c.o
+[139/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/arm_silk_map.c.o
+[140/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/arm_celt_map.c.o
+[141/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/biquad_alt_neon_intr.c.o
+[142/440] Building C object opus/CMakeFiles/opus.dir/silk/float/pitch_analysis_core_FLP.c.o
+[143/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/pitch_neon_intr.c.o
+[144/440] Building C object opus/CMakeFiles/opus.dir/celt/arm/celt_neon_intr.c.o
+[145/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/LPC_inv_pred_gain_neon_intr.c.o
+[146/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/NSQ_neon.c.o
+[147/440] Building CXX object samp/CMakeFiles/samp.dir/game/PedIntelligence.cpp.o
+[148/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimAssocDescriptions.cpp.o
+[149/440] Building C object opus/CMakeFiles/opus.dir/silk/arm/NSQ_del_dec_neon_intr.c.o
+[150/440] Linking C static library opus/libopus.a
+[151/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendAssociation.cpp.o
+[152/440] Building CXX object samp/CMakeFiles/samp.dir/audiostream.cpp.o
+[153/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendAssocGroup.cpp.o
+[154/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendClumpData.cpp.o
+[155/440] Building CXX object samp/CMakeFiles/samp.dir/CFPSFix.cpp.o
+[156/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendNode.cpp.o
+[157/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendSequence.cpp.o
+[158/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendStaticAssociation.cpp.o
+[159/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimBlendHierarchy.cpp.o
+[160/440] Building CXX object samp/CMakeFiles/samp.dir/game/COccluder.cpp.o
+[161/440] Building CXX object samp/CMakeFiles/samp.dir/game/CFileMgr.cpp.o
+[162/440] Building CXX object samp/CMakeFiles/samp.dir/game/CdStreamInfo.cpp.o
+[163/440] Building CXX object samp/CMakeFiles/samp.dir/game/COcclusion.cpp.o
+[164/440] Building CXX object samp/CMakeFiles/samp.dir/game/Cam.cpp.o
+[165/440] Building CXX object samp/CMakeFiles/samp.dir/game/Animation/AnimManager.cpp.o
+[166/440] Building CXX object samp/CMakeFiles/samp.dir/game/CRenderTarget.cpp.o
+[167/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/BoundingBox.cpp.o
+[168/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColBox.cpp.o
+[169/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColDisk.cpp.o
+[170/440] Building CXX object samp/CMakeFiles/samp.dir/game/Camera.cpp.o
+[171/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Box.cpp.o
+[172/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColLine.cpp.o
+[173/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColPoint.cpp.o
+[174/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColSphere.cpp.o
+[175/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColTrianglePlane.cpp.o
+[176/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Quaternion.cpp.o
+[177/440] Building CXX object samp/CMakeFiles/samp.dir/vendor/quaternion/quaternion.cpp.o
+[178/440] Building CXX object samp/CMakeFiles/samp.dir/vendor/raknet/AsynchronousFileIO.cpp.o
+[179/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColTriangle.cpp.o
+[180/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColModel.cpp.o
+[181/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/Collision.cpp.o
+[182/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/ColStore.cpp.o
+[183/440] Building CXX object samp/CMakeFiles/samp.dir/game/Collision/CollisionData.cpp.o
+[184/440] Building CXX object samp/CMakeFiles/samp.dir/game/ColourSet.cpp.o
+[185/440] Building CXX object samp/CMakeFiles/samp.dir/game/CompressedVector.cpp.o
+[186/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/KeyGen.cpp.o
+[187/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/EntryInfoList.cpp.o
+[188/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/EntryInfoNode.cpp.o
+[189/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/List_c.cpp.o
+[190/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Matrix.cpp.o
+[191/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrList.cpp.o
+[192/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrListSingleLink.cpp.o
+[193/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Pool.cpp.o
+[194/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrListDoubleLink.cpp.o
+[195/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/RQVector.cpp.o
+[196/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/MatrixLink.cpp.o
+[197/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/MatrixLinkList.cpp.o
+[198/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrNodeDoubleLink.cpp.o
+[199/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Rect.cpp.o
+[200/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/PtrNodeSingleLink.cpp.o
+[201/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Quaternion.cpp.o
+[202/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Vector2D.cpp.o
+[203/440] Building CXX object samp/CMakeFiles/samp.dir/game/Core/Vector.cpp.o
+[204/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Building.cpp.o
+[205/440] Building CXX object samp/CMakeFiles/samp.dir/game/CrossHair.cpp.o
+[206/440] Building CXX object samp/CMakeFiles/samp.dir/game/Coronas.cpp.o
+[207/440] Building CXX object samp/CMakeFiles/samp.dir/game/ES2VertexBuffer.cpp.o
+[208/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CPhysical.cpp.o
+[209/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CPedGTA.cpp.o
+[210/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CEntityGTA.cpp.o
+[211/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Dummy.cpp.o
+[212/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Object.cpp.o
+[213/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/CVehicleGTA.cpp.o
+[214/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventGroup.cpp.o
+[215/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/Event.cpp.o
+[216/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/Placeable.cpp.o
+[217/440] Building CXX object samp/CMakeFiles/samp.dir/game/FileLoader.cpp.o
+[218/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventHandlerHistory.cpp.o
+[219/440] Building CXX object samp/CMakeFiles/samp.dir/game/Entity/PlayerPedGta.cpp.o
+[220/440] Building CXX object samp/CMakeFiles/samp.dir/game/Events/EventHandler.cpp.o
+[221/440] Building CXX object samp/CMakeFiles/samp.dir/game/General.cpp.o
+[222/440] Building CXX object samp/CMakeFiles/samp.dir/game/IplStore.cpp.o
+[223/440] Building CXX object samp/CMakeFiles/samp.dir/game/MemoryMgr.cpp.o
+[224/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/ModelInfo.cpp.o
+[225/440] Building CXX object samp/CMakeFiles/samp.dir/game/Lines.cpp.o
+[226/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/BaseModelInfo.cpp.o
+[227/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/AtomicModelInfo.cpp.o
+[228/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/VehicleModelInfo.cpp.o
+[229/440] Building CXX object samp/CMakeFiles/samp.dir/game/Models/ClumpModelInfo.cpp.o
+[230/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomBuilding/CustomBuildingDNPipeline.cpp.o
+[231/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pickup.cpp.o
+[232/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pickups.cpp.o
+[233/440] Building CXX object samp/CMakeFiles/samp.dir/game/PlayerPedData.cpp.o
+[234/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/RxPipeline.cpp.o
+[235/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomBuilding/CustomBuildingRenderer.cpp.o
+[236/440] Building CXX object samp/CMakeFiles/samp.dir/game/RGB.cpp.o
+[237/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pipelines/CustomCar/CustomCarEnvMapPipeline.cpp.o
+[238/440] Building CXX object samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o
+FAILED: samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o 
+/usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/usr/local/lib/android/sdk/ndk/26.2.11394342/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DVER_x32=false -Dsamp_EXPORTS -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/opus/include -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/util -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/armhook -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor/imgui -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/vendor -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW -I/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/Core -isystem /home/runner/.gradle/caches/8.9/transforms/37a142a3621b95862e6db4f3da09a3c2/transformed/shadowhook-1.0.9/prefab/modules/shadowhook/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -w -fvisibility=hidden -pthread -O3 -fexceptions -fno-limit-debug-info  -fPIC -w -O3 -fexceptions -std=gnu++20 -MD -MT samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -MF samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o.d -o samp/CMakeFiles/samp.dir/game/RW/RwHelper.cpp.o -c /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp
+/home/runner/work/SAMP-Mobile/SAMP-Mobile/app/src/main/cpp/samp/game/RW/RwHelper.cpp:6:10: fatal error: 'game.h' file not found
+#include "game.h"
+         ^~~~~~~~
+1 error generated.
+[239/440] Building CXX object samp/CMakeFiles/samp.dir/game/RQ_Commands.cpp.o
+[240/440] Building CXX object samp/CMakeFiles/samp.dir/game/Plugins/NodeNamePlugin/NodeName.cpp.o
+[241/440] Building CXX object samp/CMakeFiles/samp.dir/game/Plugins/RpAnimBlendPlugin/RpAnimBlend.cpp.o
+[242/440] Building CXX object samp/CMakeFiles/samp.dir/game/RW/RenderWare.cpp.o
+[243/440] Building CXX object samp/CMakeFiles/samp.dir/game/Pools.cpp.o
+ninja: build stopped: subcommand failed.
+
+C++ build system [build] failed while executing:
+    /usr/local/lib/android/sdk/cmake/3.22.1/bin/ninja \
+      -C \
+      /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a \
+      samp
+  from /home/runner/work/SAMP-Mobile/SAMP-Mobile/app
+	at com.android.build.gradle.internal.cxx.process.ExecuteProcessKt.execute(ExecuteProcess.kt:288)
+	at com.android.build.gradle.internal.cxx.process.ExecuteProcessKt$executeProcess$1.invoke(ExecuteProcess.kt:108)
+	at com.android.build.gradle.internal.cxx.process.ExecuteProcessKt$executeProcess$1.invoke(ExecuteProcess.kt:106)
+	at com.android.build.gradle.internal.cxx.timing.TimingEnvironmentKt.time(TimingEnvironment.kt:32)
+	at com.android.build.gradle.internal.cxx.process.ExecuteProcessKt.executeProcess(ExecuteProcess.kt:106)
+	at com.android.build.gradle.internal.cxx.process.ExecuteProcessKt.executeProcess$default(ExecuteProcess.kt:85)
+	at com.android.build.gradle.internal.cxx.build.CxxRegularBuilder.executeProcessBatch(CxxRegularBuilder.kt:332)
+	at com.android.build.gradle.internal.cxx.build.CxxRegularBuilder.build(CxxRegularBuilder.kt:129)
+	at com.android.build.gradle.tasks.ExternalNativeBuildTask$doTaskAction$$inlined$recordTaskAction$1.invoke(BaseTask.kt:70)
+	at com.android.build.gradle.internal.tasks.Blocks.recordSpan(Blocks.java:51)
+	at com.android.build.gradle.tasks.ExternalNativeBuildTask.doTaskAction(ExternalNativeBuildTask.kt:145)
+	at com.android.build.gradle.internal.tasks.UnsafeOutputsTask$taskAction$$inlined$recordTaskAction$1.invoke(BaseTask.kt:65)
+	at com.android.build.gradle.internal.tasks.Blocks.recordSpan(Blocks.java:51)
+	at com.android.build.gradle.internal.tasks.UnsafeOutputsTask.taskAction(UnsafeOutputsTask.kt:63)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:125)
+	... 116 more
+Caused by: com.android.ide.common.process.ProcessException: Error while executing process /usr/local/lib/android/sdk/cmake/3.22.1/bin/ninja with arguments {-C /home/runner/work/SAMP-Mobile/SAMP-Mobile/app/.cxx/Debug/2v725x2g/arm64-v8a samp}
+	at com.android.build.gradle.internal.process.GradleProcessResult.buildProcessException(GradleProcessResult.java:73)
+	at com.android.build.gradle.internal.process.GradleProcessResult.assertNormalExitValue(GradleProcessResult.java:48)
+	at com.android.build.gradle.internal.cxx.process.ExecuteProcessKt.execute(ExecuteProcess.kt:277)
+	... 133 more
+Caused by: org.gradle.process.internal.ExecException: Process 'command '/usr/local/lib/android/sdk/cmake/3.22.1/bin/ninja'' finished with non-zero exit value 1
+	at org.gradle.process.internal.DefaultExecHandle$ExecResultImpl.assertNormalExitValue(DefaultExecHandle.java:442)
+	at com.android.build.gradle.internal.process.GradleProcessResult.assertNormalExitValue(GradleProcessResult.java:46)
+	... 134 more
+
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.9/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 24s
+2 actionable tasks: 2 executed
